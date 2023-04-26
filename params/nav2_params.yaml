@@ -20,7 +20,7 @@ amcl:
     max_beams: 60
     max_particles: 2000
     min_particles: 500
-    odom_frame_id: "odom"
+    odom_frame_id: "robotinobase3odom"
     pf_err: 0.05
     pf_z: 0.99
     recovery_alpha_fast: 0.0
@@ -38,6 +38,12 @@ amcl:
     z_rand: 0.5
     z_short: 0.05
     scan_topic: /robotinobase3/fawkes_scans/Laser_urg_filtered_360
+    #set_initial_pose: False
+    #initial_pose.x: 2.0
+    #initial_pose.y: 3.0
+    #initial_pose.z: 0.0
+    #initial_pose.yaw: 0.0
+    # first_map_only: True
 
 bt_navigator:
   ros__parameters:
@@ -48,7 +54,7 @@ bt_navigator:
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
-    # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
+    # nav3_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_th:rough_poses_w_replanning_and_recovery.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
     plugin_lib_names:
@@ -101,11 +107,11 @@ bt_navigator:
 
 bt_navigator_navigate_through_poses_rclcpp_node:
   ros__parameters:
-    use_sim_time: True
+    use_sim_time: False
 
 bt_navigator_navigate_to_pose_rclcpp_node:
   ros__parameters:
-    use_sim_time: True
+    use_sim_time: False
 
 controller_server:
   ros__parameters:

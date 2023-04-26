@@ -60,7 +60,11 @@ def generate_launch_description():
     #              https://github.com/ros2/launch_ros/issues/56
     remappings = [('/tf', 'tf'),
                   ('/tf_static', 'tf_static'),
-                  ('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel')]
+                  ('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
+                  ('/map', '/' + env_ns + '/map'),
+                  ('/' + env_ns + '/initialpose', '/initialpose'),]
+                  #  ('/navigate_to_pose/_action/status', '/' + env_ns + '/navigate_to_pose/_action/status'),
+                   # ('/navigate_to_pose/_action/feedback', '/' + env_ns + '/navigate_to_pose/_action/feedback')]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
@@ -274,3 +278,4 @@ def generate_launch_description():
     ld.add_action(load_composable_nodes)
 
     return ld
+
