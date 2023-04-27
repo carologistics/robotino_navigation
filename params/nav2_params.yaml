@@ -37,7 +37,7 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: /robotinobase3/fawkes_scans/Laser_urg_filtered_360
+    scan_topic: /fawkes_scans/Laser_urg_filtered_360
     #set_initial_pose: False
     #initial_pose.x: 2.0
     #initial_pose.y: 3.0
@@ -50,7 +50,7 @@ bt_navigator:
     use_sim_time: True
     global_frame: map
     robot_base_frame: robotinobase3base_link
-    odom_topic: /robotinobase3/odom
+    odom_topic: /odom
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -213,7 +213,7 @@ local_costmap:
         mark_threshold: 0
         observation_sources: scan
         scan:
-          topic: /robotinobase3/fawkes_scans/Laser_urg_filtered_360
+          topic: /fawkes_scans/Laser_urg_filtered_360
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -244,7 +244,7 @@ global_costmap:
         enabled: True
         observation_sources: scan
         scan:
-          topic: /robotinobase3/fawkes_scans/Laser_urg_filtered_360
+          topic: /fawkes_scans/Laser_urg_filtered_360
           max_obstacle_height: 2.0
           clearing: True
           marking: True
