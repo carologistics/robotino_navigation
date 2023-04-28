@@ -1,6 +1,6 @@
-image: rcac2023map.png
+image: rcac2023map_closed.png
 resolution: 0.01000
-origin: [0.0, 0.0, 0.000000]
+origin: [-8.7, 1.75, 0.000000]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.196
