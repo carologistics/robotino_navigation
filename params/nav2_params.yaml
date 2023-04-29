@@ -187,8 +187,8 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 8.0
-      publish_frequency: 8.0
+      update_frequency: 5.0
+      publish_frequency: 2.0
       global_frame: robotinobase3odom
       robot_base_frame: robotinobase3base_link
       use_sim_time: True
@@ -236,7 +236,7 @@ global_costmap:
       robot_base_frame: robotinobase3base_link
       use_sim_time: True
       robot_radius: 0.25
-      resolution: 0.01
+      resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
@@ -267,7 +267,7 @@ map_server:
     use_sim_time: False
     # Overridden in launch by the "map" launch configuration or provided default value.
     # To use in yaml, remove the default "map" value in the tb3_simulation_launch.py file & provide full path to map below.
-    yaml_filename: ""
+    yaml_filename: "/home/robotino/nav2_ws/src/nav2_bringup/maps/map.yaml"
 
 map_saver:
   ros__parameters:

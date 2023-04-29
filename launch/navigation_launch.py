@@ -49,7 +49,8 @@ def generate_launch_description():
                        'behavior_server',
                        'bt_navigator',
                        'waypoint_follower',
-                       'velocity_smoother']
+                       'velocity_smoother',
+                       'map_server' ]
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
     env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
@@ -62,7 +63,8 @@ def generate_launch_description():
     # TODO(orduno) Substitute with `PushNodeRemapping`
     #              https://github.com/ros2/launch_ros/issues/56
     remappings = [('/tf', 'tf'),
-                  ('/tf_static', 'tf_static'),]
+                  ('/tf_static', 'tf_static'),
+                ('/map','/ros2_map'),]
                 #('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
                 #('/map', '/' + env_ns + '/map'),]
                   #('/' + env_ns + '/initialpose', '/initialpose'),]
@@ -73,6 +75,7 @@ def generate_launch_description():
     param_substitutions = {
         'use_sim_time': use_sim_time,
         'autostart': autostart}
+
 
     configured_params = RewrittenYaml(
             source_file=params_file,
@@ -117,6 +120,8 @@ def generate_launch_description():
     declare_log_level_cmd = DeclareLaunchArgument(
         'log_level', default_value='info',
         description='log level')
+
+
 
     load_nodes = GroupAction(
         condition=IfCondition(PythonExpression(['not ', use_composition])),
@@ -203,6 +208,17 @@ def generate_launch_description():
                 parameters=[{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
                             {'node_names': lifecycle_nodes}]),
+             Node(
+                 package='nav2_map_server',
+                 executable='map_server',
+                 name='map_server',
+                 output='screen',
+                 respawn=use_respawn,
+                 respawn_delay=2.0,
+                 parameters=[configured_params],
+                 arguments=['--ros-args', '--log-level', log_level],
+                 remappings=remappings),
+
         ]
     )
 
