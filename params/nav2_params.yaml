@@ -180,7 +180,7 @@ controller_server:
       GoalAlign.forward_point_distance: 0.1
       PathDist.scale: 32.0
       GoalDist.scale: 24.0
-      RotateToGoal.scale: 30.0
+      RotateToGoal.scale: 0.0
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 
@@ -259,7 +259,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.3
+        inflation_radius: 1.3
       always_send_full_costmap: True
 
 map_server:
