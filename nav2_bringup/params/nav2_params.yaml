@@ -117,10 +117,10 @@ controller_server:
   ros__parameters:
     use_sim_time: False
     controller_frequency: 10.0
-    min_x_velocity_threshold: 0.0001
+    min_x_velocity_threshold: 0.0
     min_y_velocity_threshold: 0.0
-    min_theta_velocity_threshold: 0.0001
-    failure_tolerance: 0.0
+    min_theta_velocity_threshold: 0.0
+    failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
@@ -139,30 +139,30 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 0.30
+      xy_goal_tolerance: 0.40
+      yaw_goal_tolerance: 0.2
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
-      min_vel_x: 0.0
-      min_vel_y: 0.0
-      max_vel_x: 1.0
-      max_vel_y: 1.0
+      min_vel_x: -0.5
+      min_vel_y: -0.5
+      max_vel_x: 0.5
+      max_vel_y: 0.5
       max_vel_theta: 1.0
-      min_speed_xy: 0.0
-      max_speed_xy: 1.0
+      min_speed_xy: -0.5
+      max_speed_xy: 0.5
       min_speed_theta: 0.0
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
-      acc_lim_x: 1.5
-      acc_lim_y: 0.0
+      acc_lim_x: 2.5
+      acc_lim_y: 2.5
       acc_lim_theta: 5.2
-      decel_lim_x: -1.5
-      decel_lim_y: 0.0
+      decel_lim_x: -2.5
+      decel_lim_y: -2.5
       decel_lim_theta: -5.2
       vx_samples: 10
-      vy_samples: 5
+      vy_samples: 10
       vtheta_samples: 10
       sim_time: 1.0
       linear_granularity: 0.05
@@ -180,7 +180,7 @@ controller_server:
       GoalAlign.forward_point_distance: 0.1
       PathDist.scale: 32.0
       GoalDist.scale: 24.0
-      RotateToGoal.scale: 0.1
+      RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 
@@ -196,7 +196,7 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.015
-      robot_radius: 0.265
+      robot_radius: 0.26
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -236,7 +236,7 @@ global_costmap:
       robot_base_frame: robotinobase3base_link
       use_sim_time: False
       robot_radius: 0.25
-      resolution: 0.02
+      resolution: 0.015
       track_unknown_space: false
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
@@ -319,8 +319,8 @@ behavior_server:
     transform_tolerance: 0.1
     use_sim_time: false
     simulate_ahead_time: 2.0
-    max_rotational_vel: 1.0
-    min_rotational_vel: 0.4
+    max_rotational_vel: 1.4
+    min_rotational_vel: 0.6
     rotational_acc_lim: 3.2
 
 robot_state_publisher:
@@ -340,14 +340,14 @@ waypoint_follower:
 
 velocity_smoother:
   ros__parameters:
-    use_sim_time: True
+    use_sim_time: False
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.5, 0.0, 1.0]
-    min_velocity: [-0.5, 0.0, -1.0]
-    max_accel: [2.5, 0.0, 3.2]
-    max_decel: [-2.5, 0.0, -3.2]
+    max_velocity: [0.5, 0.5, 1.0]
+    min_velocity: [-0.5, -0.5, -1.0]
+    max_accel: [2.0, 2.0, 3.2]
+    max_decel: [-2.0, -2.0, -3.2]
     odom_topic: "/odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
