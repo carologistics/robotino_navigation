@@ -78,7 +78,6 @@ def generate_launch_description():
         'base_frame_id': "robotinobase" + env_id +"base_link",
         'odom_frame_id': "robotinobase" + env_id +"odom",
         'robot_base_frame': "robotinobase" + env_id +"base_link",
-        'global_frame': "robotinobase" + env_id +"odom",
         }
 
 
