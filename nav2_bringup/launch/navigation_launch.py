@@ -54,7 +54,7 @@ def generate_launch_description():
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
     env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
-    env_id = os.environ.get('ROS_DOMAIN_ID')   
+    env_id = str(os.environ.get('ROS_DOMAIN_ID'))   
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -75,10 +75,10 @@ def generate_launch_description():
     param_substitutions = {
         'use_sim_time': use_sim_time,
         'autostart': autostart,
-        'base_frame_id': "robotinobase" + string(env_id) +"base_link",
-        'odom_frame_id': "robotinobase" + string(env_id) +"odom",
-        'robot_base_frame': "robotinobase" + string(env_id) +"base_link",
-        'global_frame': "robotinobase" + string(env_id) +"odom",
+        'base_frame_id': "robotinobase" + env_id +"base_link",
+        'odom_frame_id': "robotinobase" + env_id +"odom",
+        'robot_base_frame': "robotinobase" + env_id +"base_link",
+        'global_frame': "robotinobase" + env_id +"odom",
         }
 
 
