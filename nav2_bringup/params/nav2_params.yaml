@@ -52,7 +52,7 @@ bt_navigator:
     robot_base_frame: base_link
     odom_topic: /odom
     bt_loop_duration: 10
-    default_server_timeout: 20
+    default_server_timeout: 10
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
     # nav3_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_th:rough_poses_w_replanning_and_recovery.xml
@@ -196,7 +196,7 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.015
-      robot_radius: 0.26
+      robot_radius: 0.25
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
