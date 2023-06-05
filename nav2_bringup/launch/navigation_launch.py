@@ -74,14 +74,20 @@ def generate_launch_description():
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
-        'autostart': autostart}
+        'autostart': autostart,
+        'base_frame_id': "robotinobase" + env_id +"base_link",
+        'odom_frame_id': "robotinobase" + env_id +"odom",
+        'robot_base_frame': "robotinobase" + env_id +"base_link",
+        'global_frame': "robotinobase" + env_id +"odom",
+        }
 
 
     configured_params = RewrittenYaml(
             source_file=params_file,
             root_key=namespace,
             param_rewrites=param_substitutions,
-            convert_types=True)
+            convert_types=True,
+            )
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
