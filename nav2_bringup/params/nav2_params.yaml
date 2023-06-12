@@ -6,7 +6,7 @@ amcl:
     alpha3: 0.2
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "robotinobase3base_link"
+    base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
@@ -20,7 +20,7 @@ amcl:
     max_beams: 60
     max_particles: 2000
     min_particles: 500
-    odom_frame_id: "robotinobase3odom"
+    odom_frame_id: "odom"
     pf_err: 0.05
     pf_z: 0.99
     recovery_alpha_fast: 0.0
@@ -49,10 +49,10 @@ bt_navigator:
   ros__parameters:
     use_sim_time: False
     global_frame: map
-    robot_base_frame: robotinobase3base_link
+    robot_base_frame: base_link
     odom_topic: /odom
     bt_loop_duration: 10
-    default_server_timeout: 20
+    default_server_timeout: 10
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
     # nav3_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_th:rough_poses_w_replanning_and_recovery.xml
@@ -189,14 +189,14 @@ local_costmap:
     ros__parameters:
       update_frequency: 5.0
       publish_frequency: 2.0
-      global_frame: robotinobase3odom
-      robot_base_frame: robotinobase3base_link
+      global_frame: map
+      robot_base_frame: base_link
       use_sim_time: False
       rolling_window: true
       width: 3
       height: 3
       resolution: 0.015
-      robot_radius: 0.26
+      robot_radius: 0.25
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -233,7 +233,7 @@ global_costmap:
       update_frequency: 1.0
       publish_frequency: 1.0
       global_frame: map
-      robot_base_frame: robotinobase3base_link
+      robot_base_frame: base_link
       use_sim_time: False
       robot_radius: 0.25
       resolution: 0.015
@@ -314,8 +314,8 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
-    global_frame: robotinobase3odom
-    robot_base_frame: robotinobase3base_link
+    global_frame: map
+    robot_base_frame: base_link
     transform_tolerance: 0.1
     use_sim_time: false
     simulate_ahead_time: 2.0

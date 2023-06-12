@@ -1,0 +1,6 @@
+image: fha_field_new.png
+resolution: 0.01
+origin: [-5.2, -0.05, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
