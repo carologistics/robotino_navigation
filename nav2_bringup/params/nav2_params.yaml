@@ -143,9 +143,13 @@ controller_server:
       yaw_goal_tolerance: 0.2
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
+      # time_steps times model_dt times vx_max should be < than than halve of
+      # the local costmap size, otherwise the robot will never reach full speed
       time_steps: 5
+      # model_dt depends on the controller frequency
       model_dt: 0.15
       batch_size: 2000
+      # robotino motion model likely needs to be adapted
       vx_std: 0.1
       vy_std: 0.1
       wz_std: 0.1
@@ -156,6 +160,7 @@ controller_server:
       iteration_count: 1
       prune_distance: 0.7
       transform_tolerance: 0.5
+      # temperature closer to 0 -> use more optimal paths
       temperature: 0.8
       gamma: 0.015
       motion_model: "Omni"
@@ -180,8 +185,9 @@ controller_server:
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.7
+        threshold_to_consider: 1.0
       PreferForwardCritic:
+        # we do not really care about facing forward, disable it
         enabled: false
         cost_power: 1
         cost_weight: 5.0
