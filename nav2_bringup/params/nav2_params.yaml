@@ -150,13 +150,13 @@ controller_server:
       model_dt: 0.15
       batch_size: 2000
       # robotino motion model likely needs to be adapted
-      vx_std: 0.1
-      vy_std: 0.1
-      wz_std: 0.1
+      vx_std: 0.2
+      vy_std: 0.2
+      wz_std: 0.4
       vx_max: 2.5
       vx_min: -2.5
       vy_max: 2.5
-      wz_max: 2.5
+      wz_max: 3.14
       iteration_count: 1
       prune_distance: 0.7
       transform_tolerance: 0.5
