@@ -139,8 +139,9 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.40
-      yaw_goal_tolerance: 0.2
+      xy_goal_tolerance: 0.25
+      yaw_goal_tolerance: 0.25
+      stateful: true
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
       # time_steps times model_dt times vx_max should be < than than halve of
@@ -201,8 +202,8 @@ controller_server:
         collision_cost: 10000.0
         collision_margin_distance: 0.1
         near_goal_distance: 0.5
-        inflation_radius: 0.10 # (only in Humble)
-        cost_scaling_factor: 1.0 # (only in Humble)
+        inflation_radius: 1.0 # (only in Humble)
+        cost_scaling_factor: 5.0 # (only in Humble)
       PathAlignCritic:
         enabled: true
         cost_power: 1
@@ -287,8 +288,8 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 1.5
+        cost_scaling_factor: 5.0
+        inflation_radius: 1.0
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -345,8 +346,8 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 1.3
+        cost_scaling_factor: 5.0
+        inflation_radius: 1.0
       always_send_full_costmap: True
 
 map_server:
