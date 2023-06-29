@@ -116,7 +116,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: False
-    controller_frequency: 20.0
+    controller_frequency: 10.0
     min_x_velocity_threshold: 0.0
     min_y_velocity_threshold: 0.0
     min_theta_velocity_threshold: 0.0
@@ -146,17 +146,17 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       # time_steps times model_dt times vx_max should be < than than halve of
       # the local costmap size, otherwise the robot will never reach full speed
-      time_steps: 10
+      time_steps: 5
       # model_dt depends on the controller frequency
-      model_dt: 0.1
+      model_dt: 0.15
       batch_size: 2000
       # robotino motion model likely needs to be adapted
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 1.5
-      vx_min: -1.5
-      vy_max: 1.5
+      vx_max: 2.0
+      vx_min: -2.0
+      vy_max: 2.0
       wz_max: 3.14
       iteration_count: 1
       prune_distance: 0.7
@@ -179,7 +179,7 @@ controller_server:
         cost_weight: 4.0
       GoalCritic:
         enabled: true
-        cost_power: 1
+        cost_power: 3
         cost_weight: 5.0
         threshold_to_consider: 0.7
       GoalAngleCritic:
