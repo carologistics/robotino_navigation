@@ -27,7 +27,7 @@ from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
     # Environment
-    package_dir = get_package_share_directory('nav2_collision_monitor')
+    package_dir = get_package_share_directory('nav2_bringup')
 
     # Constant parameters
     lifecycle_nodes = ['collision_monitor']
@@ -53,12 +53,12 @@ def generate_launch_description():
         'robot_base_frame': "robotinobase" + env_id +"base_link",
         }
 
-    configured_params = RewrittenYaml(
-            source_file=params_file,
-            root_key=namespace,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-            )
+    # configured_params = RewrittenYaml(
+    #         source_file=params_file,
+    #         root_key=namespace,
+    #         param_rewrites=param_substitutions,
+    #         convert_types=True,
+    #         )
     
     # 2. Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
