@@ -17,16 +17,16 @@ collision_monitor:
     polygons: ["PolygonStop"]
     PolygonStop:
       type: "circle"
-      radius: 0.5
+      radius: 0.280
       action_type: "stop"
-      max_points: 10
+      max_points: 2
       visualize: True
       polygon_pub_topic: "polygon_stop"
     PolygonSlow:
       type: "circle"
-      radius: 0.75
+      radius: 0.325
       action_type: "slowdown"
-      max_points: 10
+      max_points: 2
       slowdown_ratio: 0.5
       visualize: True
       polygon_pub_topic: "polygon_slowdown"
