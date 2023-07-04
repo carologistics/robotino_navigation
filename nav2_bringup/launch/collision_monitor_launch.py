@@ -42,23 +42,24 @@ def generate_launch_description():
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
     env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
-    env_id = str(os.environ.get('ROS_DOMAIN_ID'))   
+    env_id = str(os.environ.get('ROS_DOMAIN_ID'))  
+    print("env_id:", env_id) 
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
-        'autostart': autostart,
+        #'autostart': autostart,
         'base_frame_id': "robotinobase" + env_id +"base_link",
         'odom_frame_id': "robotinobase" + env_id +"odom",
-        'robot_base_frame': "robotinobase" + env_id +"base_link",
+        #'robot_base_frame': "robotinobase" + env_id +"base_link",
         }
 
-    # configured_params = RewrittenYaml(
-    #         source_file=params_file,
-    #         root_key=namespace,
-    #         param_rewrites=param_substitutions,
-    #         convert_types=True,
-    #         )
+    configured_params = RewrittenYaml(
+            source_file=params_file,
+            root_key=namespace,
+            param_rewrites=param_substitutions,
+            convert_types=True,
+            )
     
     # 2. Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
@@ -75,16 +76,6 @@ def generate_launch_description():
         'params_file',
         default_value=os.path.join(package_dir, 'params', 'collision_monitor_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes')
-
-    # Create our own temporary YAML files that include substitutions
-    param_substitutions = {
-        'use_sim_time': use_sim_time}
-
-    configured_params = RewrittenYaml(
-        source_file=params_file,
-        root_key=namespace,
-        param_rewrites=param_substitutions,
-        convert_types=True)
 
     # Nodes launching commands
     start_lifecycle_manager_cmd = Node(
