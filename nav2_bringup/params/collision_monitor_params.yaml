@@ -15,21 +15,30 @@ collision_monitor:
     # or "circle" type with static footprint set by radius. "footprint_topic" parameter
     # to be ignored in circular case.
     #polygons: ["PolygonStop"]
-    #PolygonStop:
-      #type: "circle"
-      #radius: 0.350
-      #action_type: "stop"
-      #max_points: 10
-      #visualize: True
-      #polygon_pub_topic: "polygon_stop"
+    PolygonStop:
+      type: "circle"
+      radius: 0.300
+      action_type: "stop"
+      max_points: 20
+      visualize: True
+      polygon_pub_topic: "polygon_stop"
     PolygonSlow:
      type: "circle"
-     radius: 0.350
+     radius: 0.450
      action_type: "slowdown"
      max_points: 10
-     slowdown_ratio: 0.8
+     slowdown_ratio: 0.2
      visualize: True
      polygon_pub_topic: "polygon_slowdown"
+    PolygonLimit:
+     type: "polygon"
+     points: [0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5]
+     action_type: "limit"
+     max_points: 10  # max_points: 3 for Humble
+     linear_limit: 0.5
+     angular_limit: 0.5
+     visualize: True
+     polygon_pub_topic: "polygon_limit"
     # FootprintApproach:
     #     type: "polygon"
     #     action_type: "approach"
