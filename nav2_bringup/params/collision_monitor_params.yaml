@@ -17,7 +17,7 @@ collision_monitor:
     polygons: ["PolygonStop"]
     PolygonStop:
       type: "circle"
-      radius: 0.425
+      radius: 0.350
       action_type: "stop"
       max_points: 10
       visualize: True
