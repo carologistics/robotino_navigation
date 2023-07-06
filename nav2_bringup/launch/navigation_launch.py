@@ -287,6 +287,15 @@ def generate_launch_description():
     # Create the launch description and populate
     ld = LaunchDescription()
 
+    mps_node = Node(
+        package='mps_map_gen',
+        executable='mps_map_gen',
+        name='mps_map_gen',
+        output='screen'
+    )
+
+    ld.add_action(mps_node)
+
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
 
