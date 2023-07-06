@@ -13,7 +13,7 @@
 #occupied_thresh: 0.65
 #free_thresh: 0.196
 
-image: RoboCup2023NavMap_small.png
+image: RoboCup2023NavMap_small_rev2.png
 resolution: 0.01000
 origin: [-7.0, -4.5, 0.000000]
 negate: 0
