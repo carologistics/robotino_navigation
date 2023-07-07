@@ -24,9 +24,9 @@ collision_monitor:
      # polygon_pub_topic: "polygon_stop"
     PolygonSlow:
      type: "circle"
-     radius: 0.450
+     radius: 0.470
      action_type: "slowdown"
-     max_points: 10
+     max_points: 5
      slowdown_ratio: 0.2
      visualize: True
      polygon_pub_topic: "polygon_slowdown"
