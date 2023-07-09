@@ -139,7 +139,7 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.20
+      xy_goal_tolerance: 0.3
       yaw_goal_tolerance: 0.25
       stateful: true
     FollowPath:
@@ -148,15 +148,15 @@ controller_server:
       # the local costmap size, otherwise the robot will never reach full speed
       time_steps: 5
       # model_dt depends on the controller frequency
-      model_dt: 0.15
+      model_dt: 0.12
       batch_size: 2000
       # robotino motion model likely needs to be adapted
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 2.0
-      vx_min: -2.0
-      vy_max: 2.0
+      vx_max: 2.5
+      vx_min: -2.5
+      vy_max: 2.5
       wz_max: 3.14
       iteration_count: 1
       prune_distance: 0.7
