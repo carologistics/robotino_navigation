@@ -45,7 +45,8 @@ def generate_launch_description():
 
     lifecycle_nodes = ['controller_server',
                        'smoother_server',
-                       'planner_server',
+                       #'planner_server',
+                       'my_planner_server',
                        'behavior_server',
                        'bt_navigator',
                        'waypoint_follower',
@@ -152,10 +153,22 @@ def generate_launch_description():
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings),
+            
+            #Node(
+            #    package='nav2_planner',
+            #    executable='planner_server',
+            #    name='planner_server',
+            #    output='screen',
+            #    respawn=use_respawn,
+            #    respawn_delay=2.0,
+            #    parameters=[configured_params],
+            #    arguments=['--ros-args', '--log-level', log_level],
+            #    remappings=remappings),
+            
             Node(
-                package='nav2_planner',
-                executable='planner_server',
-                name='planner_server',
+                package='my_nav2_planner',
+                executable='my_planner_server',
+                name='my_planner_server',
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
@@ -314,4 +327,5 @@ def generate_launch_description():
     
 
     return ld
+
 

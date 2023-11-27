@@ -362,6 +362,7 @@ map_server:
     #yaml_filename: "/home/saurabhborse/ros2-navigation/nav2_bringup/maps/map.yaml"
     yaml_filename: "/home/robotino/nav2_ws/src/ros2-navigation/nav2_bringup/maps/map.yaml"
 
+
 map_saver:
   ros__parameters:
     use_sim_time: False
@@ -376,9 +377,10 @@ planner_server:
     use_sim_time: False
     planner_plugins: ["GridBased"]
     GridBased:
-      plugin: "nav2_navfn_planner/NavfnPlanner"
+      #plugin: "nav2_navfn_planner/NavfnPlanner"
+      plugin: "my_nav2_smac_planner/MySmacPlanner2D"
       tolerance: 0.5
-      use_astar: false
+      #use_astar: false
       allow_unknown: true
 
 smoother_server:
@@ -445,3 +447,4 @@ velocity_smoother:
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0
+
