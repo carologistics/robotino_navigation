@@ -45,8 +45,7 @@ def generate_launch_description():
 
     lifecycle_nodes = ['controller_server',
                        'smoother_server',
-                       #'planner_server',
-                       #'my_planner_server',
+                       'cbs_planner_server',
                        'behavior_server',
                        'bt_navigator',
                        'waypoint_follower',
@@ -65,7 +64,7 @@ def generate_launch_description():
     #              https://github.com/ros2/launch_ros/issues/56
     remappings = [('/tf', 'tf'),
                   ('/tf_static', 'tf_static'),
-                ('/map','/ros2_map'),]
+                    ('/map','/ros2_map'),]
                 #('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
                 #('/map', '/' + env_ns + '/map'),]
                   #('/' + env_ns + '/initialpose', '/initialpose'),]
@@ -88,6 +87,7 @@ def generate_launch_description():
             param_rewrites=param_substitutions,
             convert_types=True,
             )
+
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -131,9 +131,7 @@ def generate_launch_description():
 
     load_nodes = GroupAction(
         condition=IfCondition(PythonExpression(['not ', use_composition])),
-        actions=[
-               # PushRosNamespace(''),
-                 
+        actions=[                 
             Node(
                 package='nav2_controller',
                 executable='controller_server',
@@ -153,22 +151,10 @@ def generate_launch_description():
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings),
-            
-            #Node(
-            #    package='nav2_planner',
-            #    executable='planner_server',
-            #    name='planner_server',
-            #    output='screen',
-            #    respawn=use_respawn,
-            #    respawn_delay=2.0,
-            #    parameters=[configured_params],
-            #    arguments=['--ros-args', '--log-level', log_level],
-            #    remappings=remappings),
-            
             Node(
-                package='my_nav2_planner',
-                executable='my_planner_server',
-                name='my_planner_server',
+                package='cbs_nav2_planner',
+                executable='cbs_planner_server',
+                name='cbs_planner_server',
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
@@ -256,12 +242,12 @@ def generate_launch_description():
                 name='smoother_server',
                 parameters=[configured_params],
                 remappings=remappings),
-            #ComposableNode(
-            #    package='nav2_planner',
-            #    plugin='nav2_planner::PlannerServer',
-            #    name='planner_server',
-            #    parameters=[configured_params],
-            #    remappings=remappings),
+            ComposableNode(
+                package='cbs_nav2_planner',
+                plugin='cbs_nav2_planner::CBSPlannerServer',
+                name='cbs_planner_server',
+                parameters=[configured_params],
+                remappings=remappings),
             ComposableNode(
                 package='nav2_behaviors',
                 plugin='behavior_server::BehaviorServer',

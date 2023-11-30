@@ -378,7 +378,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       #plugin: "nav2_navfn_planner/NavfnPlanner"
-      plugin: "my_nav2_smac_planner/MySmacPlanner2D"
+      plugin: "cbs_nav2_smac_planner/CBSSmacPlanner2D"
       tolerance: 0.5
       #use_astar: false
       allow_unknown: true
