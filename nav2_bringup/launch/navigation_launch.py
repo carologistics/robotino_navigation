@@ -65,8 +65,8 @@ def generate_launch_description():
     remappings = [('/tf', env_ns+'/tf'),
                   ('/tf_static', env_ns+'/tf_static'),
                   ('/map', env_ns+'/map'),
-		('/map_updates', env_ns+'/map_updates'),
-		('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')]
+		          ('/map_updates', env_ns+'/map_updates'),
+		          ('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')]
                 #('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
                 #('/map', '/' + env_ns + '/map'),]
                   #('/' + env_ns + '/initialpose', '/initialpose'),]
@@ -282,7 +282,7 @@ def generate_launch_description():
                 parameters=[{'use_sim_time': use_sim_time,
                              'autostart': autostart,
                              'node_names': lifecycle_nodes}],
-		remappings=remappings)
+		        remappings=remappings)
         ],
     )
 
