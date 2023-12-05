@@ -60,6 +60,7 @@ CBSPlannerServer::CBSPlannerServer(const rclcpp::NodeOptions & options)
     }
   }
 
+  RCLCPP_INFO(get_logger(), "%s", std::string{get_namespace()});
   // Setup the global costmap
   costmap_ros_ = std::make_shared<nav2_costmap_2d::Costmap2DROS>(
     "global_costmap", std::string{get_namespace()}, "global_costmap");
@@ -123,7 +124,7 @@ CBSPlannerServer::on_configure(const rclcpp_lifecycle::State & /*state*/)
     get_logger(),
     "Planner Server has %s planners available.", planner_ids_concat_.c_str());
 
-  double expected_planner_frequency;
+  double expected_planner_frequency = 1.0;
   get_parameter("expected_planner_frequency", expected_planner_frequency);
   if (expected_planner_frequency > 0) {
     max_planner_duration_ = 1 / expected_planner_frequency;
@@ -402,7 +403,7 @@ CBSPlannerServer::computePlanThroughPoses()
     if (goal->goals.size() == 0) {
       RCLCPP_WARN(
         get_logger(),
-        "Compute path through poses requested a plan with no viapoint poses, returning.");
+        "Compute path through poses requested a plan with   viapoint poses, returning.");
       action_server_poses_->terminate_current();
     }
 

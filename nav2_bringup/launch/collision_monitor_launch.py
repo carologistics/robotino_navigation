@@ -23,7 +23,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from nav2_common.launch import RewrittenYaml
-
+from launch_ros.actions import PushRosNamespace
 
 def generate_launch_description():
     # Environment
@@ -41,10 +41,11 @@ def generate_launch_description():
 
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
-    env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
+    env_ns = '/robotinobase2'                          # os.environ.get('ROS_2_NAV_NS')                                     
     env_id = str(os.environ.get('ROS_DOMAIN_ID'))  
     print("env_id:", env_id) 
-
+    
+    remappings = [('/tf', env_ns+'/tf'), ('/tf_static', env_ns+'/tf_static'),('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')] 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
@@ -54,6 +55,7 @@ def generate_launch_description():
         #'robot_base_frame': "robotinobase" + env_id +"base_link",
         }
 
+    namespace = env_ns
     configured_params = RewrittenYaml(
             source_file=params_file,
             root_key=namespace,
@@ -86,18 +88,21 @@ def generate_launch_description():
             emulate_tty=True,  # https://github.com/ros2/launch/issues/188
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
-                        {'node_names': lifecycle_nodes}])
+                        {'node_names': lifecycle_nodes}],
+	    remappings=remappings)
 
     start_collision_monitor_cmd = Node(
             package='nav2_collision_monitor',
             executable='collision_monitor',
             output='screen',
             emulate_tty=True,  # https://github.com/ros2/launch/issues/188
-            parameters=[configured_params])
+            parameters=[configured_params],
+	    remappings=remappings)
 
     ld = LaunchDescription()
 
     # Launch arguments
+    ld.add_action(PushRosNamespace(env_ns))
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)

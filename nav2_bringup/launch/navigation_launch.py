@@ -53,8 +53,8 @@ def generate_launch_description():
                        'map_server' ]
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
-    env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
-    env_id = str(os.environ.get('ROS_DOMAIN_ID'))   
+    env_ns = '/robotinobase2'                          # os.environ.get('ROS_2_NAV_NS')                                     
+    env_id = '2'  #str(os.environ.get('ROS_DOMAIN_ID'))   
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -62,9 +62,11 @@ def generate_launch_description():
     # https://github.com/ros/robot_state_publisher/pull/30
     # TODO(orduno) Substitute with `PushNodeRemapping`
     #              https://github.com/ros2/launch_ros/issues/56
-    remappings = [('/tf', 'tf'),
-                  ('/tf_static', 'tf_static'),
-                    ('/map','/ros2_map'),]
+    remappings = [('/tf', env_ns+'/tf'),
+                  ('/tf_static', env_ns+'/tf_static'),
+                  ('/map', env_ns+'/map'),
+		('/map_updates', env_ns+'/map_updates'),
+		('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')]
                 #('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
                 #('/map', '/' + env_ns + '/map'),]
                   #('/' + env_ns + '/initialpose', '/initialpose'),]
@@ -80,7 +82,7 @@ def generate_launch_description():
         'robot_base_frame': "robotinobase" + env_id +"base_link",
         }
 
-
+    namespace = env_ns
     configured_params = RewrittenYaml(
             source_file=params_file,
             root_key=namespace,
@@ -131,7 +133,7 @@ def generate_launch_description():
 
     load_nodes = GroupAction(
         condition=IfCondition(PythonExpression(['not ', use_composition])),
-        actions=[                 
+        actions=[
             Node(
                 package='nav2_controller',
                 executable='controller_server',
@@ -211,7 +213,8 @@ def generate_launch_description():
                 arguments=['--ros-args', '--log-level', log_level],
                 parameters=[{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
-                            {'node_names': lifecycle_nodes}]),
+                            {'node_names': lifecycle_nodes}],
+               remappings=remappings),
              Node(
                  package='nav2_map_server',
                  executable='map_server',
@@ -225,11 +228,10 @@ def generate_launch_description():
 
         ]
     )
-
     load_composable_nodes = LoadComposableNodes(
         condition=IfCondition(use_composition),
         target_container=container_name_full,
-        composable_node_descriptions=[
+	 composable_node_descriptions=[
             ComposableNode(
                 package='nav2_controller',
                 plugin='nav2_controller::ControllerServer',
@@ -279,26 +281,29 @@ def generate_launch_description():
                 name='lifecycle_manager_navigation',
                 parameters=[{'use_sim_time': use_sim_time,
                              'autostart': autostart,
-                             'node_names': lifecycle_nodes}]),
+                             'node_names': lifecycle_nodes}],
+		remappings=remappings)
         ],
     )
 
     # Create the launch description and populate
     ld = LaunchDescription()
 
-    mps_node = Node(
-        package='mps_map_gen',
-        executable='mps_map_gen',
-        name='mps_map_gen',
-        output='screen'
-    )
+    #mps_node = Node(
+    #    package='mps_map_gen',
+    #    executable='mps_map_gen',
+    #    name='mps_map_gen',
+    #    output='screen',
+    #    namespace = namespace,
+    #	remappings=remappings
+    #)
 
-    ld.add_action(mps_node)
+    #    ld.add_action(mps_node)
 
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
-
     # Declare the launch options
+    ld.add_action(PushRosNamespace(env_ns))
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
