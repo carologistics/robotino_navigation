@@ -15,8 +15,8 @@ find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/StartGoalPoseStamped.srv"  
-  "srv/StartGoalPositions.srv"
+  "action/StartGoalPoseStamped.action"  
+  "action/StartGoalPositions.action"
   "srv/ComputedPlans.srv"
   "msg/AgentPathRequest.msg"
   "msg/AgentPath.msg"
