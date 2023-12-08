@@ -66,7 +66,11 @@ def generate_launch_description():
                   ('/tf_static', env_ns+'/tf_static'),
                   ('/map', env_ns+'/map'),
 		          ('/map_updates', env_ns+'/map_updates'),
-		          ('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')]
+		          ('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360'),
+                  ('/trajectories', env_ns+'/trajectories' ),
+                  ('/diagnostics', env_ns+'/diagnostics'),
+                  ('/odom', env_ns+'/odom')
+                  ]
                 #('cmd_vel_smoothed', '/' + env_ns + '/cmd_vel'),
                 #('/map', '/' + env_ns + '/map'),]
                   #('/' + env_ns + '/initialpose', '/initialpose'),]

@@ -45,7 +45,12 @@ def generate_launch_description():
     env_id = str(os.environ.get('ROS_DOMAIN_ID'))  
     print("env_id:", env_id) 
     
-    remappings = [('/tf', env_ns+'/tf'), ('/tf_static', env_ns+'/tf_static'),('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360')] 
+    remappings = [('/tf', env_ns+'/tf'), 
+                  ('/tf_static', env_ns+'/tf_static'),
+                  #('/fawkes_scans/Laser_urg_filtered_360', env_ns+'/fawkes_scans/Laser_urg_filtered_360'),
+                  ('/clock', env_ns+'/clock'),
+                  ('/diagnostics', env_ns+'/diagnostics') 
+                  ] 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
