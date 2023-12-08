@@ -66,7 +66,7 @@ bool Node2D::isNodeValid(
   if (collision_checker->inCollision(index, traverse_unknown)) {
     return false;
   }
-  int n_cell = 16;
+  int n_cell = 100;
   //VCs
   for (const auto& obj : vertex_constraints) {
     int cell_value = obj.at("cell");
