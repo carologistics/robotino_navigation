@@ -74,7 +74,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 respawn_delay=2.0,
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
-                remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
+                remappings=remappings + [('/robotinobase1/cmd_vel', '/robotinobase1/cmd_vel_nav')],
                 namespace=namespace),
             Node(
                 package='nav2_smoother',
@@ -141,7 +141,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings + #[('cmd_vel', 'cmd_vel_nav')],
-                [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')],
+                [('/robotinobase1/cmd_vel', '/robotinobase1/cmd_vel_nav'), ('/robotinobase1/cmd_vel_smoothed', '/robotinobase1/cmd_vel')],
                 namespace=namespace),
             Node(
                 package='nav2_lifecycle_manager',
