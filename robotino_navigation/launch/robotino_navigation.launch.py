@@ -140,8 +140,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 respawn_delay=2.0,
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
-                remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
-                        #[('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')],
+                remappings=remappings + #[('cmd_vel', 'cmd_vel_nav')],
+                [('cmd_vel', 'cmd_vel_nav'), ('cmd_vel_smoothed', 'cmd_vel')],
                 namespace=namespace),
             Node(
                 package='nav2_lifecycle_manager',
