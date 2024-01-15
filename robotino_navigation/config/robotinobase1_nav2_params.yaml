@@ -273,7 +273,7 @@ local_costmap:
     ros__parameters:
       update_frequency: 5.0
       publish_frequency: 2.0
-      global_frame: robotinobase1/odom
+      global_frame: map
       robot_base_frame: robotinobase1/base_link
       use_sim_time: False
       rolling_window: true
