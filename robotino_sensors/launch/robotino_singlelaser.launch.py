@@ -32,8 +32,6 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
-from webots_ros2_driver.webots_launcher import WebotsLauncher
-from webots_ros2_driver.webots_controller import WebotsController
 import pathlib
 from launch.actions import (LogInfo, RegisterEventHandler, TimerAction)
 from launch.conditions import IfCondition
