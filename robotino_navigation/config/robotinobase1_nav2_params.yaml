@@ -327,7 +327,6 @@ global_costmap:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
         observation_sources: scan
-        footprint_clearing_enabled: true
         scan:
           topic: /robotinobase1/fawkes_scans/Laser_urg_filtered_360
           max_obstacle_height: 2.0
@@ -341,16 +340,10 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
-        enabled: true
-        subscribe_to_updates: true
-        transform_tolerance: 0.1
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        enabled: true
         cost_scaling_factor: 5.0
         inflation_radius: 0.75
-        inflate_unknown: false
-        inflate_around_unknown: true
       always_send_full_costmap: True
 
 map_server:
