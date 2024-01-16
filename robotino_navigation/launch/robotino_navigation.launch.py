@@ -160,7 +160,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 def generate_launch_description():
     # Get the launch directory
-    package_dir = get_package_share_directory('robotino3_navigation')
+    package_dir = get_package_share_directory('robotino_navigation')
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable(

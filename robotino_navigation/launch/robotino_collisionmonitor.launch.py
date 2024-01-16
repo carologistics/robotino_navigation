@@ -76,7 +76,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     
 def generate_launch_description():
     # Environment
-    package_dir = get_package_share_directory('robotino3_navigation')
+    package_dir = get_package_share_directory('robotino_navigation')
 
     # 2. Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
