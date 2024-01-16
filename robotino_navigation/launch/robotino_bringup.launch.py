@@ -24,21 +24,19 @@ from launch.substitutions import LaunchConfiguration
 def launch_nodes_withconfig(context, *args, **kwargs):
     
     # Get the launch directory
-    bringup_dir = get_package_share_directory('robotino3_navigation')
+    bringup_dir = get_package_share_directory('robotino_navigation')
     launch_dir = os.path.join(bringup_dir, 'launch')
     
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_namespace = LaunchConfiguration('use_namespace')
-    use_composition = LaunchConfiguration('use_namespace')
+    use_composition = LaunchConfiguration('use_composition')
     map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
     params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
     use_respawn = LaunchConfiguration('use_respawn')
     launch_mapserver = LaunchConfiguration('launch_mapserver')
-    launch_rviz = LaunchConfiguration('launch_rviz')
-    rviz_config = LaunchConfiguration('rviz_config')
     
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -62,7 +60,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                               'use_composition': use_composition,
                               'use_respawn': use_respawn,
                               'launch_mapserver': launch_mapserver,
-                              'launch_rviz': launch_rviz,
                               }.items()),
 
         IncludeLaunchDescription(
@@ -88,7 +85,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 def generate_launch_description():
     # Get the launch directory
-    bringup_dir = get_package_share_directory('robotino3_navigation')
+    bringup_dir = get_package_share_directory('robotino_navigation')
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable(
@@ -142,14 +139,6 @@ def generate_launch_description():
         'launch_mapserver', default_value='true',
         description='whether to launch map server or not')
     
-    declare_launchrviz_cmd = DeclareLaunchArgument(
-        'launch_rviz', default_value='false',
-        description='whether to launch rviz or not')
-    
-    declare_rvizconfig_cmd = DeclareLaunchArgument(
-        'rviz_config', 
-        default_value='',
-        description='Full path to the RVIZ config file to use for all launched nodes')
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -168,9 +157,7 @@ def generate_launch_description():
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
     ld.add_action(declare_launchmapserver_cmd)
-    ld.add_action(declare_launchrviz_cmd)
-    ld.add_action(declare_rvizconfig_cmd)
-
+    
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
 
