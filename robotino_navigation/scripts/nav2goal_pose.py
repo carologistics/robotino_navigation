@@ -6,7 +6,7 @@ from nav2_msgs.action import NavigateToPose
 from geometry_msgs.msg import Point, Quaternion
 from rclpy.node import Node
 import rclpy
-from ur_interface.srv import JointangleReq
+from navigation_interface.srv import JointangleReq
 
 class AutonomousNavigation(Node):
 
@@ -17,7 +17,7 @@ class AutonomousNavigation(Node):
         
     def NavPoseSrv_cb(self, request, response):
         if request.data == 'True':
-            self.get_logger().info(f"[NavPoseSrv_cb]:Tcp_pose request received: {request.tcp_pose}")
+            self.get_logger().info(f"[NavPoseSrv_cb]:Goal_pose request received: {request.tcp_pose}")
             self.pose = Point()
             self.quat = Quaternion()
             self.pose.x = request.tcp_pose[0]
