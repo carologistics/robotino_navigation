@@ -18,6 +18,7 @@ find_package(action_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(navigation_interface REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 # #add_executable(nav2goal_pose src/nav2goal_pose.py)
 # #ament_target_dependencies(nav2goal_pose rclpy action_msgs nav2_msgs geometry_msgs ur_interface)
@@ -32,6 +33,8 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
   scripts/nav2goal_pose.py
+  scripts/test_service_srv.py
+  scripts/test_service_cli.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
