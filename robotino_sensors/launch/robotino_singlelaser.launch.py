@@ -50,6 +50,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
+        
+    frame_id_lase = launch_configuration['namespace']+'_laser_link'
+    frame_id_baselink = launch_configuration['namespace']+'/base_link'
     
     # Create a list of nodes to launch
     load_nodes = GroupAction(
@@ -63,7 +66,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             namespace = namespace,
             parameters= [os.path.join(package_dir, 'config', 'laserSens_config.yaml'),
                          {'frame_id':launch_configuration['namespace']+'/laser_link',
-                          'hostname':'192.168.2.63',#169.254.4.93
+                          'hostname':'192.168.2.63', #169.254.4.93
                           'port': '2112'}],
         ), 
         
@@ -81,7 +84,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0.5', '0.5', '0.5', '0', '0', '0', 'map',launch_configuration['namespace']+'/laser_link'],
+            arguments=['0.5', '0.5', '0.5', '0', '0', '0', frame_id_baselink, frame_id_lase],
         ),
         
         ])
@@ -101,7 +104,7 @@ def generate_launch_description():
     
     declare_launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='true', 
+        default_value='false', 
         description= 'Wheather to start Rviz or not based on launch environment')
     
     # Create the launch description and populate

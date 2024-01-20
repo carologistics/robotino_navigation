@@ -53,13 +53,15 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         launch_configuration[argname] = argval
     
     namespace_frontlaser = launch_configuration['namespace']+'/front'
-    namespace_rearlaser = launch_configuration['namespace']+'/rear'
+    namespace_rearlaser = launch_configuration['namespace']+'/back'
     
     frame_id_frontlaser = namespace_frontlaser+'_laser_link'
     frame_id_rearlaser = namespace_rearlaser+'_laser_link'
     frame_id_laser = launch_configuration['namespace']+'/laser_link'
+    frame_id_baselink = launch_configuration['namespace']+'/base_link'
     
     # Create a list of nodes to launch
+    # ip adress of test sensors 1. 192.168.2.63 / 2. 169.254.4.93
     load_nodes = GroupAction(
         actions=[
             
@@ -71,7 +73,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             namespace = namespace_frontlaser,
             parameters= [os.path.join(package_dir, 'config', 'laserSens_config.yaml'),
                          {'frame_id':frame_id_frontlaser,
-                          'hostname':'192.168.2.63',
+                          'hostname':'192.168.0.42', 
                           'port':'2112'}],
         ), 
         
@@ -83,7 +85,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             namespace = namespace_rearlaser,
             parameters= [os.path.join(package_dir, 'config', 'laserSens_config.yaml'),
                          {'frame_id':frame_id_rearlaser,
-                          'hostname':'169.254.4.93',
+                          'hostname':'192.168.0.43',
                           'port':'2112'}],
         ), 
         
@@ -115,21 +117,21 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0.5', '0.0', '0.5', '0', '0', '0', 'map',frame_id_frontlaser],
+            arguments=['0.094', '0.0', '0.2390', '0', '0', '3.1415', frame_id_baselink ,frame_id_frontlaser],
         ),
         
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['-0.5', '0.0', '0.5',str(math.radians(180)), '0', '0', 'map',frame_id_rearlaser],
+            arguments=['-0.11', '0.0', '0.32', '0.0', '2.94', '0.0', frame_id_baselink,frame_id_rearlaser],
         ),
         
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0.0', '0.0', '0.5', '0', '0', '0', 'map',frame_id_laser],
+            arguments=['0.0', '0.0', '0.32', '0', '0', '0', frame_id_baselink,frame_id_laser],
         ),
         
         ])
@@ -153,7 +155,7 @@ def generate_launch_description():
     
     declare_launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='true', 
+        default_value='false', 
         description= 'Wheather to start Rviz or not based on launch environment')
     
     # Create the launch description and populate
