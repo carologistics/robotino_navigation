@@ -11,6 +11,7 @@ from launch.conditions import IfCondition
 from launch_ros.descriptions import ComposableNode, ParameterFile
 import launch
 from launch_ros.actions import LoadComposableNodes
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
@@ -53,6 +54,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     
     rviz_config_dir = os.path.join(bringup_dir,'rviz', 'robotino_localization.rviz')
     
+    
+    Nav_qos_profile = QoSProfile(
+                reliability=QoSReliabilityPolicy.BEST_EFFORT,
+                depth=10) 
+    
     # Create list of nodes to launch
     load_nodes = GroupAction(
         actions=[
@@ -67,7 +73,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_mapserver),
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_amcl',
                 executable='amcl',
@@ -78,7 +85,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings,
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',

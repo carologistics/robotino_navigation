@@ -22,6 +22,7 @@ from launch_ros.actions import LoadComposableNodes
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode, ParameterFile
 from nav2_common.launch import RewrittenYaml
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy
 
 def launch_nodes_withconfig(context, *args, **kwargs):
     
@@ -63,6 +64,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             convert_types=True),
         allow_substs=True)
     
+    Nav_qos_profile = QoSProfile(
+                reliability=QoSReliabilityPolicy.BEST_EFFORT,
+                depth=10)
+    
     # Create the list of nodes to start
     load_nodes = GroupAction(
         actions=[
@@ -75,7 +80,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings + [('/robotinobase1/cmd_vel', '/robotinobase1/cmd_vel_nav')],
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_smoother',
                 executable='smoother_server',
@@ -86,7 +92,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings,
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_planner',
                 executable='planner_server',
@@ -97,7 +104,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings, 
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_behaviors',
                 executable='behavior_server',
@@ -108,7 +116,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings,
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_bt_navigator',
                 executable='bt_navigator',
@@ -119,7 +128,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings, 
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_waypoint_follower',
                 executable='waypoint_follower',
@@ -130,7 +140,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings, 
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_velocity_smoother',
                 executable='velocity_smoother',
@@ -142,7 +153,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings + #[('cmd_vel', 'cmd_vel_nav')],
                 [('/robotinobase1/cmd_vel', '/robotinobase1/cmd_vel_nav'), ('/robotinobase1/cmd_vel_smoothed', '/robotinobase1/cmd_vel')],
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
@@ -152,7 +164,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
                             {'node_names': lifecycle_nodes}],
-                namespace=namespace),
+                namespace=namespace,
+                qos_profile=Nav_qos_profile),
         ]
     )
     
