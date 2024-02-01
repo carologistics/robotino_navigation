@@ -1,5 +1,5 @@
-
-/**: #no need to provide the node name, common param file for all instances
+#no need to provide the node name, common param file for all instances
+/**: 
   ros__parameters:
     active_echos: 0
     add_transform_check_dynamic_updates: true
@@ -61,6 +61,6 @@
     time_increment: -1.0
     time_offset: 0.0
     timelimit: 5
-    use_binary_protocol: false
+    use_binary_protocol: false # set false for sick_tim_5xx connected with robotinobases
     use_generation_timestamp: true
     use_sim_time: false

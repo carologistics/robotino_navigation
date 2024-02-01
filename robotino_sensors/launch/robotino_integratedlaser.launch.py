@@ -32,8 +32,6 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
-import pathlib
-from launch.actions import (LogInfo, RegisterEventHandler, TimerAction)
 from launch.conditions import IfCondition
 from launch.event_handlers import  OnProcessStart
 import math
@@ -142,7 +140,7 @@ def generate_launch_description():
     
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
-        'namespace', default_value='robotinobase1', 
+        'namespace', default_value='robotinobase4', 
         description='Top-level namespace')
 
     declare_sensor_config_argument = DeclareLaunchArgument(
