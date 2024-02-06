@@ -40,7 +40,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval#
     
-    slam_rviz_config = os.path.join(get_package_share_directory('robotino3_slamtoolbox'), 'rviz', launch_configuration['namespace']+'_slam.rviz')
+    slam_rviz_config = os.path.join(get_package_share_directory('robotino_slamtoolbox'), 'rviz', launch_configuration['namespace']+'_slam.rviz')
 
     # Create a list of nodes to launch
     load_nodes = GroupAction(
@@ -49,7 +49,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         # Initialize SLAM Toolbox node in asynchronous mode
         Node(
             parameters=[
-                get_package_share_directory("robotino_slamtoolbox") + '/config/map_params.yaml',
+                get_package_share_directory("robotino_slamtoolbox") + '/config/slam_params.yaml',
                 {'use_sim_time': use_sim_time, 
                 'odom_frame': launch_configuration['namespace']+'/odom',
                 'base_frame': launch_configuration['namespace']+'/base_link',
@@ -77,7 +77,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     return[load_nodes]
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('robotino3_simulation')
     
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
