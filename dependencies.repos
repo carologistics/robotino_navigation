@@ -11,7 +11,7 @@ repositories:
     type: git
     url: https://github.com/SICKAG/msgpack11.git
     version: master
-  msgpack11:
+  laser_scan_integrator:
     type: git
     url: https://github.com/borsesaurabh2022/laser_scan_integrator.git
-    version: main
+    version: sborse/hardware
