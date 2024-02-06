@@ -73,6 +73,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                          {'frame_id':frame_id_frontlaser,
                           'hostname':'192.168.0.42', 
                           'port':'2112'}],
+            remappings=[('/cloud', namespace_frontlaser+'/cloud')],  
         ), 
         
         Node(
@@ -85,6 +86,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                          {'frame_id':frame_id_rearlaser,
                           'hostname':'192.168.0.43',
                           'port':'2112'}],
+            remappings=[('/cloud', namespace_rearlaser+'/cloud')], 
         ), 
         
         # Launch Integrate laserscan launch file 
@@ -129,7 +131,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0.0', '0.0', '0.32', '0', '0', '0', frame_id_baselink,frame_id_laser],
+            arguments=['0.0', '0.0', '0.2390', '0', '0', '0', frame_id_baselink,frame_id_laser],
         ),
         
         ])
@@ -140,7 +142,7 @@ def generate_launch_description():
     
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
-        'namespace', default_value='robotinobase4', 
+        'namespace', default_value='', 
         description='Top-level namespace')
 
     declare_sensor_config_argument = DeclareLaunchArgument(
