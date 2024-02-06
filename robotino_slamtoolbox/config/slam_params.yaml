@@ -14,7 +14,7 @@ slam_toolbox:
     map_frame: map
     base_frame: robotinobase2/base_link
     scan_topic: /robotinobase2/scan
-    mode: localization
+    mode: localization #mapping
     scan_queue_size: 1
     use_map_saver: true
 
@@ -28,9 +28,9 @@ slam_toolbox:
     debug_logging: false
     throttle_scans: 1
     transform_publish_period: 0.02 #if 0 never publishes odometry
-    map_update_interval: 0.01
-    resolution: 0.03
-    max_laser_range: 100.0 #for rastering images
+    map_update_interval: 0.1
+    resolution: 0.01
+    max_laser_range: 40.0 #for rastering images
     minimum_time_interval: 0.5
     transform_timeout: 0.2
     tf_buffer_duration: 30.0
