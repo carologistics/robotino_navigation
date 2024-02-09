@@ -29,8 +29,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
-    use_namespace = LaunchConfiguration('use_namespace')
-    rviz_config_file = LaunchConfiguration('rviz_config')
+    launch_rviz = LaunchConfiguration('launch_rviz')
+    rviz_config = LaunchConfiguration('rviz_config')
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -39,7 +39,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     rviz_config_dir = os.path.join(bringup_dir,'rviz', launch_configuration['rviz_config'])
     
     start_namespaced_rviz_cmd = Node(
-        condition=IfCondition(use_namespace),
+        condition=IfCondition(launch_rviz),
         package='rviz2',
         executable='rviz2',
         namespace=namespace,
@@ -53,7 +53,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     ('/initialpose', '/'+launch_configuration['namespace']+'/initialpose')])
 
     exit_event_handler_namespaced = RegisterEventHandler(
-        condition=IfCondition(use_namespace),
+        condition=IfCondition(launch_rviz),
         event_handler=OnProcessExit(
             target_action=start_namespaced_rviz_cmd,
             on_exit=EmitEvent(event=Shutdown(reason='rviz exited'))))
@@ -72,14 +72,14 @@ def generate_launch_description():
         description=('Top-level namespace. The value will be used to replace the '
                      '<robot_namespace> keyword on the rviz config file.'))
 
-    declare_use_namespace_cmd = DeclareLaunchArgument(
-        'use_namespace',
+    declare_launch_rviz_cmd = DeclareLaunchArgument(
+        'launch_rviz',
         default_value='true',
-        description='Whether to apply a namespace to the navigation stack')
+        description='Whether to start rviz or not')
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
         'rviz_config',
-        default_value=os.path.join(bringup_dir, 'rviz', 'robotinobase1_nav2config.rviz'),
+        default_value=os.path.join(bringup_dir, 'rviz', 'robotinobase4_nav2config.rviz'),
         description='Full path to the RVIZ config file to use')
 
 
@@ -88,7 +88,7 @@ def generate_launch_description():
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_use_namespace_cmd)
+    ld.add_action(declare_launch_rviz_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
 
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
