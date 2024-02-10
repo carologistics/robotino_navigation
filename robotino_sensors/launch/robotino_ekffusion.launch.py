@@ -32,11 +32,12 @@ from launch.actions import (DeclareLaunchArgument, GroupAction, OpaqueFunction,
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.conditions import IfCondition
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 
 def launch_nodes_withconfig(context, *args, **kwargs):
     
     # Get the launch directory
-    bringup_dir = get_package_share_directory('robotino3_sensors')
+    bringup_dir = get_package_share_directory('robotino_sensors')
     
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
@@ -80,7 +81,7 @@ def generate_launch_description():
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='true',
+        default_value='false',
         description='Use simulation (Gazebo) clock if true')
     
     declare_launch_ekf_cmd = DeclareLaunchArgument(

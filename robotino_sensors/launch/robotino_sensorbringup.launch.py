@@ -68,7 +68,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
-                    FindPackageShare('robotino3_simulation'),'launch','robotino_integratedlaser.launch.py'
+                    FindPackageShare('robotino_sensor'),'launch','robotino_integratedlaser.launch.py'
                 ])
             ]),
             launch_arguments={
@@ -90,7 +90,7 @@ def generate_launch_description():
         description='Top-level namespace')
 
     declare_use_sim_time_argument = DeclareLaunchArgument(
-        'use_sim_time', default_value='true',
+        'use_sim_time', default_value='false',
         description='Use simulation clock if true')
     
     declare_launch_rviz_argument = DeclareLaunchArgument(
