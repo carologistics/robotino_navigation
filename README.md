@@ -1,7 +1,6 @@
 
 # robotino-navigation
 This Git repository encompasses a comprehensive collection of code files for autonomous navigation of Robotino robots from Festo GmbH. 
-Additionally, the repository introduces a representative industrial production scenario. 
 It provides essential packages for constructing detailed robot descriptions, implementing sensor interfaces, integrating a SLAM toolbox for mapping, and 
 deploying the Navigation2 (Nav2) stack for autonomous navigation.
 
@@ -53,7 +52,7 @@ After installation, build the dependency workspace first with the following sequ
   1. To build dependencies for SICK-Laser sensors please refer to the instruction provided [here](https://github.com/SICKAG/sick_scan_xd/blob/master/INSTALL-ROS2.md#build-on-linux-ros2) 
     under the subsection: **Build sick_generic_caller**
 
-  2. THen build the package "Laser_scan_integrator" using colon build:
+  2. Then build the package "Laser_scan_integrator" using colon build:
 
     colcon build --packages-select laser_scan_integrator --symlink-install
      
@@ -68,7 +67,7 @@ After building the package, open a new terminal and navigate to your workspace. 
 
 Then, source the workspace by running the following command:
 
-    cd ~/simulation_ws
+    cd ~/robotino-navigation_ws
     source ~/robotino-navigation_deps_ws/install/setup.bash
     source install/setup.bash
     
@@ -128,3 +127,7 @@ Important notes and topics to look into for understanding the simulation environ
 ## Bugs and Issues
 
 Please report bugs and request features using the Issue Tracker
+
+## Author
+
+- [Saurabh Borse](https://github.com/borsesaurabh2022)
