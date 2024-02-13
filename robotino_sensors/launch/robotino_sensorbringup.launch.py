@@ -68,7 +68,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
-                    FindPackageShare('robotino_sensor'),'launch','robotino_integratedlaser.launch.py'
+                    FindPackageShare('robotino_sensors'),'launch','robotino_integratedlaser.launch.py'
                 ])
             ]),
             launch_arguments={
@@ -82,7 +82,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     return[load_launchfiles]
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('robotino3_simulation')
+    package_dir = get_package_share_directory('robotino_sensors')
     
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
