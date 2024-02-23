@@ -42,7 +42,7 @@ def generate_launch_description():
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
     env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
-    env_id = str(os.environ.get('ROS_DOMAIN_ID'))  
+    env_id = str(os.environ.get('ROBOT_ID'))
     print("env_id:", env_id) 
 
     # Create our own temporary YAML files that include substitutions

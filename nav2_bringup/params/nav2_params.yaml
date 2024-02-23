@@ -146,18 +146,18 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       # time_steps times model_dt times vx_max should be < than than halve of
       # the local costmap size, otherwise the robot will never reach full speed
-      time_steps: 5
+      time_steps: 30
       # model_dt depends on the controller frequency
-      model_dt: 0.12
+      model_dt: 0.1
       batch_size: 2000
       # robotino motion model likely needs to be adapted
       vx_std: 0.2
       vy_std: 0.2
-      wz_std: 0.4
-      vx_max: 2.5
-      vx_min: -2.5
-      vy_max: 2.5
-      wz_max: 3.14
+      wz_std: 0.2
+      vx_max: 0.65
+      vx_min: -0.65
+      vy_max: 0.65
+      wz_max: 0.65
       iteration_count: 1
       prune_distance: 0.7
       transform_tolerance: 0.5
@@ -281,8 +281,8 @@ local_costmap:
       robot_base_frame: base_link
       use_sim_time: False
       rolling_window: true
-      width: 3
-      height: 3
+      width: 6
+      height: 6
       resolution: 0.015
       robot_radius: 0.25
       plugins: ["voxel_layer", "inflation_layer"]

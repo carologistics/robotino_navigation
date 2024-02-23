@@ -54,7 +54,7 @@ def generate_launch_description():
     # Get the robot-specific namespace from an environment variable             
     # The actual namespace is unavailable at that point                         
     env_ns = ''                          # os.environ.get('ROS_2_NAV_NS')                                     
-    env_id = str(os.environ.get('ROS_DOMAIN_ID'))   
+    env_id = str(os.environ.get('ROBOT_ID'))
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
