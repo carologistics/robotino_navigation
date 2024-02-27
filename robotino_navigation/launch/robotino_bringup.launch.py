@@ -108,7 +108,7 @@ def generate_launch_description():
     
     declare_launch_rviz_cmd = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='true',
+        default_value='false',
         description='Weather to use namespace or not')
 
     declare_use_composition_cmd = DeclareLaunchArgument(
@@ -150,7 +150,7 @@ def generate_launch_description():
         description='whether to launch map server or not')
     
     declare_launch_nav2rviz_cmd = DeclareLaunchArgument(
-        'launch_nav2rviz', default_value='true',
+        'launch_nav2rviz', default_value='false',
         description='whether to launch rviz or not')
     
     declare_rvizconfig_cmd = DeclareLaunchArgument(
