@@ -3,15 +3,7 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /LaserScan1
-        - /Global Planner1
-        - /Global Planner1/Global Costmap1
-        - /Global Planner1/Global Costmap1/Status1
-        - /Polygon1
-        - /Polygon1/Topic1
-        - /Polygon2
-        - /Polygon2/Topic1
+      Expanded: ~
       Splitter Ratio: 0.3778071403503418
     Tree Height: 295
   - Class: rviz_common/Selection
@@ -59,7 +51,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/robot_description
+        Value: /robotinobase4/robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -67,11 +59,41 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        anglebracketusb_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        command_bridge_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel0_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: robotinobase1
+      TF Prefix: robotinobase4
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -82,107 +104,31 @@ Visualization Manager:
         All Enabled: false
         map:
           Value: true
-        robotinobase1/back_laser:
+        robotinobase4/anglebracketusb_link:
           Value: true
-        robotinobase1/base_laser:
+        robotinobase4/back_laser_link:
           Value: true
-        robotinobase1/base_link:
+        robotinobase4/base_link:
           Value: true
-        robotinobase1/cam_base:
+        robotinobase4/command_bridge_link:
           Value: true
-        robotinobase1/cam_conveyor:
+        robotinobase4/front_laser_link:
           Value: true
-        robotinobase1/cam_gripper:
+        robotinobase4/imu_link:
           Value: true
-        robotinobase1/cam_tag:
+        robotinobase4/irpcl_link:
           Value: true
-        robotinobase1/cam_vs:
+        robotinobase4/irscan_link:
           Value: true
-        robotinobase1/conveyor_calib:
+        robotinobase4/laser_link:
           Value: true
-        robotinobase1/end_effector_home:
+        robotinobase4/odom:
           Value: true
-        "robotinobase1/fi\x02\x00\x00\x00s_home":
+        robotinobase4/wheel0_link:
           Value: true
-        robotinobase1/fingers_home:
+        robotinobase4/wheel1_link:
           Value: true
-        robotinobase1/front_dist:
-          Value: true
-        robotinobase1/front_laser:
-          Value: true
-        robotinobase1/gripper:
-          Value: true
-        robotinobase1/gripper_fingers:
-          Value: true
-        robotinobase1/gripper_fingers_record:
-          Value: true
-        robotinobase1/gripper_home:
-          Value: true
-        robotinobase1/gripper_x_dyn:
-          Value: true
-        robotinobase1/gripper_x_origin:
-          Value: true
-        robotinobase1/gripper_y_dyn:
-          Value: true
-        robotinobase1/gripper_y_origin:
-          Value: true
-        robotinobase1/gripper_z_dyn:
-          Value: true
-        robotinobase1/gripper_z_origin:
-          Value: true
-        robotinobase1/laser_line_1_e1:
-          Value: true
-        robotinobase1/laser_line_1_e2:
-          Value: true
-        robotinobase1/laser_line_2_e1:
-          Value: true
-        robotinobase1/laser_line_2_e2:
-          Value: true
-        robotinobase1/laser_line_3_e1:
-          Value: true
-        robotinobase1/laser_line_3_e2:
-          Value: true
-        robotinobase1/laser_line_4_e1:
-          Value: true
-        robotinobase1/laser_line_4_e2:
-          Value: true
-        robotinobase1/laser_line_avg_1_e1:
-          Value: true
-        robotinobase1/laser_line_avg_1_e2:
-          Value: true
-        robotinobase1/laser_line_avg_2_e1:
-          Value: true
-        robotinobase1/laser_line_avg_2_e2:
-          Value: true
-        robotinobase1/laser_line_avg_3_e1:
-          Value: true
-        robotinobase1/laser_line_avg_3_e2:
-          Value: true
-        robotinobase1/laser_line_avg_4_e1:
-          Value: true
-        robotinobase1/laser_line_avg_4_e2:
-          Value: true
-        robotinobase1/laser_line_transformed_1_e1:
-          Value: true
-        robotinobase1/laser_line_transformed_1_e2:
-          Value: true
-        robotinobase1/laser_line_transformed_2_e1:
-          Value: true
-        robotinobase1/laser_line_transformed_2_e2:
-          Value: true
-        robotinobase1/laser_line_transformed_3_e1:
-          Value: true
-        robotinobase1/laser_line_transformed_3_e2:
-          Value: true
-        robotinobase1/laser_line_transformed_4_e1:
-          Value: true
-        robotinobase1/laser_line_transformed_4_e2:
-          Value: true
-        robotinobase1/odom:
-          Value: true
-        robotinobase1/plate_top:
-          Value: true
-        robotinobase1/shelf_record:
+        robotinobase4/wheel2_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -191,79 +137,30 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          robotinobase1/laser_line_transformed_1_e1:
-            {}
-          robotinobase1/laser_line_transformed_1_e2:
-            {}
-          robotinobase1/laser_line_transformed_2_e1:
-            {}
-          robotinobase1/laser_line_transformed_2_e2:
-            {}
-          robotinobase1/laser_line_transformed_3_e1:
-            {}
-          robotinobase1/laser_line_transformed_3_e2:
-            {}
-          robotinobase1/laser_line_transformed_4_e1:
-            {}
-          robotinobase1/laser_line_transformed_4_e2:
-            {}
-          robotinobase1/odom:
-            robotinobase1/base_link:
-              robotinobase1/back_laser:
+          robotinobase4/odom:
+            robotinobase4/base_link:
+              robotinobase4/anglebracketusb_link:
                 {}
-              robotinobase1/base_laser:
-                robotinobase1/front_dist:
-                  {}
-                robotinobase1/laser_line_1_e1:
-                  {}
-                robotinobase1/laser_line_1_e2:
-                  {}
-                robotinobase1/laser_line_2_e1:
-                  {}
-                robotinobase1/laser_line_2_e2:
-                  {}
-                robotinobase1/laser_line_3_e1:
-                  {}
-                robotinobase1/laser_line_3_e2:
-                  {}
-                robotinobase1/laser_line_4_e1:
-                  {}
-                robotinobase1/laser_line_4_e2:
-                  {}
-                robotinobase1/laser_line_avg_1_e1:
-                  {}
-                robotinobase1/laser_line_avg_1_e2:
-                  {}
-                robotinobase1/laser_line_avg_2_e1:
-                  {}
-                robotinobase1/laser_line_avg_2_e2:
-                  {}
-                robotinobase1/laser_line_avg_3_e1:
-                  {}
-                robotinobase1/laser_line_avg_3_e2:
-                  {}
-                robotinobase1/laser_line_avg_4_e1:
-                  {}
-                robotinobase1/laser_line_avg_4_e2:
-                  {}
-              robotinobase1/cam_tag:
+              robotinobase4/back_laser_link:
                 {}
-              robotinobase1/front_laser:
+              robotinobase4/command_bridge_link:
                 {}
-              robotinobase1/plate_top:
-                robotinobase1/cam_vs:
-                  {}
-                robotinobase1/gripper_home:
-                  robotinobase1/conveyor_calib:
-                    {}
-                  robotinobase1/end_effector_home:
-                    {}
-                  "robotinobase1/fi\x02\x00\x00\x00s_home":
-                    {}
-                  robotinobase1/fingers_home:
-                    {}
-                robotinobase1/gripper_x_origin:
-                  {}
+              robotinobase4/front_laser_link:
+                {}
+              robotinobase4/imu_link:
+                {}
+              robotinobase4/irpcl_link:
+                {}
+              robotinobase4/irscan_link:
+                {}
+              robotinobase4/laser_link:
+                {}
+              robotinobase4/wheel0_link:
+                {}
+              robotinobase4/wheel1_link:
+                {}
+              robotinobase4/wheel2_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -296,7 +193,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase1/fawkes_scans/Laser_urg_filtered_360
+        Value: /robotinobase4/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -369,7 +266,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase1/particle_cloud
+        Value: /robotinobase4/particle_cloud
       Value: true
     - Class: rviz_common/Group
       Displays:
@@ -380,18 +277,18 @@ Visualization Manager:
           Enabled: true
           Name: Global Costmap
           Topic:
-            Depth: 1
+            Depth: 3
             Durability Policy: Transient Local
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap
+            Value: /robotinobase4/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap_updates
+            Value: /robotinobase4/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 0.30000001192092896
@@ -406,13 +303,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap
+            Value: /robotinobase4/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap_updates
+            Value: /robotinobase4/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -441,7 +338,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/plan
+            Value: /robotinobase4/plan
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -488,7 +385,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/published_footprint
+            Value: /robotinobase4/global_costmap/published_footprint
           Value: true
       Enabled: true
       Name: Global Planner
@@ -506,13 +403,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/costmap
+            Value: /robotinobase4/local_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/costmap_updates
+            Value: /robotinobase4/local_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -541,7 +438,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_plan
+            Value: /robotinobase4/plan_smoothed
           Value: true
         - Class: rviz_default_plugins/MarkerArray
           Enabled: true
@@ -566,7 +463,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/published_footprint
+            Value: /robotinobase4/local_costmap/published_footprint
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -666,7 +563,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/waypoints
+        Value: /robotinobase4/waypoints
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -679,7 +576,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/polygon_slowdown
+        Value: /robotinobase4/polygon_slowdown
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -692,7 +589,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/polygon_stop
+        Value: /robotinobase4/polygon_stop
       Value: true
   Enabled: true
   Global Options:
@@ -741,7 +638,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 92.34815216064453
+      Scale: 45.861358642578125
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
       X: 0.6133970618247986
