@@ -1,3 +1,25 @@
+# Author: Saurabh Borse(saurabh.borse@alumni.fh-aachen.de)
+
+#  MIT License
+#  Copyright (c) 2023 Saurabh Borse
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#  SOFTWARE.
+
 #!/usr/bin/env python3
 
 import os
@@ -15,7 +37,7 @@ from launch_ros.actions import LoadComposableNodes
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     bringup_dir = get_package_share_directory('robotino_navigation')
-    
+
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')
@@ -26,9 +48,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     log_level = LaunchConfiguration('log_level')
     launch_rviz = LaunchConfiguration('launch_rviz')
     launch_mapserver = LaunchConfiguration('launch_mapserver')
-    
+
     lifecycle_nodes = ['map_server', 'amcl']
-    
+
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
@@ -41,18 +63,18 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             param_rewrites=param_substitutions,
             convert_types=True),
         allow_substs=True)
-    
+
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
-    
+
     # Create the remappings for the nodes
     remappings = [('/'+launch_configuration['namespace']+'/tf', '/tf'),
                   ('/'+launch_configuration['namespace']+'/tf_static', '/tf_static'),
                   ('/'+launch_configuration['namespace']+'/map','/map')]
-    
+
     rviz_config_dir = os.path.join(bringup_dir,'rviz', 'robotino_localization.rviz')
-    
+
     # Create list of nodes to launch
     load_nodes = GroupAction(
         actions=[
@@ -88,19 +110,19 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[{'use_sim_time': use_sim_time},
                             {'autostart': autostart},
                             {'node_names': lifecycle_nodes}],
-                namespace=namespace), 
+                namespace=namespace),
         ])
-    
+
     return[load_nodes]
 
 def generate_launch_description():
-    
+
     bringup_dir = get_package_share_directory('robotino_navigation')
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
-    
+
     declare_namespace_cmd = DeclareLaunchArgument(
         'namespace', default_value='',
         description='Top-level namespace')
@@ -129,15 +151,15 @@ def generate_launch_description():
     declare_log_level_cmd = DeclareLaunchArgument(
         'log_level', default_value='info',
         description='log level')
-    
+
     launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='false', 
+        default_value='false',
         description= 'Wheather to start Rvizor not based on launch environment')
-    
+
     launch_mapserver_argument = DeclareLaunchArgument(
         'launch_mapserver',
-        default_value='false', 
+        default_value='false',
         description= 'Wheather to launch map server or not')
 
     # Create the launch description and populate

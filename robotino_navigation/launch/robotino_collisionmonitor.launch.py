@@ -1,18 +1,26 @@
-#!/usr/bin/env python3
+# Author: Saurabh Borse(saurabh.borse@alumni.fh-aachen.de)
 
-# Copyright (c) 2022 Samsung R&D Institute Russia
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  MIT License
+#  Copyright (c) 2023 Saurabh Borse
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#  SOFTWARE.
+
+#!/usr/bin/env python3
 
 import os
 from ament_index_python.packages import get_package_share_directory
@@ -29,11 +37,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     params_file = LaunchConfiguration('params_file')
-    
+
     # Constant parameters
     lifecycle_nodes = ['collision_monitor']
     autostart = True
-    
+
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time}
@@ -45,7 +53,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             param_rewrites=param_substitutions,
             convert_types=True),
         allow_substs=True)
-    
+
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
@@ -56,7 +64,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             executable='lifecycle_manager',
             name='lifecycle_manager',
             output='screen',
-            emulate_tty=True, 
+            emulate_tty=True,
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
                         {'node_names': lifecycle_nodes}],
@@ -72,8 +80,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             namespace=namespace)
 
     return [start_lifecycle_manager_cmd, start_collision_monitor_cmd]
-    
-    
+
+
 def generate_launch_description():
     # Environment
     package_dir = get_package_share_directory('robotino_navigation')
