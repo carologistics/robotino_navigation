@@ -1,5 +1,0 @@
-string data
-float64[] tcp_pose
----
-bool response
-string message
