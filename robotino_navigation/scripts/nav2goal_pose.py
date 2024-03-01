@@ -11,22 +11,22 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
 
 class AutonomousNavigation(Node):
 
-    def __init__(self):   
+    def __init__(self):
         self.Nav_qos_profile = QoSProfile(
                 reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                depth=10) 
-         
+                depth=10)
+
         super().__init__('robotino_nav2goal_pose')
-        self.navtopose_client = ActionClient(self, NavigateToPose, '/robotinobase1/navigate_to_pose', 
+        self.navtopose_client = ActionClient(self, NavigateToPose, '/robotinobase1/navigate_to_pose',
                                              result_service_qos_profile=self.Nav_qos_profile,
                                              goal_service_qos_profile=self.Nav_qos_profile,
                                              cancel_service_qos_profile=self.Nav_qos_profile,
                                              feedback_sub_qos_profile=self.Nav_qos_profile,
                                              status_sub_qos_profile=self.Nav_qos_profile)
         #
-        
+
         self.TcpPose_srv = self.create_service(JointangleReq, '/pose_req', self.NavPoseSrv_cb)
-        
+
     def NavPoseSrv_cb(self, request, response):
         if request.data == 'True':
             self.get_logger().info(f"[NavPoseSrv_cb]:Goal_pose request received: {request.tcp_pose}")

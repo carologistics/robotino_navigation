@@ -22,7 +22,7 @@ amcl:
     min_particles: 500
     odom_frame_id: "robotinobase1/odom"
     set_initial_pose: true
-    initial_pose: 
+    initial_pose:
       x: 0.0
       y: 0.0
       z: 0.0
@@ -366,8 +366,8 @@ global_costmap:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
         inflation_radius: 0.75
-        inflate_unknown: False        
-        inflate_around_unknown: False 
+        inflate_unknown: False
+        inflate_around_unknown: False
       always_send_full_costmap: True
 
 map_server:

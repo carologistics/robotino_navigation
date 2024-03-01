@@ -1,9 +1,9 @@
 # robotino_sensor
-The Git repository contains extensive code allowing for the seamless integration of various sensors mounted on Robotino robots 
-with the ROS 2 environment. The Robotinos are equipped with multiple sensors including LiDAR sensors, IMUs, depth cameras, among others. The repository provides a detailed 
-list of these sensors along with their manufacturers and links to their respective drivers. This facilitates easy access and 
-setup of the required drivers for each sensor, ensuring smooth communication between the sensors and the ROS 2 framework. This 
-integration enables us to leverage the sensor data effectively for tasks such as mapping, navigation, and obstacle avoidance, 
+The Git repository contains extensive code allowing for the seamless integration of various sensors mounted on Robotino robots
+with the ROS 2 environment. The Robotinos are equipped with multiple sensors including LiDAR sensors, IMUs, depth cameras, among others. The repository provides a detailed
+list of these sensors along with their manufacturers and links to their respective drivers. This facilitates easy access and
+setup of the required drivers for each sensor, ensuring smooth communication between the sensors and the ROS 2 framework. This
+integration enables us to leverage the sensor data effectively for tasks such as mapping, navigation, and obstacle avoidance,
 enhancing the efficiency and reliability of our robotic systems in industrial settings.
 
 ## List of sensors, product catalogue and drivers:
@@ -15,15 +15,15 @@ enhancing the efficiency and reliability of our robotic systems in industrial se
 
 ### 1. Lidar Sensors: SICK-TIM5XX
 
-#### Launching the sensor interface for single SICK sensors in ROS2 environment: 
+#### Launching the sensor interface for single SICK sensors in ROS2 environment:
 
     ros2 launch robotino_sensors robotino_singlelaser.launch.py namespace:=robotinobase4
 
-#### Launching the sensor interface for multiple SICK sensors in ROS2 environment: 
+#### Launching the sensor interface for multiple SICK sensors in ROS2 environment:
 
     ros2 launch robotino_sensors robotino_multilaser.launch.py namespace:=robotinobase4
 
-#### Launching the sensor interface for multiple SICK sensors, integrate the scans from these sensors (currentls two sensors mounted on Front and  back of the robotino), publish over the topic /<namespace/scan >- in ROS2 environment: 
+#### Launching the sensor interface for multiple SICK sensors, integrate the scans from these sensors (currentls two sensors mounted on Front and  back of the robotino), publish over the topic /<namespace/scan >- in ROS2 environment:
 
      ros2 launch robotino_sensors robotino_integratedlaser.launch.py namespace:=robotinobase4
 
@@ -51,7 +51,7 @@ In the domain of robot localization, the accuracy of wheel odometry is paramount
 To address these challenges, we've adopted the ROS 2 robot_localization package, leveraging its pre-built functionality. This package employs either Extended or Unscented Kalman filters to fuse data from multiple sensors, including wheel encoders, IMUs, and GPS sensors. The filtered odometry is then published on the topic /<namespace>/odom_filtered, providing a more accurate and robust estimation of the robot's pose.
 More information about the robot_localization package and corresponding parameters is available [here](http://docs.ros.org/en/melodic/api/robot_localization/html/index.html)
 
-While using this repository, the EKF node can be launched with following command: 
+While using this repository, the EKF node can be launched with following command:
 
     ros2 launch robotino_sensors robotino_ekffusion.launch.py namespace:=robotinobase4
 
@@ -62,11 +62,6 @@ To launch the ROS2 driver for Lidar sensors, IMU and sensor fusion using Extende
 
     ros2 launch robotino_sensors robotino_sensorbringup.launch.py namespace:=robotinobase4
 
-## Author: 
+## Author:
 
 - [Saurabh Borse](https://github.com/borsesaurabh2022)
-
-
-
-
-  
