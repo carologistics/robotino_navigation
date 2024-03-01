@@ -22,7 +22,7 @@ amcl:
     min_particles: 500
     odom_frame_id: "robotinobase2/odom"
     set_initial_pose: true
-    initial_pose: 
+    initial_pose:
       x: 0.5
       y: 0.0
       z: 0.0

@@ -41,23 +41,23 @@ from launch.event_handlers import  OnProcessStart
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     package_dir = get_package_share_directory('robotino_sensors')
-    
+
     # Declare launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     launch_rviz = LaunchConfiguration('launch_rviz')
-    
+
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
-        
+
     frame_id_lase = launch_configuration['namespace']+'_laser_link'
     frame_id_baselink = launch_configuration['namespace']+'/base_link'
-    
+
     # Create a list of nodes to launch
     load_nodes = GroupAction(
         actions=[
-            
+
         Node(
             package='sick_scan_xd',
             executable='sick_generic_caller',
@@ -68,8 +68,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                          {'frame_id':launch_configuration['namespace']+'/laser_link',
                           'hostname':'192.168.2.63', #169.254.4.93
                           'port': '2112'}],
-        ), 
-        
+        ),
+
         # Spawn Rviz2 node for visualization
         Node(
             package='rviz2',
@@ -78,35 +78,35 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             arguments=['-d', os.path.join(package_dir,'rviz','lasersens_rvizconfig.rviz')],
             output='screen',
             condition = IfCondition(launch_rviz),
-        ), 
-        
+        ),
+
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
             arguments=['0.5', '0.5', '0.5', '0', '0', '0', frame_id_baselink, frame_id_lase],
         ),
-        
+
         ])
     return[load_nodes]
 
 def generate_launch_description():
     package_dir = get_package_share_directory('robotino_sensors')
-    
+
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
-        'namespace', default_value='', 
+        'namespace', default_value='',
         description='Top-level namespace')
 
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time', default_value='false',
         description='Use simulation clock if true')
-    
+
     declare_launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='false', 
+        default_value='false',
         description= 'Wheather to start Rviz or not based on launch environment')
-    
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -117,5 +117,5 @@ def generate_launch_description():
 
     # Add the actions to launch all nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
-    
+
     return ld

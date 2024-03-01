@@ -34,10 +34,10 @@ from launch_ros.actions import Node
 from launch.conditions import IfCondition
 
 def launch_nodes_withconfig(context, *args, **kwargs):
-    
+
     # Get the launch directory
     bringup_dir = get_package_share_directory('robotino3_sensors')
-    
+
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -63,7 +63,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                  'imu0': '/'+launch_configuration['namespace']+'/imu',
                  }],
                 namespace=namespace,
-                remappings=[('/'+launch_configuration['namespace']+'/odometry/filtered', 
+                remappings=[('/'+launch_configuration['namespace']+'/odometry/filtered',
                              '/'+launch_configuration['namespace']+'/odom_filtered'),]
            )
 
@@ -71,7 +71,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 
 def generate_launch_description():
-    
+
     # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
         'namespace',
@@ -82,7 +82,7 @@ def generate_launch_description():
         'use_sim_time',
         default_value='true',
         description='Use simulation (Gazebo) clock if true')
-    
+
     declare_launch_ukf_cmd = DeclareLaunchArgument(
         'launch_ukf',
         default_value='false',
@@ -95,7 +95,7 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_launch_ukf_cmd)
-    
+
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
 

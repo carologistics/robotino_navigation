@@ -28,7 +28,7 @@ amcl:
     resample_interval: 1
     robot_model_type: "nav2_amcl::OmniMotionModel"
     set_initial_pose: true
-    initial_pose: 
+    initial_pose:
       x: 1.0
       y: 0.0
       z: 0.0

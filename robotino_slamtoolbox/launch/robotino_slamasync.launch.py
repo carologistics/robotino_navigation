@@ -19,7 +19,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-    
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -39,7 +39,7 @@ from launch_ros.actions import Node
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
-    
+
     # Declare launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -47,11 +47,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     autostart = LaunchConfiguration('autostart')
     use_lifecycle_manager = LaunchConfiguration("use_lifecycle_manager")
     slam_params_file = LaunchConfiguration('slam_params_file')
-    
+
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval#
-    
+
     slam_rviz_config = os.path.join(get_package_share_directory('robotino_slamtoolbox'), 'rviz', launch_configuration['namespace']+'_slam.rviz')
 
 
@@ -59,7 +59,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     start_async_slam_toolbox_node = LifecycleNode(
         parameters=[
             slam_params_file,
-                {'use_sim_time': use_sim_time, 
+                {'use_sim_time': use_sim_time,
                 'odom_frame': launch_configuration['namespace']+'/odom',
                 'base_frame': launch_configuration['namespace']+'/base_link',
                 'scan_topic': launch_configuration['namespace']+'/scan',
@@ -95,7 +95,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ),
         condition=IfCondition(AndSubstitution(autostart, NotSubstitution(use_lifecycle_manager)))
     )
-    
+
     # Initialize rviz2
     rviz_node = Node(
         package='rviz2',
@@ -105,11 +105,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         parameters=[{'use_sim_time': use_sim_time}],
         condition = IfCondition(launch_rviz)
     )
-        
+
     return[start_async_slam_toolbox_node, configure_event, activate_event, rviz_node]
 
 def generate_launch_description():
-    
+
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
         'namespace', default_value='',
@@ -118,25 +118,25 @@ def generate_launch_description():
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time', default_value='true',
         description='Use simulation clock if true')
-    
+
     declare_launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='true', 
+        default_value='true',
         description= 'Wheather to start Rvizor not based on launch environment')
-    
+
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
         description='Automatically startup the slamtoolbox, Ignored when use_lifecycle_manager is true.')
-    
+
     declare_use_lifecycle_manager = DeclareLaunchArgument(
         'use_lifecycle_manager', default_value='true',
         description='Enable bond connection during node activation')
-    
+
     declare_slam_params_file_cmd = DeclareLaunchArgument(
         'slam_params_file',
         default_value=os.path.join(get_package_share_directory("robotino_slamtoolbox"),'config', 'slam_params.yaml'),
         description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
-    
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -150,5 +150,5 @@ def generate_launch_description():
 
     # Add the actions to launch all nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
-    
+
     return ld

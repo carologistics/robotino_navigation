@@ -40,29 +40,29 @@ import math
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     package_dir = get_package_share_directory('robotino_sensors')
-    
+
     # Declare launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     launch_rviz = LaunchConfiguration('launch_rviz')
-    
+
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
-    
+
     namespace_frontlaser = launch_configuration['namespace']+'/front'
     namespace_rearlaser = launch_configuration['namespace']+'/back'
-    
+
     frame_id_frontlaser = namespace_frontlaser+'_laser_link'
     frame_id_rearlaser = namespace_rearlaser+'_laser_link'
     frame_id_laser = launch_configuration['namespace']+'/laser_link'
     frame_id_baselink = launch_configuration['namespace']+'/base_link'
-    
+
     # Create a list of nodes to launch
     # ip adress of test sensors 1. 192.168.2.63 / 2. 169.254.4.93
     load_nodes = GroupAction(
         actions=[
-            
+
         Node(
             package='sick_scan_xd',
             executable='sick_generic_caller',
@@ -71,11 +71,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             namespace = namespace_frontlaser,
             parameters= [os.path.join(package_dir, 'config', 'laserSens_config.yaml'),
                          {'frame_id':frame_id_frontlaser,
-                          'hostname':'192.168.0.42', 
+                          'hostname':'192.168.0.42',
                           'port':'2112'}],
-            remappings=[('/cloud', namespace_frontlaser+'/cloud')],  
-        ), 
-        
+            remappings=[('/cloud', namespace_frontlaser+'/cloud')],
+        ),
+
         Node(
             package='sick_scan_xd',
             executable='sick_generic_caller',
@@ -86,10 +86,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                          {'frame_id':frame_id_rearlaser,
                           'hostname':'192.168.0.43',
                           'port':'2112'}],
-            remappings=[('/cloud', namespace_rearlaser+'/cloud')], 
-        ), 
-        
-        # Launch Integrate laserscan launch file 
+            remappings=[('/cloud', namespace_rearlaser+'/cloud')],
+        ),
+
+        # Launch Integrate laserscan launch file
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -102,7 +102,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 'namespace': namespace,
             }.items()
         ),
-        
+
         # Spawn Rviz2 node for visualization
         Node(
             package='rviz2',
@@ -112,37 +112,37 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             output='screen',
             condition = IfCondition(launch_rviz),
         ),
-        
+
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
             arguments=['0.094', '0.0', '0.2390', '0', '0', '3.1415', frame_id_baselink ,frame_id_frontlaser],
         ),
-        
+
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
             arguments=['-0.11', '0.0', '0.32', '0.0', '2.94', '0.0', frame_id_baselink,frame_id_rearlaser],
         ),
-        
+
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
             arguments=['0.0', '0.0', '0.2390', '0', '0', '0', frame_id_baselink,frame_id_laser],
         ),
-        
+
         ])
     return[load_nodes]
 
 def generate_launch_description():
     package_dir = get_package_share_directory('robotino_sensors')
-    
+
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
-        'namespace', default_value='', 
+        'namespace', default_value='',
         description='Top-level namespace')
 
     declare_sensor_config_argument = DeclareLaunchArgument(
@@ -152,12 +152,12 @@ def generate_launch_description():
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time', default_value='false',
         description='Use simulation clock if true')
-    
+
     declare_launch_rviz_argument = DeclareLaunchArgument(
         'launch_rviz',
-        default_value='false', 
+        default_value='false',
         description= 'Wheather to start Rviz or not based on launch environment')
-    
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -169,5 +169,5 @@ def generate_launch_description():
 
     # Add the actions to launch all nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
-    
+
     return ld
