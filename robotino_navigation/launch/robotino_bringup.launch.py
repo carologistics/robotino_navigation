@@ -150,7 +150,13 @@ def generate_launch_description():
 
     declare_host_params_file_cmd = DeclareLaunchArgument(
         "host_params_file",
-        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
+        default_value=[
+            os.path.join(package_dir, "config/"),
+            LaunchConfiguration("namespace"),
+            "_nav2_params",
+            LaunchConfiguration("host_suffix"),
+            ".yaml",
+        ],
         description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
@@ -185,6 +191,11 @@ def generate_launch_description():
         default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
+    declare_host_suffix_cmd = DeclareLaunchArgument(
+        "host_suffix",
+        default_value="",
+        description="Use host-specific suffix.",
+    )
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -206,6 +217,7 @@ def generate_launch_description():
     ld.add_action(declare_launchmapserver_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
+    ld.add_action(declare_host_suffix_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
