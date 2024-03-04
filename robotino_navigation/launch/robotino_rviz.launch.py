@@ -48,15 +48,26 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    rviz_config_dir = os.path.join(bringup_dir, "rviz", launch_configuration["rviz_config"])
+    rviz_config_file = launch_configuration["rviz_config"]
+    # Replace placeholders with actual values
+    with open(rviz_config_file, "r") as file:
+        rviz_template_content = file.read()
+    namespace = context.launch_configurations["namespace"]
+    replaced_content = rviz_template_content.replace("<namespace>", namespace)
+
+    # Write the modified content to a new RVIZ2 configuration file
+    new_rviz_config_path = os.path.join(bringup_dir, "rviz", namespace + "_nav2config.rviz")
+    with open(new_rviz_config_path, "w") as file:
+        file.write(replaced_content)
 
     start_namespaced_rviz_cmd = Node(
         condition=IfCondition(launch_rviz),
         package="rviz2",
         executable="rviz2",
         namespace=namespace,
-        arguments=["-d", rviz_config_dir],
+        arguments=["-d", new_rviz_config_path],
         output="screen",
+        parameters=[{"namespace", launch_configuration["namespace"]}],
         remappings=[
             ("/" + launch_configuration["namespace"] + "/map", "/map"),
             ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
@@ -83,7 +94,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    bringup_dir = get_package_share_directory("robotino_navigation")
+    package_dir = get_package_share_directory("robotino_navigation")
 
     # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
@@ -101,8 +112,8 @@ def generate_launch_description():
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
         "rviz_config",
-        default_value=os.path.join(bringup_dir, "rviz", "robotinobase4_nav2config.rviz"),
-        description="Full path to the RVIZ config file to use",
+        default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
+        description="Full path to the RVIZ config file to use for all launched nodes",
     )
 
     # Create the launch description and populate
