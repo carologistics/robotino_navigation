@@ -137,7 +137,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    bringup_dir = get_package_share_directory("robotino_navigation")
+    package_dir = get_package_share_directory("robotino_navigation")
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
@@ -146,7 +146,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(bringup_dir, "map", "map.yaml"),
+        default_value=os.path.join(package_dir, "map", "map.yaml"),
         description="Full path to map yaml file to load",
     )
 
@@ -164,14 +164,14 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         "params_file",
-        default_value=os.path.join(bringup_dir, "config", "robotinobase3_nav2_params.yaml"),
-        description="Full path to the ROS2 parameters file to use",
+        default_value=[os.path.join(package_dir, "config/"), "nav2_params.yaml"],
+        description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
     declare_host_params_file_cmd = DeclareLaunchArgument(
         "host_params_file",
-        default_value=os.path.join(bringup_dir, "config", "robotinobase3_nav2_params.yaml"),
-        description="Full path to the ROS2 parameters file to use",
+        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
+        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
     declare_use_respawn_cmd = DeclareLaunchArgument(

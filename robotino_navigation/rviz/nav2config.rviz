@@ -51,7 +51,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase4/robot_description
+        Value: /<namespace>/robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -93,7 +93,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: robotinobase4
+      TF Prefix: <namespace>
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -104,31 +104,31 @@ Visualization Manager:
         All Enabled: false
         map:
           Value: true
-        robotinobase4/anglebracketusb_link:
+        <namespace>/anglebracketusb_link:
           Value: true
-        robotinobase4/back_laser_link:
+        <namespace>/back_laser_link:
           Value: true
-        robotinobase4/base_link:
+        <namespace>/base_link:
           Value: true
-        robotinobase4/command_bridge_link:
+        <namespace>/command_bridge_link:
           Value: true
-        robotinobase4/front_laser_link:
+        <namespace>/front_laser_link:
           Value: true
-        robotinobase4/imu_link:
+        <namespace>/imu_link:
           Value: true
-        robotinobase4/irpcl_link:
+        <namespace>/irpcl_link:
           Value: true
-        robotinobase4/irscan_link:
+        <namespace>/irscan_link:
           Value: true
-        robotinobase4/laser_link:
+        <namespace>/laser_link:
           Value: true
-        robotinobase4/odom:
+        <namespace>/odom:
           Value: true
-        robotinobase4/wheel0_link:
+        <namespace>/wheel0_link:
           Value: true
-        robotinobase4/wheel1_link:
+        <namespace>/wheel1_link:
           Value: true
-        robotinobase4/wheel2_link:
+        <namespace>/wheel2_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -137,29 +137,29 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          robotinobase4/odom:
-            robotinobase4/base_link:
-              robotinobase4/anglebracketusb_link:
+          <namespace>/odom:
+            <namespace>/base_link:
+              <namespace>/anglebracketusb_link:
                 {}
-              robotinobase4/back_laser_link:
+              <namespace>/back_laser_link:
                 {}
-              robotinobase4/command_bridge_link:
+              <namespace>/command_bridge_link:
                 {}
-              robotinobase4/front_laser_link:
+              <namespace>/front_laser_link:
                 {}
-              robotinobase4/imu_link:
+              <namespace>/imu_link:
                 {}
-              robotinobase4/irpcl_link:
+              <namespace>/irpcl_link:
                 {}
-              robotinobase4/irscan_link:
+              <namespace>/irscan_link:
                 {}
-              robotinobase4/laser_link:
+              <namespace>/laser_link:
                 {}
-              robotinobase4/wheel0_link:
+              <namespace>/wheel0_link:
                 {}
-              robotinobase4/wheel1_link:
+              <namespace>/wheel1_link:
                 {}
-              robotinobase4/wheel2_link:
+              <namespace>/wheel2_link:
                 {}
       Update Interval: 0
       Value: true
@@ -193,7 +193,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase4/scan
+        Value: /<namespace>/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -266,7 +266,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase4/particle_cloud
+        Value: /<namespace>/particle_cloud
       Value: true
     - Class: rviz_common/Group
       Displays:
@@ -282,13 +282,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/global_costmap/costmap
+            Value: /<namespace>/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/global_costmap/costmap_updates
+            Value: /<namespace>/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 0.30000001192092896
@@ -303,13 +303,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/global_costmap/costmap
+            Value: /<namespace>/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/global_costmap/costmap_updates
+            Value: /<namespace>/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -338,7 +338,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/plan
+            Value: /<namespace>/plan
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -385,7 +385,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/global_costmap/published_footprint
+            Value: /<namespace>/global_costmap/published_footprint
           Value: true
       Enabled: true
       Name: Global Planner
@@ -403,13 +403,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/local_costmap/costmap
+            Value: /<namespace>/local_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/local_costmap/costmap_updates
+            Value: /<namespace>/local_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -438,7 +438,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/plan_smoothed
+            Value: /<namespace>/plan_smoothed
           Value: true
         - Class: rviz_default_plugins/MarkerArray
           Enabled: true
@@ -463,7 +463,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase4/local_costmap/published_footprint
+            Value: /<namespace>/local_costmap/published_footprint
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -563,7 +563,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase4/waypoints
+        Value: /<namespace>/waypoints
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -576,7 +576,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase4/polygon_slowdown
+        Value: /<namespace>/polygon_slowdown
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -589,7 +589,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase4/polygon_stop
+        Value: /<namespace>/polygon_stop
       Value: true
   Enabled: true
   Global Options:

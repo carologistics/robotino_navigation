@@ -112,14 +112,14 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         "params_file",
-        default_value=os.path.join(package_dir, "params", "collision_monitor_params.yaml"),
+        default_value=[os.path.join(package_dir, "config/"), "nav2_params.yaml"],
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
     declare_host_params_file_cmd = DeclareLaunchArgument(
         "host_params_file",
-        default_value=os.path.join(package_dir, "params", "collision_monitor_params.yaml"),
-        description="Full path to the ROS2 parameters file to use for all launched nodes",
+        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
+        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
     ld = LaunchDescription()

@@ -56,10 +56,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    params_file = os.path.join(bringup_dir, "config", launch_configuration["params_file"])
-    host_params_file = os.path.join(bringup_dir, "config",  launch_configuration["host_params_file"])
-
-    rviz_config = os.path.join(bringup_dir, "rviz", launch_configuration["namespace"] + "_nav2config.rviz")
+    params_file = LaunchConfiguration("params_file")
+    host_params_file = LaunchConfiguration("host_params_file")
 
     # Specify the actions
     bringup_cmd_group = GroupAction(
@@ -113,7 +111,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
 def generate_launch_description():
     # Get the launch directory
-    bringup_dir = get_package_share_directory("robotino_navigation")
+    package_dir = get_package_share_directory("robotino_navigation")
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
@@ -134,7 +132,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(bringup_dir, "map", "map_sf.yaml"),
+        default_value=os.path.join(package_dir, "map", "map_sf.yaml"),
         description="Full path to map yaml file to load",
     )
 
@@ -146,14 +144,13 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         "params_file",
-        default_value=os.path.join(brinup_dir, 'config', 'nav2_params.yaml'),
-        # default_value=os.path.join(bringup_dir, 'config', 'robotinobase3_nav2_params.yaml'),
+        default_value=[os.path.join(package_dir, "config/"), "nav2_params.yaml"],
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
+
     declare_host_params_file_cmd = DeclareLaunchArgument(
         "host_params_file",
-        default_value=[LaunchConfiguration('namespace'), '_nav2_params.yaml'],
-        # default_value=os.path.join(bringup_dir, 'config', 'robotinobase3_nav2_params.yaml'),
+        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
         description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
@@ -185,7 +182,7 @@ def generate_launch_description():
 
     declare_rvizconfig_cmd = DeclareLaunchArgument(
         "rviz_config",
-        default_value="",
+        default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
 
