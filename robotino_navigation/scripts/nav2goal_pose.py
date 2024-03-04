@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # MIT License
 #
 # Copyright (c) 2024
@@ -21,36 +20,40 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-from rclpy.action import ActionClient
-from action_msgs.msg import GoalStatus
-from nav2_msgs.action import NavigateToPose
-from geometry_msgs.msg import Point, Quaternion
-from rclpy.node import Node
 import rclpy
+from action_msgs.msg import GoalStatus
+from geometry_msgs.msg import Point
+from geometry_msgs.msg import Quaternion
+from nav2_msgs.action import NavigateToPose
 from navigation_interface.srv import JointangleReq
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSDurabilityPolicy
+from rclpy.action import ActionClient
+from rclpy.node import Node
+from rclpy.qos import QoSProfile
+from rclpy.qos import QoSReliabilityPolicy
+
 
 class AutonomousNavigation(Node):
 
     def __init__(self):
-        self.Nav_qos_profile = QoSProfile(
-                reliability=QoSReliabilityPolicy.BEST_EFFORT,
-                depth=10)
+        self.Nav_qos_profile = QoSProfile(reliability=QoSReliabilityPolicy.BEST_EFFORT, depth=10)
 
-        super().__init__('robotino_nav2goal_pose')
-        self.navtopose_client = ActionClient(self, NavigateToPose, '/robotinobase1/navigate_to_pose',
-                                             result_service_qos_profile=self.Nav_qos_profile,
-                                             goal_service_qos_profile=self.Nav_qos_profile,
-                                             cancel_service_qos_profile=self.Nav_qos_profile,
-                                             feedback_sub_qos_profile=self.Nav_qos_profile,
-                                             status_sub_qos_profile=self.Nav_qos_profile)
+        super().__init__("robotino_nav2goal_pose")
+        self.navtopose_client = ActionClient(
+            self,
+            NavigateToPose,
+            "/robotinobase1/navigate_to_pose",
+            result_service_qos_profile=self.Nav_qos_profile,
+            goal_service_qos_profile=self.Nav_qos_profile,
+            cancel_service_qos_profile=self.Nav_qos_profile,
+            feedback_sub_qos_profile=self.Nav_qos_profile,
+            status_sub_qos_profile=self.Nav_qos_profile,
+        )
         #
 
-        self.TcpPose_srv = self.create_service(JointangleReq, '/pose_req', self.NavPoseSrv_cb)
+        self.TcpPose_srv = self.create_service(JointangleReq, "/pose_req", self.NavPoseSrv_cb)
 
     def NavPoseSrv_cb(self, request, response):
-        if request.data == 'True':
+        if request.data == "True":
             self.get_logger().info(f"[NavPoseSrv_cb]:Goal_pose request received: {request.tcp_pose}")
             self.pose = Point()
             self.quat = Quaternion()
@@ -74,16 +77,18 @@ class AutonomousNavigation(Node):
         goal.pose.header.stamp = self.get_clock().now().to_msg()
         goal.pose.pose.position = position
         goal.pose.pose.orientation = orientation
-        self.get_logger().info("Received new goal => X: " + str(goal.pose.pose.position.x) + " Y: " + str(goal.pose.pose.position.y))
+        self.get_logger().info(
+            "Received new goal => X: " + str(goal.pose.pose.position.x) + " Y: " + str(goal.pose.pose.position.y)
+        )
         self.send_goal_future = self.navtopose_client.send_goal_async(goal)
         self.send_goal_future.add_done_callback(self.goal_response_callback)
 
     def goal_response_callback(self, send_goal_future):
         goal_handle = send_goal_future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
+            self.get_logger().info("Goal rejected :(")
             return
-        self.get_logger().info('Goal accepted :)')
+        self.get_logger().info("Goal accepted :)")
         self.get_result_future = goal_handle.get_result_async()
         self.get_result_future.add_done_callback(self.get_result_callback)
 
@@ -94,16 +99,18 @@ class AutonomousNavigation(Node):
         elif status == 6:
             self.get_logger().info("Retrying navigation to the goal-pose")
 
-def main(args=None):
-  rclpy.init(args=args)
-  auto_navigate  = AutonomousNavigation()
-  try:
-    rclpy.spin(auto_navigate)
-  except KeyboardInterrupt:
-      pass
-  auto_navigate.destroy_node()
-  rclpy.shutdown()
-  rclpy.spin(auto_navigate)
 
-if __name__ == '__main__':
+def main(args=None):
+    rclpy.init(args=args)
+    auto_navigate = AutonomousNavigation()
+    try:
+        rclpy.spin(auto_navigate)
+    except KeyboardInterrupt:
+        pass
+    auto_navigate.destroy_node()
+    rclpy.shutdown()
+    rclpy.spin(auto_navigate)
+
+
+if __name__ == "__main__":
     main()

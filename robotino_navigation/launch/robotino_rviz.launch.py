@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # MIT License
 #
 # Copyright (c) 2024
@@ -21,77 +20,90 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 import os
+
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler, OpaqueFunction
-from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import DeclareLaunchArgument
+from launch.actions import EmitEvent
+from launch.actions import OpaqueFunction
+from launch.actions import RegisterEventHandler
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from nav2_common.launch import ReplaceString
+
 
 def launch_nodes_withconfig(context, *args, **kwargs):
     # Get the launch directory
-    bringup_dir = get_package_share_directory('robotino_navigation')
+    bringup_dir = get_package_share_directory("robotino_navigation")
 
     # Create the launch configuration variables
-    namespace = LaunchConfiguration('namespace')
-    launch_rviz = LaunchConfiguration('launch_rviz')
-    rviz_config = LaunchConfiguration('rviz_config')
+    namespace = LaunchConfiguration("namespace")
+    launch_rviz = LaunchConfiguration("launch_rviz")
+    LaunchConfiguration("rviz_config")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    rviz_config_dir = os.path.join(bringup_dir,'rviz', launch_configuration['rviz_config'])
+    rviz_config_dir = os.path.join(bringup_dir, "rviz", launch_configuration["rviz_config"])
 
     start_namespaced_rviz_cmd = Node(
         condition=IfCondition(launch_rviz),
-        package='rviz2',
-        executable='rviz2',
+        package="rviz2",
+        executable="rviz2",
         namespace=namespace,
-        arguments=['-d', rviz_config_dir],
-        output='screen',
-        remappings=[('/'+launch_configuration['namespace']+'/map', '/map'),
-                    ('/'+launch_configuration['namespace']+'/tf', '/tf'),
-                    ('/'+launch_configuration['namespace']+'/tf_static', 'tf_static'),
-                    ('/goal_pose', '/'+launch_configuration['namespace']+'/goal_pose'),
-                    ('/clicked_point', '/'+launch_configuration['namespace']+'/clicked_point'),
-                    ('/initialpose', '/'+launch_configuration['namespace']+'/initialpose')])
+        arguments=["-d", rviz_config_dir],
+        output="screen",
+        remappings=[
+            ("/" + launch_configuration["namespace"] + "/map", "/map"),
+            ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
+            ("/" + launch_configuration["namespace"] + "/tf_static", "tf_static"),
+            ("/goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
+            (
+                "/clicked_point",
+                "/" + launch_configuration["namespace"] + "/clicked_point",
+            ),
+            ("/initialpose", "/" + launch_configuration["namespace"] + "/initialpose"),
+        ],
+    )
 
     exit_event_handler_namespaced = RegisterEventHandler(
         condition=IfCondition(launch_rviz),
         event_handler=OnProcessExit(
             target_action=start_namespaced_rviz_cmd,
-            on_exit=EmitEvent(event=Shutdown(reason='rviz exited'))))
+            on_exit=EmitEvent(event=Shutdown(reason="rviz exited")),
+        ),
+    )
 
-    return [start_namespaced_rviz_cmd,
-            exit_event_handler_namespaced]
+    return [start_namespaced_rviz_cmd, exit_event_handler_namespaced]
+
 
 def generate_launch_description():
 
-    bringup_dir = get_package_share_directory('robotino_navigation')
+    bringup_dir = get_package_share_directory("robotino_navigation")
 
     # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
-        'namespace',
-        default_value='',
-        description=('Top-level namespace. The value will be used to replace the '
-                     '<robot_namespace> keyword on the rviz config file.'))
+        "namespace",
+        default_value="",
+        description=(
+            "Top-level namespace. The value will be used to replace the "
+            "<robot_namespace> keyword on the rviz config file."
+        ),
+    )
 
     declare_launch_rviz_cmd = DeclareLaunchArgument(
-        'launch_rviz',
-        default_value='true',
-        description='Whether to start rviz or not')
+        "launch_rviz", default_value="true", description="Whether to start rviz or not"
+    )
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
-        'rviz_config',
-        default_value=os.path.join(bringup_dir, 'rviz', 'robotinobase4_nav2config.rviz'),
-        description='Full path to the RVIZ config file to use')
-
+        "rviz_config",
+        default_value=os.path.join(bringup_dir, "rviz", "robotinobase4_nav2config.rviz"),
+        description="Full path to the RVIZ config file to use",
+    )
 
     # Create the launch description and populate
     ld = LaunchDescription()
