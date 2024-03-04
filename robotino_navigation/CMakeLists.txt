@@ -19,10 +19,6 @@ find_package(nav2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
 
-# #add_executable(nav2goal_pose src/nav2goal_pose.py)
-# #ament_target_dependencies(nav2goal_pose rclpy action_msgs nav2_msgs geometry_msgs ur_interface)
-# ament_python_install_package(${PROJECT_NAME})
-
 install(
   DIRECTORY launch config rviz map
   DESTINATION share/${PROJECT_NAME}
