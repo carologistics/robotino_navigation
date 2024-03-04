@@ -2,7 +2,7 @@ amcl:
   ros__parameters:
     base_frame_id: "robotinobase1/base_link"
     odom_frame_id: "robotinobase1/odom"
-    scan_topic: /robotinobase1/scan
+    scan_topic: /robotinobase1/fawkes_scans/Laser_urg_filtered_360
 
 bt_navigator:
   ros__parameters:
@@ -20,7 +20,7 @@ local_costmap:
       robot_base_frame: robotinobase1/base_link
       obstacle_layer:
         scan:
-          topic: /robotinobase1/scan
+          topic: /robotinobase1/fawkes_scans/Laser_urg_filtered_360
 
 global_costmap:
   global_costmap:
@@ -28,23 +28,18 @@ global_costmap:
       robot_base_frame: robotinobase1/base_link
       obstacle_layer:
         scan:
-          topic: /robotinobase1/scan
+          topic: /robotinobase1/fawkes_scans/Laser_urg_filtered_360
 
 map_server:
   ros__parameters:
     yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
-
-map_saver:
-  ros__parameters:
-
-planner_server:
-  ros__parameters:
 
 behavior_server:
   ros__parameters:
     costmap_topic: /robotinobase1/local_costmap/costmap_raw
     footprint_topic: /robotinobase1/local_costmap/published_footprint
     robot_base_frame: robotinobase1/base_link
+
 
 velocity_smoother:
   ros__parameters:
@@ -62,4 +57,4 @@ collision_monitor:
     PolygonSlow:
       polygon_pub_topic: "/robotinobase1/polygon_slowdown"
     scan:
-      topic: "/robotinobase1/ir_scan_merged"
+      topic: "/robotinobase1/fawkes_scans/Laser_urg_filtered_360"
