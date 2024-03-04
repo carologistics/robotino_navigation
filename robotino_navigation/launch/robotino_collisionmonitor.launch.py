@@ -38,6 +38,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     params_file = LaunchConfiguration("params_file")
+    host_params_file = LaunchConfiguration("host_params_file")
 
     # Constant parameters
     lifecycle_nodes = ["collision_monitor"]
@@ -49,6 +50,15 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
+            root_key=namespace,
+            param_rewrites=param_substitutions,
+            convert_types=True,
+        ),
+        allow_substs=True,
+    )
+    configured_host_params = ParameterFile(
+        RewrittenYaml(
+            source_file=host_params_file,
             root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
@@ -80,7 +90,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         executable="collision_monitor",
         output="screen",
         emulate_tty=True,
-        parameters=[configured_params, {"use_sim_time": use_sim_time}],
+        parameters=[configured_params, configured_host_params, {"use_sim_time": use_sim_time}],
         namespace=namespace,
     )
 
@@ -106,12 +116,19 @@ def generate_launch_description():
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
+    declare_host_params_file_cmd = DeclareLaunchArgument(
+        "host_params_file",
+        default_value=os.path.join(package_dir, "params", "collision_monitor_params.yaml"),
+        description="Full path to the ROS2 parameters file to use for all launched nodes",
+    )
+
     ld = LaunchDescription()
 
     # Launch arguments
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
+    ld.add_action(declare_host_params_file_cmd)
 
     # Node launching commands
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
