@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import os
+import sys
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -31,6 +32,37 @@ from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+
+
+def find_file(path, locations):
+    """
+    Check if the file at the given path exists. If not,
+    check if the path is absolute. If it is not absolute,
+    search for the file in the list of locations.
+
+    Args:
+        path (str): The path to the file.
+        locations (list): List of locations to search for the file.
+
+    Returns:
+        str: The absolute path to the file if found, otherwise None.
+    """
+    # Check if the file exists
+    if os.path.exists(path):
+        return path
+
+    # Check if the path is absolute
+    if os.path.isabs(path):
+        return None
+
+    # Search for the file in the list of locations
+    for location in locations:
+        file_path = os.path.join(location, path)
+        if os.path.exists(file_path):
+            return file_path
+
+    # File not found
+    return None
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -56,6 +88,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
+    map_yaml_file = find_file(map_yaml_file, [bringup_dir])
+    if map_yaml_file is None:
+        print("Can not find %s, abort!", map_yaml_file)
+        sys.exit(1)
     params_file = LaunchConfiguration("params_file")
     host_params_file = LaunchConfiguration("host_params_file")
 
