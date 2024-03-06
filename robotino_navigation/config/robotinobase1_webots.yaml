@@ -30,16 +30,6 @@ global_costmap:
         scan:
           topic: /robotinobase1/scan
 
-map_server:
-  ros__parameters:
-    yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
-
-map_saver:
-  ros__parameters:
-
-planner_server:
-  ros__parameters:
-
 behavior_server:
   ros__parameters:
     costmap_topic: /robotinobase1/local_costmap/costmap_raw
