@@ -75,25 +75,32 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     namespace = LaunchConfiguration("namespace")
     launch_rviz = LaunchConfiguration("launch_rviz")
     use_composition = LaunchConfiguration("use_composition")
-    map_yaml_file = LaunchConfiguration("map")
+    input_map_yaml_file = LaunchConfiguration("map")
     use_sim_time = LaunchConfiguration("use_sim_time")
-    params_file = LaunchConfiguration("params_file")
     autostart = LaunchConfiguration("autostart")
     use_respawn = LaunchConfiguration("use_respawn")
     launch_mapserver = LaunchConfiguration("launch_mapserver")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
+    input_params_file = LaunchConfiguration("params_file")
+    input_host_params_file = LaunchConfiguration("host_params_file")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    map_yaml_file = find_file(map_yaml_file, [bringup_dir])
+    map_yaml_file = find_file(input_map_yaml_file.perform(context), [bringup_dir+"/map/"])
     if map_yaml_file is None:
-        print("Can not find %s, abort!", map_yaml_file)
+        print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
-    params_file = LaunchConfiguration("params_file")
-    host_params_file = LaunchConfiguration("host_params_file")
+    params_file = find_file(input_params_file.perform(context), [bringup_dir+"/config/"])
+    if params_file is None:
+        print("Can not find %s, abort!", input_params_file.perform(context))
+        sys.exit(1)
+    host_params_file = find_file(input_host_params_file.perform(context), [bringup_dir+"/config/"])
+    if host_params_file is None:
+        print("Can not find %s, abort!", input_host_params_file.perform(context))
+        sys.exit(1)
 
     # Specify the actions
     bringup_cmd_group = GroupAction(
@@ -190,7 +197,6 @@ def generate_launch_description():
             os.path.join(package_dir, "config/"),
             LaunchConfiguration("namespace"),
             "_nav2_params",
-            LaunchConfiguration("host_suffix"),
             ".yaml",
         ],
         description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
@@ -227,11 +233,6 @@ def generate_launch_description():
         default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
-    declare_host_suffix_cmd = DeclareLaunchArgument(
-        "host_suffix",
-        default_value="",
-        description="Use host-specific suffix.",
-    )
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -253,7 +254,6 @@ def generate_launch_description():
     ld.add_action(declare_launchmapserver_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
-    ld.add_action(declare_host_suffix_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
