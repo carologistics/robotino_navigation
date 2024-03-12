@@ -13,5 +13,5 @@ repositories:
     version: master
   laser_scan_integrator:
     type: git
-    url: https://github.com/borsesaurabh2022/laser_scan_integrator.git
-    version: sborse/hardware
+    url: https://github.com/carologistics/laser_scan_integrator.git
+    version: tviehmann/minor-rename
