@@ -21,12 +21,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import os
+import sys
 
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import IncludeLaunchDescription
+from launch.actions import LogInfo
 from launch.actions import OpaqueFunction
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -35,6 +38,8 @@ from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+from robotino_utils import find_file
+
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
@@ -42,25 +47,80 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Declare launch configuration variables
     namespace = LaunchConfiguration("namespace")
+    host_config = LaunchConfiguration("host_config")
+    sensor_config = LaunchConfiguration("sensor_config")
     LaunchConfiguration("use_sim_time")
     launch_rviz = LaunchConfiguration("launch_rviz")
+    host_config_file = find_file(host_config.perform(context), [package_dir + "/config/"])
+    if host_config_file is None:
+        print("Can not find %s, abort!", host_config.perform(context))
+        sys.exit(1)
+    sensor_config_file = find_file(sensor_config.perform(context), [package_dir + "/config/"])
+    if sensor_config_file is None:
+        print("Can not find host config %s, abort", sensor_config.perform(context))
+        sys.exit(1)
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
+    static_transform_publishers = []
+    static_transforms = {}
+    with open(sensor_config_file, "r") as file:
+        transforms = yaml.safe_load(file).get("static_transforms", [])
+        for entity, transform in transforms.items():
+            if not isinstance(static_transforms.get(entity), dict):
+                static_transforms[entity] = {}
+            for key in ["translation", "rotation", "parent_frame_id", "child_frame_id"]:
+                if key in transform:
+                    static_transforms[entity][key] = transform[key]
+    with open(host_config_file, "r") as file:
+        transforms = yaml.safe_load(file).get("static_transforms", [])
+        for entity, transform in transforms.items():
+            if not isinstance(static_transforms.get(entity), dict):
+                static_transforms[entity] = {}
+            for key in ["translation", "rotation", "parent_frame_id", "child_frame_id"]:
+                if key in transform:
+                    static_transforms[entity][key] = transform[key]
+    print(static_transforms)
+    for transform, values in static_transforms.items():
+        translation = values.get("translation", None)
+        rotation = values.get("rotation", None)
+        frame_id = values.get("parent_frame_id", None)
+        child_frame_id = values.get("child_frame_id", None)
+
+        if None in [translation, rotation, frame_id, child_frame_id]:
+            static_transform_publishers.append(LogInfo(msg="[WARN] Missing key(s) in transform. Skipping..."))
+            continue
+        static_transform_publisher_node = Node(
+            package="tf2_ros",
+            executable="static_transform_publisher",
+            output="screen",
+            arguments=[
+                "--x",
+                str(translation[0]),
+                "--y",
+                str(translation[1]),
+                "--z",
+                str(translation[2]),
+                "--yaw",
+                str(rotation[0]),
+                "--pitch",
+                str(rotation[1]),
+                "--roll",
+                str(rotation[2]),
+                "--frame-id",
+                frame_id,
+                "--child-frame-id",
+                child_frame_id,
+            ],
+        )
+        static_transform_publishers.append(static_transform_publisher_node)
 
     namespace_frontlaser = launch_configuration["namespace"] + "/front"
     namespace_rearlaser = launch_configuration["namespace"] + "/back"
-
-    frame_id_frontlaser = namespace_frontlaser + "_laser_link"
-    frame_id_rearlaser = namespace_rearlaser + "_laser_link"
-    frame_id_laser = launch_configuration["namespace"] + "/laser_link"
-    frame_id_baselink = launch_configuration["namespace"] + "/base_link"
-
-    # Create a list of nodes to launch
-    # ip adress of test sensors 1. 192.168.2.63 / 2. 169.254.4.93
     load_nodes = GroupAction(
-        actions=[
+        actions=static_transform_publishers
+        + [
             Node(
                 package="sick_scan_xd",
                 executable="sick_generic_caller",
@@ -68,12 +128,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 namespace=namespace_frontlaser,
                 parameters=[
-                    os.path.join(package_dir, "config", "laserSens_config.yaml"),
-                    {
-                        "frame_id": frame_id_frontlaser,
-                        "hostname": "192.168.0.42",
-                        "port": "2112",
-                    },
+                    sensor_config_file,
+                    host_config_file,
                 ],
                 remappings=[("/cloud", namespace_frontlaser + "/cloud")],
             ),
@@ -84,12 +140,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 namespace=namespace_rearlaser,
                 parameters=[
-                    os.path.join(package_dir, "config", "laserSens_config.yaml"),
-                    {
-                        "frame_id": frame_id_rearlaser,
-                        "hostname": "192.168.0.43",
-                        "port": "2112",
-                    },
+                    sensor_config_file,
+                    host_config_file,
                 ],
                 remappings=[("/cloud", namespace_rearlaser + "/cloud")],
             ),
@@ -122,51 +174,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 condition=IfCondition(launch_rviz),
             ),
-            Node(
-                package="tf2_ros",
-                executable="static_transform_publisher",
-                output="screen",
-                arguments=[
-                    "0.094",
-                    "0.0",
-                    "0.2390",
-                    "0",
-                    "0",
-                    "3.1415",
-                    frame_id_baselink,
-                    frame_id_frontlaser,
-                ],
-            ),
-            Node(
-                package="tf2_ros",
-                executable="static_transform_publisher",
-                output="screen",
-                arguments=[
-                    "-0.11",
-                    "0.0",
-                    "0.32",
-                    "0.0",
-                    "2.94",
-                    "0.0",
-                    frame_id_baselink,
-                    frame_id_rearlaser,
-                ],
-            ),
-            Node(
-                package="tf2_ros",
-                executable="static_transform_publisher",
-                output="screen",
-                arguments=[
-                    "0.0",
-                    "0.0",
-                    "0.2390",
-                    "0",
-                    "0",
-                    "0",
-                    frame_id_baselink,
-                    frame_id_laser,
-                ],
-            ),
         ]
     )
     return [load_nodes]
@@ -182,6 +189,16 @@ def generate_launch_description():
         "sensor_config",
         default_value=os.path.join(package_dir, "config", "laserSens_config.yaml"),
         description="Full path to laserSens_config.yaml file to load",
+    )
+
+    declare_host_config_argument = DeclareLaunchArgument(
+        "host_config",
+        default_value=[
+            os.path.join(package_dir, "config/"),
+            LaunchConfiguration("namespace"),
+            ".yaml",
+        ],
+        description="path to host-specific configs",
     )
 
     declare_use_sim_time_argument = DeclareLaunchArgument(
@@ -202,6 +219,7 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_namespace_argument)
     ld.add_action(declare_sensor_config_argument)
+    ld.add_action(declare_host_config_argument)
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_launch_rviz_argument)
 

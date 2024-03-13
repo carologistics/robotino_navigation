@@ -34,8 +34,6 @@ from launch_ros.substitutions import FindPackageShare
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
-    get_package_share_directory("robotino_sensors")
-
     # Declare launch configuration variables
     namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")

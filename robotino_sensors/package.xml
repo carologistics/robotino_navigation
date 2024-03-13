@@ -15,7 +15,7 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>sick_scan_xd</exec_depend>
-  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>robotino_utils</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
