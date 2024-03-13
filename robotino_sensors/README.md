@@ -15,7 +15,7 @@ enhancing the efficiency and reliability of our robotic systems in industrial se
 | Sensor_name | Product catalogue | Ros2-DRiver  |
 | --------    | --------          | --------     |
 | Sick Lidar - TIM5XX   | [Data sheet](https://cdn.sick.com/media/pdf/4/44/444/dataSheet_TiM571-2050101_1075091_en.pdf)      | [ROS2 DRiver](https://github.com/SICKAG/sick_scan_xd)      |
-| IMU: Microinfinity | [Data sheet](https://ip.festo-didactic.com/InfoPortal/Robotino/document/gyro.pdf)           | [ROS2 Driver]       |
+| IMU: Microinfinity | [Data sheet](https://ip.festo-didactic.com/InfoPortal/Robotino/document/gyro.pdf)           | [ROS2 Driver](https://github.com/grips-robocup/robotino)       |
 
 ## Launching Sensor Bringup:
 This Assumes that the robotino driver or an appropriate simulations is running for the necessary odometry and IMU data.
@@ -23,7 +23,7 @@ This Assumes that the robotino driver or an appropriate simulations is running f
 To launch the ROS2 driver for Lidar sensors, static transforms for the lidars, as well as sensor fusion using Extended kalman filter run following command:
 
 ```bash
-    ros2 launch robotino_sensors robotino_sensorbringup.launch.py namespace:=robotinobase1
+ros2 launch robotino_sensors robotino_sensorbringup.launch.py namespace:=robotinobase1
 ```
 
 Parameters:
@@ -41,12 +41,13 @@ he relevant files are:
  - backlasertop.stl
  - backlaserbottom.stl
  - frontlasermounting.stl
+
 Here are pictures of [front](https://raw.githubusercontent.com/carologistics/hardware/master/pictures/frontlaser_mount.jpg) and [back mounts](https://raw.githubusercontent.com/carologistics/hardware/master/pictures/backlaser_mount.jpg) for reference.
 
 #### Launching the sensor interfaces in ROS2 environment:
 The following command launches the corresponding lidar nodes from Sick along with static transforms for them and the [laser scan integrator](https://github.com/carologistics/laser_scan_integrator) to combine the laser data.
 ```bash
-    ros2 launch robotino_sensors robotino_multilaser.launch.py namespace:=robotinobase1
+ros2 launch robotino_sensors robotino_multilaser.launch.py namespace:=robotinobase1
 ```
 
 Parameters:
@@ -72,5 +73,5 @@ More information about the robot_localization package and corresponding paramete
 While using this repository, the EKF node can be launched with following command:
 
 ```bash
-    ros2 launch robotino_sensors robotino_ekffusion.launch.py namespace:=robotinobase1
+ros2 launch robotino_sensors robotino_ekffusion.launch.py namespace:=robotinobase1
 ```
