@@ -1,21 +1,23 @@
 ---
-front_laser:
+/robotinobase2/front/front_laser:
     ros__parameters:
       frame_id:  robotinobase2/front_laser_link
-      hostname: 192.168.0.22
-      port: 2112
-back_laser:
+      hostname: "192.168.0.22"
+      port: "2112"
+/robotinobase2/back/rear_laser:
     ros__parameters:
       frame_id:  robotinobase2/back_laser_link
-      hostname: 192.168.0.23
-      port: 2112
-static_transforms:
-  front_laser:
-    child_frame_id: robotinobase2/front_laser_link
-    parent_frame_id: robotinobase2/base_link
-  back_laser:
-    child_frame_id: robotinobase2/back_laser_link
-    parent_frame_id: robotinobase2/base_link
-  laser:
-    child_frame_id: robotinobase2/laser_link
-    parent_frame_id: robotinobase2/base_link
+      hostname: "192.168.0.23"
+      port: "2112"
+/**:
+  ros__parameters:
+    static_transforms:
+      front_laser:
+        child_frame_id: robotinobase2/front_laser_link
+        parent_frame_id: robotinobase2/base_link
+      back_laser:
+        child_frame_id: robotinobase2/back_laser_link
+        parent_frame_id: robotinobase2/base_link
+      laser:
+        child_frame_id: robotinobase2/laser_link
+        parent_frame_id: robotinobase2/base_link

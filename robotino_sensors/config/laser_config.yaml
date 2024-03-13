@@ -64,14 +64,13 @@
     use_binary_protocol: false # set false for sick_tim_5xx connected with robotinobases
     use_generation_timestamp: true
     use_sim_time: false
-
-static_transforms:
-  front_laser:
-    translation: [0.094, 0.0, 0.2390]
-    rotation: [0, 0, 3.1415]
-  back_laser:
-    translation: [-0.11, 0.0, 0.32]
-    rotation: [0.0, 2.94, 0.0]
-  laser:
-    translation: [0.0, 0.0, 0.2390]
-    rotation: [0, 0, 0]
+    static_transforms:
+      front_laser:
+        translation: [0.094, 0.0, 0.2390]
+        rotation: [0.0, 0.0, 3.1415]
+      back_laser:
+        translation: [-0.11, 0.0, 0.32]
+        rotation: [0.0, 2.94, 0.0]
+      laser:
+        translation: [0.0, 0.0, 0.2390]
+        rotation: [0.0, 0.0, 0.0]

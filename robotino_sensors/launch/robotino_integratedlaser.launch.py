@@ -66,7 +66,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     static_transform_publishers = []
     static_transforms = {}
     with open(sensor_config_file, "r") as file:
-        transforms = yaml.safe_load(file).get("static_transforms", [])
+        transforms = yaml.safe_load(file)
+        for key in "/**|ros__parameters|static_transforms".split("|"):
+            transforms = transforms.get(key, {})
         for entity, transform in transforms.items():
             if not isinstance(static_transforms.get(entity), dict):
                 static_transforms[entity] = {}
@@ -74,7 +76,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 if key in transform:
                     static_transforms[entity][key] = transform[key]
     with open(host_config_file, "r") as file:
-        transforms = yaml.safe_load(file).get("static_transforms", [])
+        transforms = yaml.safe_load(file)
+        for key in "/**|ros__parameters|static_transforms".split("|"):
+            transforms = transforms.get(key, {})
         for entity, transform in transforms.items():
             if not isinstance(static_transforms.get(entity), dict):
                 static_transforms[entity] = {}
