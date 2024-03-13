@@ -187,8 +187,8 @@ def generate_launch_description():
 
     declare_sensor_config_argument = DeclareLaunchArgument(
         "sensor_config",
-        default_value=os.path.join(package_dir, "config", "laserSens_config.yaml"),
-        description="Full path to laserSens_config.yaml file to load",
+        default_value=os.path.join(package_dir, "config", "laser_config.yaml"),
+        description="Full path to laser config file to load",
     )
 
     declare_host_config_argument = DeclareLaunchArgument(
