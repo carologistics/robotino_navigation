@@ -33,36 +33,7 @@ from launch.actions import SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
-
-def find_file(path, locations):
-    """
-    Check if the file at the given path exists. If not,
-    check if the path is absolute. If it is not absolute,
-    search for the file in the list of locations.
-
-    Args:
-        path (str): The path to the file.
-        locations (list): List of locations to search for the file.
-
-    Returns:
-        str: The absolute path to the file if found, otherwise None.
-    """
-    # Check if the file exists
-    if os.path.exists(path):
-        return path
-
-    # Check if the path is absolute
-    if os.path.isabs(path):
-        return None
-
-    # Search for the file in the list of locations
-    for location in locations:
-        file_path = os.path.join(location, path)
-        if os.path.exists(file_path):
-            return file_path
-
-    # File not found
-    return None
+from robotino_utils import find_file
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -89,15 +60,15 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    map_yaml_file = find_file(input_map_yaml_file.perform(context), [bringup_dir+"/map/"])
+    map_yaml_file = find_file(input_map_yaml_file.perform(context), [bringup_dir + "/map/"])
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
-    params_file = find_file(input_params_file.perform(context), [bringup_dir+"/config/"])
+    params_file = find_file(input_params_file.perform(context), [bringup_dir + "/config/"])
     if params_file is None:
         print("Can not find %s, abort!", input_params_file.perform(context))
         sys.exit(1)
-    host_params_file = find_file(input_host_params_file.perform(context), [bringup_dir+"/config/"])
+    host_params_file = find_file(input_host_params_file.perform(context), [bringup_dir + "/config/"])
     if host_params_file is None:
         print("Can not find %s, abort!", input_host_params_file.perform(context))
         sys.exit(1)
