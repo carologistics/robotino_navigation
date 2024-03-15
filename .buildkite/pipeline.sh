@@ -22,7 +22,7 @@
 # Error out on an error in the script
 echo "HALLO "
 
-prinenv
+echo $(bash -c env)
 
 echo "hallo "
 set -eu
