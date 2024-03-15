@@ -20,6 +20,11 @@
 #  Read the full text in the LICENSE.GPL file in the doc directory.
 
 # Error out on an error in the script
+echo "HALLO "
+
+prinenv
+
+echo "hallo "
 set -eu
 
 SCRIPT_PATH=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
