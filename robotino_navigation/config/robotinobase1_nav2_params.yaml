@@ -62,4 +62,4 @@ collision_monitor:
     PolygonSlow:
       polygon_pub_topic: "/robotinobase1/polygon_slowdown"
     scan:
-      topic: "/robotinobase1/ir_scan_merged"
+      topic: "/robotinobase1/irsensor_scan"
