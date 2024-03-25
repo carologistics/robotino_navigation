@@ -103,12 +103,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     "use_respawn": use_respawn,
                 }.items(),
             ),
-            IncludeLaunchDescription(
-               PythonLaunchDescriptionSource(os.path.join(launch_dir, 'robotino_collisionmonitor.launch.py')),
-               launch_arguments={'namespace': namespace,
-                                 'use_sim_time': use_sim_time,
-                                 'params_file': params_file,
-                                 }.items()),
+            # IncludeLaunchDescription(
+            #    PythonLaunchDescriptionSource(os.path.join(launch_dir, 'robotino_collisionmonitor.launch.py')),
+            #    launch_arguments={'namespace': namespace,
+            #                      'use_sim_time': use_sim_time,
+            #                      'params_file': params_file,
+            #                      }.items()),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
                 launch_arguments={
