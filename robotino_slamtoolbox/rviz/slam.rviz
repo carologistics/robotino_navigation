@@ -1,14 +1,15 @@
 Panels:
   - Class: rviz_common/Displays
-    Help Height: 87
+    Help Height: 78
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
         - /Status1
-        - /LaserScan1/Topic1
+        - /Map1
+        - /Map1/Topic1
       Splitter Ratio: 0.5
-    Tree Height: 584
+    Tree Height: 457
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -26,7 +27,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -48,194 +49,6 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/LaserScan
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: LaserScan
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: System Default
-        Value: /<namespace>/scan
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Class: rviz_default_plugins/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: true
-        map:
-          Value: true
-        <namespace>/Inertial_Unit:
-          Value: true
-        <namespace>/SickLaser_Front:
-          Value: true
-        <namespace>/SickLaser_Rear:
-          Value: true
-        <namespace>/anglebracketusb_link:
-          Value: true
-        <namespace>/base_link:
-          Value: true
-        <namespace>/command_bridge_link:
-          Value: true
-        <namespace>/ir1_sensor:
-          Value: true
-        <namespace>/ir2_sensor:
-          Value: true
-        <namespace>/ir3_sensor:
-          Value: true
-        <namespace>/ir4_sensor:
-          Value: true
-        <namespace>/ir5_sensor:
-          Value: true
-        <namespace>/ir6_sensor:
-          Value: true
-        <namespace>/ir7_sensor:
-          Value: true
-        <namespace>/ir8_sensor:
-          Value: true
-        <namespace>/ir9_sensor:
-          Value: true
-        <namespace>/irsensor_merge:
-          Value: true
-        <namespace>/laser_link:
-          Value: true
-        <namespace>/odom:
-          Value: true
-        <namespace>/wheel0_link:
-          Value: true
-        <namespace>/wheel1_link:
-          Value: true
-        <namespace>/wheel2_link:
-          Value: true
-      Marker Scale: 1
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: false
-      Tree:
-        map:
-          <namespace>/odom:
-            <namespace>/base_link:
-              <namespace>/Inertial_Unit:
-                {}
-              <namespace>/SickLaser_Front:
-                {}
-              <namespace>/SickLaser_Rear:
-                {}
-              <namespace>/anglebracketusb_link:
-                {}
-              <namespace>/command_bridge_link:
-                {}
-              <namespace>/ir1_sensor:
-                {}
-              <namespace>/ir2_sensor:
-                {}
-              <namespace>/ir3_sensor:
-                {}
-              <namespace>/ir4_sensor:
-                {}
-              <namespace>/ir5_sensor:
-                {}
-              <namespace>/ir6_sensor:
-                {}
-              <namespace>/ir7_sensor:
-                {}
-              <namespace>/ir8_sensor:
-                {}
-              <namespace>/ir9_sensor:
-                {}
-              <namespace>/irsensor_merge:
-                {}
-              <namespace>/laser_link:
-                {}
-              <namespace>/wheel0_link:
-                {}
-              <namespace>/wheel1_link:
-                {}
-              <namespace>/wheel2_link:
-                {}
-      Update Interval: 0
-      Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
-      Description File: ""
-      Description Source: Topic
-      Description Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /<namespace>/robot_description
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        anglebracketusb_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        command_bridge_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wheel0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wheel1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wheel2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-      Mass Properties:
-        Inertia: false
-        Mass: false
-      Name: RobotModel
-      TF Prefix: <namespace>
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -303,7 +116,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 18.81028938293457
+      Distance: 10
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -318,18 +131,18 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.11479651927948
+      Pitch: 0.785398006439209
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.0254071950912476
+      Yaw: 0.785398006439209
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 964
+  Height: 761
   Hide Left Dock: false
-  Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd000000040000000000000172000002f2fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000007901000003fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000052000002f20000010301000003fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f00000326fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000326000000df01000003fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003c000000052fc0100000002fb0000000800540069006d00650100000000000003c00000035a01000003fb0000000800540069006d006501000000000000045000000000000000000000024d000002f200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000015600000257fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003f00000257000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f00000257fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003f00000257000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000059c0000003efc0100000002fb0000000800540069006d006501000000000000059c0000027b00fffffffb0000000800540069006d006501000000000000045000000000000000000000032b0000025700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -337,7 +150,7 @@ Window Geometry:
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: true
-  Width: 960
+    collapsed: false
+  Width: 1436
   X: 0
-  Y: 27
+  Y: 32

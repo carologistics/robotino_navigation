@@ -43,7 +43,6 @@ from lifecycle_msgs.msg import Transition
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Declare launch configuration variables
-    LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     launch_rviz = LaunchConfiguration("launch_rviz")
     autostart = LaunchConfiguration("autostart")

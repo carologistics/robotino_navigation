@@ -42,7 +42,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_rviz = LaunchConfiguration("launch_rviz")
     slam_config = LaunchConfiguration("slam_config")
     host_config = LaunchConfiguration("host_config")
-    rviz_config = LaunchConfiguration["rviz_config"]
+    rviz_config = LaunchConfiguration("rviz_config")
     package_dir = get_package_share_directory("robotino_slamtoolbox")
 
     launch_configuration = {}
@@ -122,7 +122,7 @@ def generate_launch_description():
 
     declare_slam_config_argument = DeclareLaunchArgument(
         "slam_config",
-        default_value=os.path.join(package_dir, "config", "slam_config.yaml"),
+        default_value=os.path.join(package_dir, "config", "slam_params.yaml"),
         description="Full path to laser config file to load",
     )
 
