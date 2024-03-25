@@ -3,6 +3,11 @@ amcl:
     base_frame_id: "robotinobase1/base_link"
     odom_frame_id: "robotinobase1/odom"
     scan_topic: /robotinobase1/scan
+    initial_pose:
+      x: 5.5
+      y: 0.45
+      z: 0.0
+      yaw: 3.14
 
 bt_navigator:
   ros__parameters:
