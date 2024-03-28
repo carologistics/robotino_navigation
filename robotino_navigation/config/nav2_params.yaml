@@ -192,7 +192,7 @@ controller_server:
         critical_weight: 20.0
         consider_footprint: true # default: false, incerase the computation cost, uses robot footprint information
         collision_cost: 10000.0
-        collision_margin_distance: 0.15
+        collision_margin_distance: 0.1
         near_goal_distance: 0.1
         inflation_radius: 1.0 # (only in Humble)
         cost_scaling_factor: 5.0 # (only in Humble)
