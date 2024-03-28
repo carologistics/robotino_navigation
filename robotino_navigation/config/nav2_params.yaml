@@ -116,7 +116,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: False
-    controller_frequency: 10.0
+    controller_frequencey: 20.0
     min_x_velocity_threshold: 0.0001 #default:0.0
     min_y_velocity_threshold: 0.0001 #default:0.0
     min_theta_velocity_threshold: 0.0001 #default:0.0
@@ -142,16 +142,16 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       # Time_steps times model_dt times vx_max should be < than than halve of
       # The local costmap size, otherwise the robot will never reach full speed
-      time_steps: 15 # model_dt depends on the controller frequency
-      model_dt: 0.1
+      time_steps: 80  # model_dt depends on the controller frequency
+      model_dt: 0.05
       batch_size: 2000 # robotino motion model likely needs to be adapted
-      vx_std: 0.2
-      vy_std: 0.2
-      wz_std: 0.8
-      vx_max: 1.75
-      vx_min: -1.75
-      vy_max: 1.75
-      wz_max: 1.57
+      vx_std: 0.4
+      vy_std: 0.4
+      wz_std: 0.4
+      vx_max: 0.7
+      vx_min: -0.7
+      vy_max: 0.7
+      wz_max: 0.8
       iteration_count: 1
       prune_distance: 0.7
       transform_tolerance: 0.5 # temperature closer to 0 -> use more optimal paths
@@ -225,8 +225,8 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 10.0
-      publish_frequency: 10.0
+      update_frequencey: 20.0
+      publish_frequencey: 20.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: False
@@ -282,8 +282,8 @@ global_costmap:
   global_costmap:
     ros__parameters:
       #footprint_padding: 0.075  #robot footprint padding in mtr.
-      update_frequency: 10.0        #default 1.0
-      publish_frequency: 10.0       #default 1.0
+      update_frequencey: 20.0        #default 1.0
+      publish_frequencey: 20.0       #default 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: False
@@ -340,7 +340,7 @@ map_saver:
 
 planner_server:
   ros__parameters:
-    expected_planner_frequency: 10.0
+    expected_planner_frequencey: 20.0
     use_sim_time: False
     planner_plugins: ["GridBased"]
     # GridBased:
@@ -386,7 +386,7 @@ behavior_server:
   ros__parameters:
     costmap_topic: /local_costmap/costmap_raw
     footprint_topic: /local_costmap/published_footprint
-    cycle_frequency: 10.0
+    cycle_frequencey: 20.0
     behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
     spin:
       plugin: "nav2_behaviors/Spin"
@@ -425,7 +425,7 @@ waypoint_follower:
 velocity_smoother:
   ros__parameters:
     use_sim_time: False
-    smoothing_frequency: 10.0
+    smoothing_frequencey: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
     max_velocity: [1.0, 1.0, 1.0]
