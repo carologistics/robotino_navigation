@@ -6,7 +6,7 @@
         # The frequency, in Hz, at which the filter will output a position estimate. Note that the filter will not begin
         # computation until it receives at least one message from one of the inputs. It will then run continuously at the
         # frequency specified here, regardless of whether it receives more measurements. Defaults to 30 if unspecified.
-        frequency: 50.0 #(imu and odom topic are being published at 30Hz)
+        frequency: 20.0 #(imu and odom topic are being published at 20Hz)
 
         # The period, in seconds, after which we consider a sensor to have timed out. In this event, we carry out a predict
         # cycle on the EKF without correcting it. This parameter can be thought of as the minimum frequency with which the
@@ -35,10 +35,10 @@
         # Debug settings. Not for the faint of heart. Outputs a ludicrous amount of information to the file specified by
         # debug_out_file. I hope you like matrices! Please note that setting this to true will have strongly deleterious
         # effects on the performance of the node. Defaults to false if unspecified.
-        debug: true
+        debug: false
 
         # Defaults to "robot_localization_debug.txt" if unspecified. Please specify the full path.
-        debug_out_file: /home/ros2/fullstack_ws/robot_localization_debug.txt
+        debug_out_file: robot_localization_debug.txt
 
         # Whether we'll allow old measurements to cause a re-publication of the updated state
         permit_corrected_publication: false

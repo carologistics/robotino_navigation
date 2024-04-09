@@ -85,7 +85,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             for key in ["translation", "rotation", "parent_frame_id", "child_frame_id"]:
                 if key in transform:
                     static_transforms[entity][key] = transform[key]
-    print(static_transforms)
     for transform, values in static_transforms.items():
         translation = values.get("translation", None)
         rotation = values.get("rotation", None)
