@@ -116,7 +116,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: False
-    controller_frequencey: 20.0
+    controller_frequency: 20.0
     min_x_velocity_threshold: 0.0001 #default:0.0
     min_y_velocity_threshold: 0.0001 #default:0.0
     min_theta_velocity_threshold: 0.0001 #default:0.0
@@ -160,10 +160,11 @@ controller_server:
       motion_model: "Omni"
       visualize: false
       reset_period: 1.0 # (only in Humble)
+      regenerate_noises: false
       TrajectoryVisualizer:
         trajectory_step: 5
         time_step: 3
-      AckermannConstrains:
+      AckermannConstraints:
         min_turning_r: 0.2
       critics: ["ConstraintCritic", "ObstaclesCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"]
       ConstraintCritic:
@@ -225,8 +226,8 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequencey: 20.0
-      publish_frequencey: 20.0
+      update_frequency: 20.0
+      publish_frequency: 20.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: False
@@ -282,8 +283,8 @@ global_costmap:
   global_costmap:
     ros__parameters:
       #footprint_padding: 0.075  #robot footprint padding in mtr.
-      update_frequencey: 20.0        #default 1.0
-      publish_frequencey: 20.0       #default 1.0
+      update_frequency: 20.0        #default 1.0
+      publish_frequency: 20.0       #default 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: False
@@ -340,7 +341,7 @@ map_saver:
 
 planner_server:
   ros__parameters:
-    expected_planner_frequencey: 20.0
+    expected_planner_frequency: 20.0
     use_sim_time: False
     planner_plugins: ["GridBased"]
     # GridBased:
@@ -425,7 +426,7 @@ waypoint_follower:
 velocity_smoother:
   ros__parameters:
     use_sim_time: False
-    smoothing_frequencey: 20.0
+    smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
     max_velocity: [1.0, 1.0, 1.0]
