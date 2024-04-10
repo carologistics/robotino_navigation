@@ -1,0 +1,5 @@
+slam_toolbox:
+  ros__parameters:
+    odom_frame: robotinobase2/odom
+    base_frame: robotinobase2/base_link
+    scan_topic: /robotinobase2/scan
