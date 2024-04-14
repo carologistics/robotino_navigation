@@ -21,7 +21,7 @@ namespace motor_move {
         const rclcpp_action::GoalUUID & uuid,
         std::shared_ptr<const MotorMoveAction::Goal> goal) {
         (void)uuid;
-        RCLCPP_INFO(this->get_logger(), "Received goal requst with order %f", goal->goal.position.x);
+        RCLCPP_INFO(this->get_logger(), "Received goal requst with order %f", goal->motor_goal.pose.position.x);
         return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
 
