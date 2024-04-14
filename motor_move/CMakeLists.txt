@@ -11,11 +11,11 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(motor_move_msgs REQUIRED)
 
 add_executable(${PROJECT_NAME} src/motor_move.cpp)
-
-ament_export_dependencies(rosidl_default_runtime)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -27,7 +27,10 @@ ament_target_dependencies(${PROJECT_NAME}
   geometry_msgs
   motor_move_msgs
   tf2_ros
+  tf2
+  tf2_geometry_msgs
 )
+target_link_libraries(motor_move tf2::tf2 tf2_ros::tf2_ros)
 install(TARGETS ${PROJECT} DESTINATION lib/${PROJECT_NAME})
 # Install include directory
 install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})

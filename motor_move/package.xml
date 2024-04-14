@@ -19,6 +19,8 @@
   <depend>rclcpp_action</depend>
   <depend>geometry_msgs</depend>
   <depend>motor_move_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
