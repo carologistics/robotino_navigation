@@ -121,11 +121,11 @@ controller_server:
       batch_size: 2000  # robotino motion model likely needs to be adapted
       vx_std: 0.4
       vy_std: 0.4
-      wz_std: 0.4
+      wz_std: 1.0
       vx_max: 0.7
       vx_min: -0.7
       vy_max: 0.7
-      wz_max: 0.8
+      wz_max: 1.25
       iteration_count: 1
       # TODO: ours was 0.7
       prune_distance: 1.7
