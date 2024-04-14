@@ -61,11 +61,13 @@ namespace motor_move {
     void MotorMove::execute(const std::shared_ptr<GoalHandleMotorMove> goal_handle) {
         (void)goal_handle;
         rclcpp::Rate loop_rate(15);
-        RCLCPP_INFO(this->get_logger(), "Execute goal");
-        PoseStamped error = to_frame(std::make_shared<PoseStamped>(target_pose_), "base_link");
-        loop_rate.sleep();
-        RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f",
-                    error.pose.position.x, error.pose.position.y);
+        while(rclcpp::ok()) {
+            RCLCPP_INFO(this->get_logger(), "Execute goal");
+            PoseStamped error = to_frame(std::make_shared<PoseStamped>(target_pose_), "base_link");
+            loop_rate.sleep();
+            RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f",
+                        error.pose.position.x, error.pose.position.y);
+        }
     }
 }
 int main(int argc, char **argv) {
