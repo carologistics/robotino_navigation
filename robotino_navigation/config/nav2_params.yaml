@@ -85,11 +85,11 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
-    use_sim_time: false
-    controller_frequency: 20.0
-    min_x_velocity_threshold: 0.0001  # default:0.0
-    min_y_velocity_threshold: 0.0001  # default:0.0
-    min_theta_velocity_threshold: 0.0001  # default:0.0
+    use_sim_time: False
+    controller_frequency: 15.0
+    min_x_velocity_threshold: 0.0001 #default:0.0
+    min_y_velocity_threshold: 0.0001 #default:0.0
+    min_theta_velocity_threshold: 0.0001 #default:0.0
     odom_topic: "/odom_filtered"
     failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
     progress_checker_plugins: ["progress_checker"]
