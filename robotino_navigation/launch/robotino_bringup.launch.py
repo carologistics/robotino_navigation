@@ -20,6 +20,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Get the launch directory
     bringup_dir = get_package_share_directory("robotino_navigation")
+    mps_map_gen_dir = get_package_share_directory("mps_map_gen")
     launch_dir = os.path.join(bringup_dir, "launch")
 
     # Create the launch configuration variables
@@ -83,6 +84,21 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     "use_respawn": use_respawn,
                 }.items(),
             ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(os.path.join(mps_map_gen_dir, "mps_map_gen.launch.py")),
+                launch_arguments={
+                    "namespace": namespace,
+                    "use_sim_time": use_sim_time,
+                    "get_data_from_refbox": True,
+                    "publish_wait_pos": True,
+                    "peer_address": "172.26.255.255",
+                    "recv_port_private": 4444,
+                    "recv_port_public": 4441,
+                    "crypto_key": "randomkey",
+                    "map_client": "/map_server/map",
+                    # 'proto_path': proto_path
+                }.items(),
+            ),
             # IncludeLaunchDescription(
             #    PythonLaunchDescriptionSource(os.path.join(launch_dir, 'robotino_collisionmonitor.launch.py')),
             #    launch_arguments={'namespace': namespace,
@@ -126,7 +142,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(package_dir, "map", "map_sf.yaml"),
+        default_value=os.path.join(package_dir, "map", "map_sf_empty.yaml"),
         description="Full path to map yaml file to load",
     )
 
