@@ -109,11 +109,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 launch_arguments={
                     "namespace": namespace,
                     "use_sim_time": use_sim_time,
-                    "get_data_from_refbox": True,
-                    "publish_wait_pos": True,
+                    "get_data_from_refbox": "true",
+                    "publish_wait_pos": "true",
                     "peer_address": "172.26.255.255",
-                    "recv_port_private": 4444,
-                    "recv_port_public": 4441,
+                    "recv_port_private": "4441",
+                    "recv_port_public": "4444",
                     "crypto_key": "randomkey",
                     "map_client": "/map_server/map",
                     # 'proto_path': proto_path
