@@ -1,0 +1,19 @@
+<!-- <library path="recovery_behavior_plugin">
+  <class name="nav2_behaviors/BackUpCls" type="nav2_behaviors::BackUpCls" base_class_type="nav2_core::Behavior">
+    <description>This is plugin to recover the robot pose</description>
+  </class>
+</library> -->
+
+<class_libraries>
+	<library path="recovery_behavior_plugin">
+	  <class name="nav2_behaviors/BackUpCls" type="nav2_behaviors::BackUpCls" base_class_type="nav2_core::Behavior">
+	    <description>Plugin- recovery with backup action with collision detection</description>
+	  </class>
+	</library>
+
+	<library path="recovery_behavior_plugin">
+	  <class name="nav2_behaviors/RecoverPoseCls" type="nav2_behaviors::RecoverPoseCls" base_class_type="nav2_core::Behavior">
+	    <description>Plugin- recovery with pose estimation using sensor interface</description>
+	  </class>
+	</library>
+</class_libraries>
