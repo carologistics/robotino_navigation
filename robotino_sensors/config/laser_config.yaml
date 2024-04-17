@@ -22,9 +22,9 @@
     intensity: true
     intensity_resolution_16bit: true
     locationName: not defined
-    max_ang: 2.356194490192345
+    max_ang: 1.950 #2.356194490192345
     message_monitoring_enabled: true
-    min_ang: -2.356194490192345
+    min_ang: -1.950 #-2.356194490192345
     min_intensity: 0.0
     nav_tf_child_frame_id: nav
     nav_tf_parent_frame_id: map
