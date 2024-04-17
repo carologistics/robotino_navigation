@@ -9,6 +9,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include <geometry_msgs/msg/quaternion.hpp>
 
 namespace motor_move {
 using MotorMoveAction = motor_move_msgs::action::MotorMove;
@@ -40,5 +41,7 @@ private:
 
     void handle_accepted(const std::shared_ptr<GoalHandleMotorMove> goal_handle);
     void execute(const std::shared_ptr<GoalHandleMotorMove> goal_handle);
+    inline float calculate_distance(const PoseStamped pose);
+    double quaternionToYaw(const geometry_msgs::msg::Quaternion& q);
 };
 } // namespace motor_move
