@@ -385,7 +385,7 @@ smoother_server:
 
 behavior_server:
   ros__parameters:
-    cycle_frequency: 20.0
+    cycle_frequency: 15.0
     action_server_result_timeout: 5.0
     behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
     spin:
