@@ -297,7 +297,7 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: True
-        map_topic: /mps_map
+        map_topic: /mps_map_bounded
         subscribe_to_updates: True
         map_subscribe_transient_local: True
       obstacle_layer:
@@ -329,7 +329,7 @@ map_server:
     # Overridden in launch by the "map" launch configuration or provided default value.
     # To use in yaml, remove the default "map" value in the tb3_simulation_launch.py file & provide full path to map below.
     yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
-    topic_name: "/mps_map"
+    topic_name: "/map"
     frame_id: "map"
 
 map_saver:
