@@ -30,8 +30,8 @@ ament_target_dependencies(${PROJECT_NAME}
   tf2
   tf2_geometry_msgs
 )
-target_link_libraries(motor_move tf2::tf2 tf2_ros::tf2_ros)
-install(TARGETS ${PROJECT} DESTINATION lib/${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} tf2::tf2 tf2_ros::tf2_ros)
+install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
 # Install include directory
 install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
 
