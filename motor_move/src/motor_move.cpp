@@ -92,7 +92,17 @@ namespace motor_move {
             RCLCPP_INFO(this->get_logger(), "Execute goal");
             PoseStamped error = to_frame(std::make_shared<PoseStamped>(target_pose_), "base_link");
             distance = calculate_distance(error);
+            goal_handle->publish_feedback(feedback);
             float yaw = quaternionToYaw(error.pose.orientation);
+            if(yaw < 0.0872665f) {
+                geometry_msgs::msg::Twist cmd_vel;
+                cmd_vel.angular.z = 0.0;
+                cmd_vel_->publish(cmd_vel);
+            } else if (distance > 0.05) {
+                geometry_msgs::msg::Twist cmd_vel;
+                cmd_vel.linear.x = 0.1;
+                cmd_vel_->publish(cmd_vel);
+            }
             RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance);
             RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw);
             RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f",
