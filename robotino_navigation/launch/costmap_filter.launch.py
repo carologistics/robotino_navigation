@@ -46,7 +46,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
+<<<<<<< HEAD
     # host_params_file = LaunchConfiguration("host_params_file")
+=======
+    #host_params_file = LaunchConfiguration("host_params_file")
+>>>>>>> 28b0eff (keepout zone implemenztation for trails)
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
