@@ -237,6 +237,7 @@ local_costmap:
       resolution: 0.015
       robot_radius: 0.225
       plugins: ["obstacle_layer","inflation_layer"] #"voxel_layer"
+      filters: ["keepout_filter"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enable: true
@@ -257,6 +258,10 @@ local_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 1.5
           obstacle_min_range: 0.0
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: True
+        filter_info_topic: "/costmap_filter_info"
       # voxel_layer:
       #   plugin: "nav2_costmap_2d::VoxelLayer"
       #   enabled: True
@@ -293,6 +298,7 @@ global_costmap:
       lethal_cost_threshold: 90    #default=100 (Need tunning)
       track_unknown_space: false
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      filters: ["keepout_filter"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: True
@@ -320,6 +326,10 @@ global_costmap:
         inflation_radius: 0.6
         inflate_unknown: False
         inflate_around_unknown: False
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: True
+        filter_info_topic: "/costmap_filter_info"
       always_send_full_costmap: True
 
 map_server:
@@ -330,6 +340,15 @@ map_server:
     yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
     topic_name: "/map"
     frame_id: "map"
+
+costmap_filter_info_server:
+  ros__parameters:
+    use_sim_time: true
+    type: 0
+    filter_info_topic: "/costmap_filter_info"
+    mask_topic: "/map"
+    base: 0.0
+    multiplier: 1.0
 
 map_saver:
   ros__parameters:
