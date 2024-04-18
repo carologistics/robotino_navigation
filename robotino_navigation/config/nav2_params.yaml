@@ -8,6 +8,11 @@ amcl:
     beam_skip_threshold: 0.3
     do_beamskip: false
     global_frame_id: "map"
+    map_topic: /map
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 2.0
+    laser_max_range: 100.0
+    laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     odom_frame_id: "odom"
     set_initial_pose: true
@@ -294,6 +299,7 @@ local_costmap:
       resolution: 0.015
       robot_radius: 0.225
       plugins: ["obstacle_layer", "inflation_layer", "denoise_layer"] # "voxel_layer"
+      filters: ["keepout_filter"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
@@ -331,6 +337,10 @@ local_costmap:
         enabled: true
         minimal_group_size: 2
         group_connectivity_type: 8
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: True
+        filter_info_topic: "/costmap_filter_info"
       # voxel_layer:
       #   plugin: "nav2_costmap_2d::VoxelLayer"
       #   enabled: true
@@ -367,6 +377,7 @@ global_costmap:
       lethal_cost_threshold: 90    # default=100 (Need tunning)
       track_unknown_space: false
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      filters: ["keepout_filter"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: true
@@ -394,6 +405,10 @@ global_costmap:
         inflation_radius: 0.4
         inflate_unknown: False
         inflate_around_unknown: False
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: True
+        filter_info_topic: "/costmap_filter_info"
       always_send_full_costmap: True
 
 map_server:
@@ -404,6 +419,15 @@ map_server:
     yaml_filename: "map.yaml"
     topic_name: "/map"
     frame_id: "map"
+
+costmap_filter_info_server:
+  ros__parameters:
+    use_sim_time: true
+    type: 0
+    filter_info_topic: "/robotinobase1/costmap_filter_info"
+    mask_topic: "/robotinobase1/keepout_filter_mask"
+    base: 0.0
+    multiplier: 1.0
 
 map_saver:
   ros__parameters:
