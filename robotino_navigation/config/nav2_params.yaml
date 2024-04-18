@@ -418,7 +418,7 @@ costmap_filter_info_server:
     use_sim_time: true
     type: 0
     filter_info_topic: "/costmap_filter_info"
-    mask_topic: "/map"
+    mask_topic: "/keepout_filter_mask"
     base: 0.0
     multiplier: 1.0
 
