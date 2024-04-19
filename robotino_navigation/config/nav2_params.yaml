@@ -8,6 +8,7 @@ amcl:
     beam_skip_threshold: 0.3
     do_beamskip: false
     global_frame_id: "map"
+    map_topic: /map
     laser_model_type: "likelihood_field"
     odom_frame_id: "odom"
     set_initial_pose: true

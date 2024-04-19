@@ -77,6 +77,18 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "launch_rviz": launch_rviz,
             }.items(),
         ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
+                launch_arguments={
+                    "namespace": namespace,
+                    "use_sim_time": use_sim_time,
+                    "autostart": autostart,
+                    "params_file": params_file,
+                    "host_params_file": host_params_file,
+                    "use_respawn": use_respawn,
+                    "launch_map_filter": launch_mapfilter,
+                }.items(),
+            ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_navigation.launch.py")),
             launch_arguments={
