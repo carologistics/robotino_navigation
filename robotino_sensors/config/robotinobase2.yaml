@@ -2,7 +2,7 @@
 /robotinobase2/front/front_laser:
     ros__parameters:
       frame_id:  robotinobase2/front_laser_link
-      hostname: "192.168.0.22"
+      hostname: "192.168.0.1"
       port: "2112"
 /robotinobase2/back/rear_laser:
     ros__parameters:
