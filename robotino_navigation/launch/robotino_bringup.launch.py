@@ -32,6 +32,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     autostart = LaunchConfiguration("autostart")
     use_respawn = LaunchConfiguration("use_respawn")
     launch_mapserver = LaunchConfiguration("launch_mapserver")
+    launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
     input_params_file = LaunchConfiguration("params_file")
@@ -76,6 +77,18 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "launch_rviz": launch_rviz,
             }.items(),
         ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
+                launch_arguments={
+                    "namespace": namespace,
+                    "use_sim_time": use_sim_time,
+                    "autostart": autostart,
+                    "params_file": params_file,
+                    "host_params_file": host_params_file,
+                    "use_respawn": use_respawn,
+                    "launch_map_filter": launch_mapfilter,
+                }.items(),
+            ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_navigation.launch.py")),
             launch_arguments={
@@ -205,6 +218,12 @@ def generate_launch_description():
         description="whether to launch map server or not",
     )
 
+    declare_launchmapfilter_cmd = DeclareLaunchArgument(
+        "launch_mapfilter",
+        default_value="true",
+        description="whether to launch keepout filer or not",
+    )
+
     declare_launch_nav2rviz_cmd = DeclareLaunchArgument(
         "launch_nav2rviz",
         default_value="false",
@@ -242,6 +261,7 @@ def generate_launch_description():
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
     ld.add_action(declare_launchmapserver_cmd)
+    ld.add_action(declare_launchmapfilter_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
     ld.add_action(declare_team_name_cmd)
