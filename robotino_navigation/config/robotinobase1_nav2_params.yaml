@@ -3,6 +3,7 @@ amcl:
     base_frame_id: "robotinobase1/base_link"
     odom_frame_id: "robotinobase1/odom"
     scan_topic: /robotinobase1/scan
+    map_topic: /mps_map
     initial_pose:
       x: 5.5
       y: 0.45
@@ -33,6 +34,8 @@ global_costmap:
   global_costmap:
     ros__parameters:
       robot_base_frame: robotinobase1/base_link
+      static_layer:
+        map_topic: /mps_map
       obstacle_layer:
         scan:
           topic: /robotinobase1/scan
