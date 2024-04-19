@@ -36,6 +36,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     rviz_config = LaunchConfiguration("rviz_config")
     input_params_file = LaunchConfiguration("params_file")
     input_host_params_file = LaunchConfiguration("host_params_file")
+    team = LaunchConfiguration("team")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -53,6 +54,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     if host_params_file is None:
         print("Can not find %s, abort!", input_host_params_file.perform(context))
         sys.exit(1)
+    team_port = "4442"
+    if team.perform(context) == "CYAN":
+        team_port = "4441"
 
     # Specify the actions
     bringup_cmd_group = GroupAction(
@@ -92,7 +96,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     "get_data_from_refbox": "true",
                     "publish_wait_pos": "true",
                     "peer_address": "172.26.255.255",
-                    "recv_port_private": "4441",
+                    "recv_port_private": team_port,
                     "recv_port_public": "4444",
                     "crypto_key": "randomkey",
                     "map_client": "/map_server/map",
@@ -201,6 +205,12 @@ def generate_launch_description():
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
 
+    declare_team_cmd = DeclareLaunchArgument(
+        "team",
+        default_value="MAGENTA",
+        description="Which team to play as in the refbox (important for mps_map_gen)",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -221,6 +231,7 @@ def generate_launch_description():
     ld.add_action(declare_launchmapserver_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
+    ld.add_action(declare_team_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
