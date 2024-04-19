@@ -234,7 +234,7 @@ local_costmap:
       plugins: ["obstacle_layer", "inflation_layer", "denoise_layer"] # "voxel_layer"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        enable: true
+        enabled: true
         cost_scaling_factor: 5.0
         inflation_radius: 0.40
       obstacle_layer:
