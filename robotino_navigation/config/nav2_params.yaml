@@ -185,8 +185,8 @@ controller_server:
       #   repulsion_weight: 1.5
       #   critical_weight: 20.0
       #   consider_footprint: true # default: false, incerase the computation cost, uses robot footprint information
-      #   collision_cost: 10000.0
-      #   collision_margin_distance: 0.1
+      #   collision_cost: 1000.0
+      #   collision_margin_distance: 0.05
       #   near_goal_distance: 0.1
       #   inflation_radius: 0.4 # (only in Humble)
       #   cost_scaling_factor: 5.0 # (only in Humble)
@@ -235,8 +235,8 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
-        cost_scaling_factor: 5.0
-        inflation_radius: 0.40
+        cost_scaling_factor: 1.0
+        inflation_radius: 0.4
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
@@ -316,11 +316,11 @@ global_costmap:
           obstacle_min_range: 0.0
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 5.0
-        inflation_radius: 0.6
-        inflate_unknown: false
-        inflate_around_unknown: false
-      always_send_full_costmap: true
+        cost_scaling_factor: 1.0
+        inflation_radius: 0.4
+        inflate_unknown: False
+        inflate_around_unknown: False
+      always_send_full_costmap: True
 
 map_server:
   ros__parameters:
