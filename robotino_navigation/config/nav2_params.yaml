@@ -131,6 +131,9 @@ controller_server:
       required_movement_radius: 0.5
       #required_movement_angle: 0.3 #param for PoseProgressChecker
       movement_time_allowance: 10.0
+      xy_goal_tolerance: 0.05
+      yaw_goal_tolerance: 0.08
+
     #Goal checker parameters
     goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
