@@ -14,4 +14,4 @@ repositories:
   laser_scan_integrator:
     type: git
     url: https://github.com/carologistics/laser_scan_integrator.git
-    version: tviehmann/minor-rename
+    version: main
