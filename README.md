@@ -1,29 +1,13 @@
-
 # robotino-navigation
-This Git repository encompasses a comprehensive collection of code files for autonomous navigation of Robotino robots from Festo GmbH.
-It provides essential packages for constructing detailed robot descriptions, implementing sensor interfaces, integrating a SLAM toolbox for mapping, and
-deploying the Navigation2 (Nav2) stack for autonomous navigation.
+This repository provides a navigation configuration for robotino robots from Festo Didactic.
+It is set up to seamlessly integrate with [our webots simulation](https://github.com/carologistics/rcll_simulation_webots/tree/main)
+as well as with real robots controlled via [this ROS 2 driver](https://github.com/robocup-logistics/ros2-robotino).
 
-Encouraging collaboration and contributions, the repository aims to serve as a reliable resource for researchers, developers, and enthusiasts in the fields of robotics and simulation.
-Regular updates ensure compatibility with evolving dependencies, making it a sustainable and valuable tool for the robotics community.
-
-## Table of content
-- Installation Premise
-- Installation
-    - Dependencies
-    - Installation from source
-- Building
-- Launch sensor_bringup
-- Launch SLAM toolbox
-- Launch NAV2 stack
-- Nodes and Topics to look into
-- Research and References
-- Bugs and Issues
+It is configured for Robotinos that are extended by lidar sensors and this repository also offers instructions for an example setup using [two SICK tim571lidars](https://github.com/carologistics/hardware/tree/master/pictures).
 
 ## Installation Premise
 This repository has been tested on [ROS2 Humble] It is recommended to use the same versions to avoid any issues;
-These instructions assume that you have already installed ROS2 Humble on your machine. If not, please follow the recommended recommended ubuntu installation tutorial;
-Create a ros2 workspace, Once you have created the workspace, clone this repository in the source folder of your workspace.
+These instructions assume that you have already installed ROS2 Humble on your machine. If not, please follow the recommended recommended ubuntu installation tutorial.
 
 ## Installation
 
@@ -36,7 +20,8 @@ cd ~/robotino_navigation_ws/src
 git clone https://github.com/carologistics/robotino_navigation.git
 ```
 
-Then create a workspace called "robotino-navigation_deps_ws" to install the packages/dependencies required for successfully launching the lidar interfaces.
+
+Then create a workspace called "robotino_navigation_deps_ws" to install the packages for lidar interfaces and the robotino driver
 
 ```bash
 mkdir -p ~/ros2/robotino_navigation_deps_ws/src
@@ -51,12 +36,16 @@ After installation, build the dependency workspace first with the following sequ
   1. (Optional) To build dependencies for SICK-Laser sensors please refer to the instruction provided [here](https://github.com/SICKAG/sick_scan_xd/blob/master/INSTALL-ROS2.md#build-on-linux-ros2)
     under the subsection: **Build sick_generic_caller**.
   2. Build the package "laser_scan_integrator":
-
 ```bash
 cd ~/robotino-navigation_deps_ws
 colcon build --packages-select laser_scan_integrator --symlink-install
 ```
-  3. Now build the main workspace:
+  3. (Optional) Build the robotino driver:
+```bash
+cd ~/robotino-navigation_deps_ws
+colcon build --symlink-install
+```
+  4. Now build the main workspace:
 ```bash
 cd ~/robotino-navigation_ws
 colcon build --symlink-install
@@ -106,6 +95,3 @@ ros2 launch robotino_navigation robotino_bringup.launch.py namespace:=robotinoba
 
 Once the robot is localized, use the 2D Nav Goal tool in Rviz2 to send a goal to the robot.
 
-## Bugs and Issues
-
-Please report bugs and request features using the Issue Tracker
