@@ -1,17 +1,9 @@
 repositories:
-  sick_scan_xd:
-    type: git
-    url: https://github.com/SICKAG/sick_scan_xd.git
-    version: master
-  libsick_ldmrs:
-    type: git
-    url: https://github.com/SICKAG/libsick_ldmrs.git
-    version: master
-  msgpack11:
-    type: git
-    url: https://github.com/SICKAG/msgpack11.git
-    version: master
   laser_scan_integrator:
     type: git
     url: https://github.com/carologistics/laser_scan_integrator.git
+    version: main
+  ros2-robotino:
+    type: git
+    url: https://github.com/robocup-logistics/ros2-robotino.git
     version: main
