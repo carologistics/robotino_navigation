@@ -1,6 +1,6 @@
 amcl:
   ros__parameters:
-    use_sim_time: false
+    use_sim_time: False
     map_topic: /mps_map
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
@@ -315,7 +315,7 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: True
-        map_topic: /mps_map_bounded
+        map_topic: /map
         subscribe_to_updates: True
         map_subscribe_transient_local: True
       obstacle_layer:
