@@ -10,7 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-  <exec_depend>mps_map_gen</exec_depend>
+  <exec_depend condition="$USE_MPS_MAP_GEN != ''">mps_map_gen</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>nav2_common</exec_depend>
   <exec_depend>nav2_msgs</exec_depend>
