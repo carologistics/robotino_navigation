@@ -231,7 +231,7 @@ local_costmap:
       height: 6
       resolution: 0.015
       robot_radius: 0.225
-      plugins: ["obstacle_layer", "inflation_layer"]  # "voxel_layer"
+      plugins: ["obstacle_layer","inflation_layer","denoise_layer"] #"voxel_layer"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enable: true
@@ -252,6 +252,11 @@ local_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 1.5
           obstacle_min_range: 0.0
+      denoise_layer:
+        plugin: "nav2_costmap_2d::DenoiseLayer"
+        enabled: true
+        minimal_group_size: 2
+        group_connectivity_type: 8
       # voxel_layer:
       #   plugin: "nav2_costmap_2d::VoxelLayer"
       #   enabled: true
