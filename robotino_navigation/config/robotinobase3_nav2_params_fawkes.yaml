@@ -36,9 +36,14 @@ map_server:
 
 behavior_server:
   ros__parameters:
-    costmap_topic: /robotinobase3/local_costmap/costmap_raw
-    footprint_topic: /robotinobase3/local_costmap/published_footprint
+    # costmap_topic: /robotinobase3/local_costmap/costmap_raw
+    # footprint_topic: /robotinobase3/local_costmap/published_footprint
+    local_costmap_topic: /robotinobase3/local_costmap/costmap_raw
+    global_costmap_topic: /robotinobase3/global_costmap/costmap_raw
+    local_footprint_topic: /robotinobase3/local_costmap/published_footprint
+    global_footprint_topic: /robotinobase3/global_costmap/published_footprint
     robot_base_frame: robotinobase3/base_link
+    local_frame: robotinobase3/odom
 
 
 velocity_smoother:
