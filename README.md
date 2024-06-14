@@ -94,4 +94,3 @@ ros2 launch robotino_navigation robotino_bringup.launch.py namespace:=robotinoba
 - map: yaml file for the map, if a relative path is given the map directory of the robotino_navigation package is also searched
 
 Once the robot is localized, use the 2D Nav Goal tool in Rviz2 to send a goal to the robot.
-

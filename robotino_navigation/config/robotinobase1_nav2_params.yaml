@@ -48,7 +48,7 @@ planner_server:
 behavior_server:
   ros__parameters:
     costmap_topic: /robotinobase1/local_costmap/costmap_raw
-    #footprint_topic: /robotinobase1/local_costmap/published_footprint
+    # footprint_topic: /robotinobase1/local_costmap/published_footprint
     robot_base_frame: robotinobase1/base_link
 
 velocity_smoother:

@@ -1,22 +1,5 @@
 #!/usr/bin/env python3
-# Author: Saurabh Borse(saurabh.borse@alumni.fh-aachen.de)
-#  MIT License
-#  Copyright (c) 2023 Saurabh Borse
-#  Permission is hereby granted, free of charge, to any person obtaining a copy
-#  of this software and associated documentation files (the "Software"), to deal
-#  in the Software without restriction, including without limitation the rights
-#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-#  copies of the Software, and to permit persons to whom the Software is
-#  furnished to do so, subject to the following conditions:
-#  The above copyright notice and this permission notice shall be included in all
-#  copies or substantial portions of the Software.
-#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#  SOFTWARE.
+# Licensed under MIT. See LICENSE file. Copyright Carologistics.
 import math
 
 import rclpy
@@ -47,8 +30,8 @@ class Robotino3IrScanMerger(Node):
         # Initialize subscribers for all ir sensors
         for i in range(num_ir_sensors):
             self.subscribers = []
-            self.topic = self.get_namespace() + f"/ir{i+1}"
-            self.callback_fcn = getattr(self, f"IrScan_cb_{i+1}")
+            self.topic = self.get_namespace() + f"/ir{i + 1}"
+            self.callback_fcn = getattr(self, f"IrScan_cb_{i + 1}")
             subscriber = self.create_subscription(Range, self.topic, self.callback_fcn, 10)
             self.subscribers.append(subscriber)
             self.get_logger().info(f"Subscriber {i} created for topic {self.topic}")
@@ -120,7 +103,7 @@ class Robotino3IrScanMerger(Node):
             msg.range_min = 0.02
             msg.range_max = 0.5 + robotino_base_radius
             for i in range(num_ir_sensors):
-                self.ir_scan_range = getattr(self, f"ir{i+1}_scan_range")
+                self.ir_scan_range = getattr(self, f"ir{i + 1}_scan_range")
                 msg.ranges.append(self.ir_scan_range + robotino_base_radius)
             self.publisher.publish(msg)
 

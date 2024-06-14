@@ -3,4 +3,6 @@
 .gitignore
 .gitlint
 .pre-commit-config.yaml
+.config.yaml
+**.mypy_cache/
 *.swp
