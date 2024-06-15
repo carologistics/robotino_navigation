@@ -1,4 +1,4 @@
-#no need to provide the node name, common param file for all instances
+# no need to provide the node name, common param file for all instances
 /**:
   ros__parameters:
     active_echos: 0
@@ -29,7 +29,7 @@
     nav_tf_child_frame_id: nav
     nav_tf_parent_frame_id: map
     new_IP_address: ''
-    nodename: sick_scan #namespace for topic names
+    nodename: sick_scan  # namespace for topic names
     ntp_server_address: ''
     operationHours: 1003.3000000000001
     port: '2112'
@@ -51,7 +51,7 @@
     ros_qos: -1
     scan_freq: 0.0
     scandatacfg_timingflag: -1
-    scanner_type: sick_tim_5xx #Sick sensor product series no.
+    scanner_type: sick_tim_5xx  # Sick sensor product series no.
     skip: 0
     slam_bundle: false
     slam_echo: ''
@@ -61,7 +61,7 @@
     time_increment: -1.0
     time_offset: 0.0
     timelimit: 5
-    use_binary_protocol: false # set false for sick_tim_5xx connected with robotinobases
+    use_binary_protocol: false  # set false for sick_tim_5xx connected with robotinobases
     use_generation_timestamp: true
     use_sim_time: false
     static_transforms:
