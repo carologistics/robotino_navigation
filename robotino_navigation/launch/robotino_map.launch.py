@@ -76,18 +76,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 namespace=namespace,
                 condition=IfCondition(launch_mapserver),
             ),
-            # Node(
-            #     package="mps_map_gen",
-            #     executable="mps_map_gen",
-            #     name="mps_map_gen",
-            #     output="screen",
-            #     respawn=use_respawn,
-            #     respawn_delay=2.0,
-            #     parameters=[configured_params],
-            #     arguments=["--ros-args", "--log-level", log_level],
-            #     remappings=remappings,
-            #     namespace=namespace,
-            # ),
             Node(
                 package="nav2_lifecycle_manager",
                 executable="lifecycle_manager",
@@ -118,7 +106,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(package_dir, "map", "map_go.yaml"),
+        default_value=os.path.join(package_dir, "map", "map_sf_empty.yaml"),
         description="Full path to map yaml file to load",
     )
 
@@ -157,7 +145,7 @@ def generate_launch_description():
     launch_rviz_argument = DeclareLaunchArgument(
         "launch_rviz",
         default_value="false",
-        description="Wheather to start Rvizor not based on launch environment",
+        description="Whether to start Rviz or not based on launch environment",
     )
 
     launch_mapserver_argument = DeclareLaunchArgument(
