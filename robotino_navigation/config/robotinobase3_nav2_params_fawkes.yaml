@@ -32,7 +32,7 @@ global_costmap:
 
 map_server:
   ros__parameters:
-    yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
+    yaml_filename: "map.yaml"
 
 behavior_server:
   ros__parameters:

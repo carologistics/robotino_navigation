@@ -1,6 +1,7 @@
 amcl:
   ros__parameters:
-    use_sim_time: false
+    use_sim_time: False
+    map_topic: /mps_map
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
@@ -313,10 +314,10 @@ global_costmap:
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
-        enable: true
+        enable: True
         map_topic: /map
-        subscribe_to_updates: true
-        map_subscribe_transient_local: true
+        subscribe_to_updates: True
+        map_subscribe_transient_local: True
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
@@ -345,7 +346,7 @@ map_server:
     use_sim_time: false
     # Overridden in launch by the "map" launch configuration or provided default value.
     # To use in yaml, remove the default "map" value in the tb3_simulation_launch.py file & provide full path to map below.
-    yaml_filename: "/home/srb-jarvis/ros2_ws/ws_thesis/simulation_ws/src/rcll_simulation_webots/robotino3_navigation/map/map.yaml"
+    yaml_filename: "map.yaml"
     topic_name: "/map"
     frame_id: "map"
 

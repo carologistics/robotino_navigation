@@ -3,6 +3,7 @@ amcl:
     base_frame_id: "robotinobase1/base_link"
     odom_frame_id: "robotinobase1/odom"
     scan_topic: /robotinobase1/scan
+    map_topic: /mps_map
     initial_pose:
       x: 5.5
       y: 0.45
@@ -34,6 +35,8 @@ global_costmap:
       obstacle_layer:
         scan:
           topic: /robotinobase1/scan
+      static_layer:
+        map_topic: /mps_map_bounded
 
 map_server:
   ros__parameters:
@@ -48,7 +51,7 @@ planner_server:
 behavior_server:
   ros__parameters:
     costmap_topic: /robotinobase1/local_costmap/costmap_raw
-    # footprint_topic: /robotinobase1/local_costmap/published_footprint
+    #footprint_topic: /robotinobase1/local_costmap/published_footprint
     robot_base_frame: robotinobase1/base_link
 
 velocity_smoother:
