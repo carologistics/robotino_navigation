@@ -1,6 +1,6 @@
 amcl:
   ros__parameters:
-    use_sim_time: False
+    use_sim_time: false
     map_topic: /mps_map
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
@@ -91,7 +91,7 @@ controller_server:
     min_y_velocity_threshold: 0.0001  # default:0.0
     min_theta_velocity_threshold: 0.0001  # default:0.0
     odom_topic: "/odom_filtered"
-    failure_tolerance: 0.0 #default: 0.3, The maximum duration in seconds the called controller plugin can fail
+    failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
     progress_checker_plugins: ["progress_checker"]
     goal_checker_plugins: ["goal_checker"]
     controller_plugins: ["FollowPath"]
@@ -197,7 +197,7 @@ controller_server:
         max_path_occupancy_ratio: 0.05
         # TODO: ours was 3
         trajectory_point_step: 4
-        threshold_to_consider: 0.5 #default: 1.4
+        threshold_to_consider: 0.5 # default: 1.4
         offset_from_furthest: 20
         use_path_orientations: false
       PathFollowCritic:
@@ -205,7 +205,7 @@ controller_server:
         cost_power: 1
         cost_weight: 5.0
         offset_from_furthest: 5
-        threshold_to_consider: 0.5 #default: 1.4
+        threshold_to_consider: 0.5 # default: 1.4
       PathAngleCritic:
         enabled: true
         cost_power: 1
@@ -231,7 +231,7 @@ local_costmap:
       height: 6
       resolution: 0.015
       robot_radius: 0.225
-      plugins: ["obstacle_layer","inflation_layer","denoise_layer"] #"voxel_layer"
+      plugins: ["obstacle_layer", "inflation_layer", "denoise_layer"] # "voxel_layer"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enable: true
@@ -295,10 +295,10 @@ global_costmap:
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
-        enable: True
+        enable: true
         map_topic: /map
-        subscribe_to_updates: True
-        map_subscribe_transient_local: True
+        subscribe_to_updates: true
+        map_subscribe_transient_local: true
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
@@ -444,7 +444,7 @@ velocity_smoother:
 
 collision_monitor:
   ros__parameters:
-    use_sim_time: False
+    use_sim_time: false
     # TODO ours was "bae_link"
     base_frame_id: "base_footprint"
     odom_frame_id: "odom"
@@ -454,14 +454,14 @@ collision_monitor:
     state_topic: "/collision_monitor_state"
     transform_tolerance: 0.1 # default 0.2
     source_timeout: 5.0 # default 1.0
-    base_shift_correction: True
+    base_shift_correction: true
     stop_pub_timeout: 2.0
     # Polygons represent zone around the robot for "stop" and "slowdown" action types,
     # and robot footprint for "approach" action type.
     # Footprint could be "polygon" type with dynamically set footprint from footprint_topic
     # or "circle" type with static footprint set by radius. "footprint_topic" parameter
     # to be ignored in circular case.
-    polygons: [ "PolygonSlow"] #"FootprintApproach"]
+    polygons: ["PolygonSlow"] # "FootprintApproach"]
     FootprintApproach:
       type: "polygon"
       action_type: "approach"
@@ -469,8 +469,8 @@ collision_monitor:
       time_before_collision: 1.2
       simulation_time_step: 0.1
       min_points: 6
-      visualize: False
-      enabled: True
+      visualize: false
+      enabled: true
     # PolygonStop:
     #   type: "circle"
     #   radius: 0.280
@@ -478,16 +478,16 @@ collision_monitor:
     #   max_points: 1
     #   visualize: true
     #   polygon_pub_topic: "/polygon_stop"
-    #   enable: True
+    #   enable: true
     # PolygonSlow:
     #   type: "circle"
     #   radius: 0.450
     #   action_type: "slowdown"
     #   max_points: 1
     #   slowdown_ratio: 0.5
-    #   visualize: True
+    #   visualize: true
     #   polygon_pub_topic: "/polygon_slowdown"
-    #   enable: True
+    #   enable: true
     observation_sources: ["scan"]
     scan:
       source_timeout: 0.2
@@ -495,4 +495,4 @@ collision_monitor:
       topic: "/fawkes_scans/Laser_urg_filtered_360"
       min_height: 0.15
       max_height: 2.0
-      enabled: True
+      enabled: true
