@@ -20,7 +20,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
 
 install(
-  DIRECTORY launch config rviz map
+  DIRECTORY launch config rviz map behavior_trees
   DESTINATION share/${PROJECT_NAME}
 )
 
