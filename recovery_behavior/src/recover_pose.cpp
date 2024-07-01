@@ -173,7 +173,8 @@ bool RecoverPoseCls::isCollisionFree(
 
   geometry_msgs::msg::Pose2D local_pose = pose2d_local;
   geometry_msgs::msg::Pose2D global_pose = pose2d_global;
-  bool fetch_data = true;
+  bool fetch_local_data = true;
+  bool fetch_global_data = true;
   double projected_distance = distance;
   double posechange_x;
   double posechange_y;
@@ -202,22 +203,22 @@ bool RecoverPoseCls::isCollisionFree(
     // pose2d_global.x, pose2d_global.y, pose2d_global.theta);
 
     if (this->global_collision_checker_->isCollisionFree(pose2d_global,
-                                                         fetch_data)) {
+                                                         fetch_global_data)) {
       RCLCPP_INFO(logger_,
                   "[global_collision_checker_]: Declared availibility of free "
                   "space at: %f, %f, %f ",
                   pose2d_global.x, pose2d_global.y, pose2d_global.theta);
       if (this->local_collision_checker_->isCollisionFree(pose2d_local,
-                                                          fetch_data)) {
+                                                          fetch_local_data)) {
         // RCLCPP_INFO(logger_, "[local_collision_checker_]: Declared
         // availibility of free space at: %f, %f, %f ", pose2d_local.x,
         // pose2d_local.y, pose2d_local.theta);
         angle_heading = i;
         return true;
       }
+      fetch_local_data = false;
     }
-
-    fetch_data = false;
+    fetch_global_data = false;
   }
 
   RCLCPP_INFO(
