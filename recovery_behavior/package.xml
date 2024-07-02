@@ -3,7 +3,7 @@
 <package format="3">
   <name>recovery_behavior</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Package for recovery behavior</description>
   <maintainer email="saurabh.borse@alumni.fh-aachen.de">srb-jarvis</maintainer>
   <license>TODO: License declaration</license>
 
