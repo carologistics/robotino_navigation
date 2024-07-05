@@ -3,6 +3,7 @@ amcl:
     base_frame_id: "robotinobase4/base_link"
     odom_frame_id: "robotinobase4/odom"
     scan_topic: /robotinobase4/scan
+    map_topic: /map
 
 bt_navigator:
   ros__parameters:
