@@ -132,12 +132,12 @@ ResultStatus RecoverPoseCls::onCycleUpdate() {
   pose2d.y = current_pose.pose.position.y;
   pose2d.theta = tf2::getYaw(current_pose.pose.orientation);
 
-  if (!dynamicCollisionCheck(distance, cmd_vel->twist, pose2d)) {
-    this->stopRobot();
-    RCLCPP_WARN(this->logger_, "Collision Ahead - Exiting DriveOnHeading");
-    return ResultStatus{Status::FAILED,
-                        RecoverPoseActionResult::COLLISION_AHEAD};
-  }
+  // if (!dynamicCollisionCheck(distance, cmd_vel->twist, pose2d)) {
+  //   this->stopRobot();
+  //   RCLCPP_WARN(this->logger_, "Collision Ahead - Exiting DriveOnHeading");
+  //   return ResultStatus{Status::FAILED,
+  //                       RecoverPoseActionResult::COLLISION_AHEAD};
+  // }
 
   vel_pub_->publish(std::move(cmd_vel));
 
