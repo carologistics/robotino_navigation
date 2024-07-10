@@ -41,7 +41,7 @@ class Robotino3IrScanMerger(Node):
 
         # Initialize publisher for merged ir scan
         self.publisher = self.create_publisher(
-            LaserScan, self.get_namespace() + "/ir_scan_merged", qos_profile=self.Laserscan_qos_profile
+            LaserScan, self.get_namespace() + "/irsensor_scan", qos_profile=self.Laserscan_qos_profile
         )
         self.ir1_scan_range = 0.0
         self.ir2_scan_range = 0.0
