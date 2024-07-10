@@ -25,8 +25,10 @@ local_costmap:
       global_frame: robotinobase2/odom
       robot_base_frame: robotinobase2/base_link
       obstacle_layer:
-        scan:
+        scan_lidar:
           topic: /robotinobase2/scan
+        scan_ir:
+          topic: /robotinobase2/irsensor_scan
 
 global_costmap:
   global_costmap:
