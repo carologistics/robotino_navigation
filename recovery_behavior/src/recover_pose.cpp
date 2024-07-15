@@ -132,12 +132,12 @@ ResultStatus RecoverPoseCls::onCycleUpdate() {
   pose2d.y = current_pose.pose.position.y;
   pose2d.theta = tf2::getYaw(current_pose.pose.orientation);
 
-  if (!dynamicCollisionCheck(distance, cmd_vel->twist, pose2d)) {
-    this->stopRobot();
-    RCLCPP_WARN(this->logger_, "Collision Ahead - Exiting DriveOnHeading");
-    return ResultStatus{Status::FAILED,
-                        RecoverPoseActionResult::COLLISION_AHEAD};
-  }
+  // if (!dynamicCollisionCheck(distance, cmd_vel->twist, pose2d)) {
+  //   this->stopRobot();
+  //   RCLCPP_WARN(this->logger_, "Collision Ahead - Exiting DriveOnHeading");
+  //   return ResultStatus{Status::FAILED,
+  //                       RecoverPoseActionResult::COLLISION_AHEAD};
+  // }
 
   vel_pub_->publish(std::move(cmd_vel));
 
@@ -181,19 +181,42 @@ bool RecoverPoseCls::isCollisionFree(
 
     if (this->global_collision_checker_->isCollisionFree(pose2d_global,
                                                          fetch_global_data)) {
-      RCLCPP_INFO(logger_,
-                  "[global_collision_checker_]: Declared availibility of free "
-                  "space at: %f, %f, %f ",
-                  pose2d_global.x, pose2d_global.y, pose2d_global.theta);
-      if (this->local_collision_checker_->isCollisionFree(pose2d_local,
-                                                          fetch_local_data)) {
-        // RCLCPP_INFO(logger_, "[local_collision_checker_]: Declared
-        // availibility of free space at: %f, %f, %f ", pose2d_local.x,
-        // pose2d_local.y, pose2d_local.theta);
-        angle_heading = i;
-        return true;
+      RCLCPP_WARN(
+          this->logger_,
+          "[Static_global_collision_check]: Collision free heading angle: %f",
+          i);
+      auto cmd_vel_ = std::make_unique<geometry_msgs::msg::TwistStamped>();
+      cmd_vel_->header.stamp = this->clock_->now();
+      cmd_vel_->header.frame_id = this->robot_base_frame_;
+      cmd_vel_->twist.linear.y = command_speed_ * sin(angle_heading);
+      cmd_vel_->twist.angular.z = 0.0;
+      cmd_vel_->twist.linear.x = command_speed_ * cos(angle_heading);
+      if (dynamicCollisionCheck(distance, cmd_vel_->twist, pose2d_global)) {
+        RCLCPP_WARN(this->logger_,
+                    "[dynamic_global_collision_check]: Collision free");
+        if (this->local_collision_checker_->isCollisionFree(pose2d_local,
+                                                            fetch_local_data)) {
+          RCLCPP_WARN(this->logger_, "[local_collision_check]:Collision free");
+
+          RCLCPP_INFO(logger_,
+                      "Declared availibility of free space at: %f, %f, %f ",
+                      pose2d_global.x, pose2d_global.y, pose2d_global.theta);
+          angle_heading = i;
+          return true;
+        } else {
+          RCLCPP_WARN(this->logger_, "[local_collision_check]:Collision prone");
+          continue;
+        }
+        fetch_local_data = false;
+      } else {
+        RCLCPP_WARN(this->logger_,
+                    "[dynamic_global_collision_check]: Collision prone");
+        continue;
       }
-      fetch_local_data = false;
+    } else {
+      RCLCPP_WARN(this->logger_,
+                  "[Static_global_collision_check]: Collision Prone");
+      continue;
     }
     fetch_global_data = false;
   }
@@ -238,7 +261,7 @@ bool RecoverPoseCls::dynamicCollisionCheck(
       break;
     }
 
-    if (!this->local_collision_checker_->isCollisionFree(pose2d, fetch_data)) {
+    if (!this->global_collision_checker_->isCollisionFree(pose2d, fetch_data)) {
       RCLCPP_INFO(logger_,
                   "[local_collision_checker_]: Unable to identify the free "
                   "space around robot at: %f, %f, %f ",
