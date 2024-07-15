@@ -5,7 +5,7 @@ amcl:
     scan_topic: /robotinobase2/scan
     map_topic: /mps_map
     initial_pose:
-      x: 5.0
+      x: 5.5
       y: 0.45
       z: 0.0
       yaw: 3.14
