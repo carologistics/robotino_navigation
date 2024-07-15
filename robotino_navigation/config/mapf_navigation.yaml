@@ -1,0 +1,417 @@
+amcl:
+  ros__parameters:
+    use_sim_time: false
+    map_topic: /mps_map
+    base_frame_id: "base_link"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    global_frame_id: "map"
+    laser_model_type: "likelihood_field"
+    odom_frame_id: "odom"
+    set_initial_pose: true
+    initial_pose:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0
+    pf_err: 0.05
+    pf_z: 0.99
+    recovery_alpha_fast: 0.0
+    recovery_alpha_slow: 0.0
+    resample_interval: 1
+    robot_model_type: "nav2_amcl::OmniMotionModel"
+    save_pose_rate: 0.5
+    tf_broadcast: true
+    transform_tolerance: 1.0
+    scan_topic: /fawkes_scans/Laser_urg_filtered_360
+
+    # values from fawkes AMCL
+    # alpha values
+    alpha1: 1.0
+    alpha2: 1.0
+    alpha3: 0.4
+    alpha4: 0.4
+    alpha5: 0.4
+
+    # beam skip is disabled by default
+    # do_beamskip: true
+    # beam_skip_distance: 0.3
+
+    # laser
+    laser_likelihood_max_dist: 8.5
+    laser_max_range: 15.0
+    laser_min_range: 0.05
+
+    # beam model
+    lambda_short: 0.1
+    max_beams: 120
+    max_particles: 1000
+    min_particles: 500
+
+    # movement update settings
+    update_min_a: 0.05
+    update_min_d: 0.1
+
+    # priori probabilities
+    z_hit: 0.95
+    sigma_hit: 0.2
+    z_short: 0.05
+    z_max: 0.05
+    z_rand: 0.05
+
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: "/odom_filtered"
+    transform_tolerance: 0.1
+    default_nav_to_pose_bt_xml: $(find-pkg-share robotino_navigation)/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml
+    goal_blackboard_id: goal
+    path_blackboard_id: path
+    bt_loop_duration: 10
+    default_server_timeout: 10
+    wait_for_service_timeout: 1000
+    action_server_result_timeout: 900.0
+    navigators: ["navigate_to_pose", "navigate_through_poses"]
+    navigate_to_pose:
+      plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
+    navigate_through_poses:
+      plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
+    error_code_names:
+      - compute_path_error_code
+      - follow_path_error_code
+    plugin_lib_names:
+      - nav2_recover_pose_action_bt_node
+
+
+controller_server:
+  ros__parameters:
+    use_sim_time: False
+    controller_frequency: 15.0
+    min_x_velocity_threshold: 0.0001 #default:0.0
+    min_y_velocity_threshold: 0.0001 #default:0.0
+    min_theta_velocity_threshold: 0.0001 #default:0.0
+    odom_topic: "/odom_filtered"
+    failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
+    progress_checker_plugins: ["progress_checker"]
+    goal_checker_plugins: ["goal_checker"]
+    controller_plugins: ["FollowPath"]
+    use_realtime_priority: false
+    # Progress checker parameters
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.5
+      # required_movement_angle: 0.3 # param for PoseProgressChecker
+      movement_time_allowance: 10.0
+      xy_goal_tolerance: 0.05
+      yaw_goal_tolerance: 0.08
+    #Goal checker parameters
+    goal_checker:
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.25
+      yaw_goal_tolerance: 0.25
+      stateful: true
+    # Controller parameters- MPPI
+    FollowPath:
+      plugin: "nav2_mppi_controller::MPPIController"
+      # Time_steps times model_dt times vx_max should be < than than halve of
+      # The local costmap size, otherwise the robot will never reach full speed
+      time_steps: 59  # model_dt depends on the controller frequency
+      model_dt: 0.067
+      batch_size: 2000 # robotino motion model likely needs to be adapted
+      vx_std: 0.4
+      vy_std: 0.4
+      wz_std: 1.0
+      vx_max: 0.7
+      vx_min: -0.7
+      vy_max: 0.7
+      wz_max: 1.25
+      iteration_count: 1
+      # TODO: ours was 0.7
+      prune_distance: 1.7
+      # TODO: ours was 0.5
+      transform_tolerance: 0.1
+      # temperature closer to 0 -> use more optimal paths
+      # TODO: ours was 0.8
+      temperature: 0.3
+      gamma: 0.015
+      motion_model: "Omni"
+      visualize: false
+      reset_period: 1.0 # (only in Humble)
+      # TODO: ours was false
+      regenerate_noises: true
+      TrajectoryVisualizer:
+        trajectory_step: 5
+        time_step: 3
+      AckermannConstraints:
+        min_turning_r: 0.2
+      # TODO: ours was: ["ConstraintCritic", "ObstaclesCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"]
+      critics: [
+        "ConstraintCritic", "CostCritic", "GoalCritic",
+        "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic",
+        "PathAngleCritic", "PreferForwardCritic"]
+      ConstraintCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+      GoalCritic:
+        enabled: true
+        # TODO: ours was 3
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 0.5 # default: 1.4
+      GoalAngleCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.0
+        threshold_to_consider: 0.5 # default: 1.4
+      PreferForwardCritic: # we do not really care about facing forward, disable it
+        enabled: false
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 0.4
+      CostCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.81
+        critical_cost: 300.0
+        consider_footprint: true
+        collision_cost: 1000000.0
+        near_goal_distance: 1.0
+        trajectory_point_step: 2
+      # ObstaclesCritic:
+      #   enabled: true
+      #   cost_power: 1
+      #   repulsion_weight: 1.5
+      #   critical_weight: 20.0
+      #   consider_footprint: true # default: false, incerase the computation cost, uses robot footprint information
+      #   collision_cost: 1000.0
+      #   collision_margin_distance: 0.05
+      #   near_goal_distance: 0.1
+      #   inflation_radius: 0.4 # (only in Humble)
+      #   cost_scaling_factor: 5.0 # (only in Humble)
+      PathAlignCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 14.0
+        max_path_occupancy_ratio: 0.05
+        # TODO: ours was 3
+        trajectory_point_step: 4
+        threshold_to_consider: 0.5 # default: 1.4
+        offset_from_furthest: 20
+        use_path_orientations: false
+      PathFollowCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        offset_from_furthest: 5
+        threshold_to_consider: 0.5 # default: 1.4
+      PathAngleCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 2.0
+        offset_from_furthest: 4
+        threshold_to_consider: 0.5
+        max_angle_to_furthest: 1.0
+      # TwirlingCritic:
+      #   enabled: true
+      #   twirling_cost_power: 1
+      #   twirling_cost_weight: 10.0
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      update_frequency: 15.0
+      publish_frequency: 15.0
+      global_frame: odom
+      robot_base_frame: base_link
+      use_sim_time: false
+      rolling_window: true
+      width: 6
+      height: 6
+      resolution: 0.015
+      robot_radius: 0.225
+      plugins: ["obstacle_layer", "inflation_layer", "denoise_layer"] # "voxel_layer"
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        enabled: true
+        cost_scaling_factor: 1.0
+        inflation_radius: 0.4
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: True
+        footprint_clearing_enabled: True
+        observation_sources: scan_lidar scan_ir
+        scan_lidar:
+          topic: /fawkes_scans/Laser_urg_filtered_360
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+          raytrace_max_range: 1.5
+          raytrace_min_range: 0.0
+          obstacle_max_range: 1.5
+          obstacle_min_range: 0.0
+        scan_ir:
+          topic: /irsensor_scan
+          max_obstacle_height: 2.0
+          clearing: True
+          marking: True
+          data_type: "LaserScan"
+          raytrace_max_range: 0.65
+          raytrace_min_range: 0.05
+          obstacle_max_range: 0.5
+          obstacle_min_range: 0.25
+      denoise_layer:
+        plugin: "nav2_costmap_2d::DenoiseLayer"
+        enabled: true
+        minimal_group_size: 2
+        group_connectivity_type: 8
+      # voxel_layer:
+      #   plugin: "nav2_costmap_2d::VoxelLayer"
+      #   enabled: true
+      #   publish_voxel_map: true
+      #   origin_z: 0.0
+      #   z_resolution: 0.1
+      #   z_voxels: 16
+      #   max_obstacle_height: 0.5
+      #   mark_threshold: 0
+      #   observation_sources: scan
+      #   scan:
+      #     topic: /robotinobase1/scan
+      #     max_obstacle_height: 0.4
+      #     clearing: true
+      #     marking: true
+      #     data_type: "LaserScan"
+      #     raytrace_max_range: 3.0
+      #     raytrace_min_range: 0.0
+      #     obstacle_max_range: 2.5
+      #     obstacle_min_range: 0.0
+      always_send_full_costmap: true
+
+smoother_server:
+  ros__parameters:
+    use_sim_time: false
+    smoother_plugins: ["simple_smoother"]
+    simple_smoother:
+      plugin: "nav2_smoother::SimpleSmoother"
+      tolerance: 1.0e-10
+      max_its: 1000
+      do_refinement: true
+
+behavior_server:
+  ros__parameters:
+    cycle_frequency: 15.0
+    action_server_result_timeout: 5.0
+    behavior_plugins: ["spin", "wait", "recoverpose", "backup"]
+    spin:
+      plugin: "nav2_behaviors::Spin"
+      simulate_ahead_time: 0.0
+    backup:
+      plugin: "nav2_behaviors/BackUpCls"
+    recoverpose:
+      plugin: "nav2_behaviors/RecoverPoseCls"
+    drive_on_heading:
+      plugin: "nav2_behaviors::DriveOnHeading"
+    wait:
+      plugin: "nav2_behaviors::Wait"
+    assisted_teleop:
+      plugin: "nav2_behaviors::AssistedTeleop"
+    local_frame: odom
+    global_frame: map
+    robot_base_frame: base_link
+    transform_tolerance: 0.1
+    use_sim_time: false
+    simulate_ahead_time: 0.0
+    max_rotational_vel: 1.57
+    min_rotational_vel: 0.25
+    rotational_acc_lim: 3.2
+
+robot_state_publisher:
+  ros__parameters:
+    use_sim_time: false
+
+waypoint_follower:
+  ros__parameters:
+    use_sim_time: false
+    loop_rate: 10
+    stop_on_failure: false
+    action_server_result_timeout: 900.0
+    waypoint_task_executor_plugin: "wait_at_waypoint"
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: true
+      waypoint_pause_duration: 200
+
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: False
+    smoothing_frequency: 15.0
+    scale_velocities: False
+    feedback: "OPEN_LOOP"
+    max_velocity: [1.0, 1.0, 1.25]
+    min_velocity: [-1.0, -1.0, -1.25]
+    max_accel: [2.0, 2.0, 3.2]
+    max_decel: [-2.0, -2.0, -3.2]
+    odom_topic: "/odom_filtered"
+    odom_duration: 0.1
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 1.0
+
+collision_monitor:
+  ros__parameters:
+    use_sim_time: false
+    # TODO ours was "bae_link"
+    base_frame_id: "base_footprint"
+    odom_frame_id: "odom"
+    cmd_vel_in_topic: "/cmd_vel_smoothed"
+    cmd_vel_out_topic: "/cmd_vel"
+    # TODO ours was "/cm_state"
+    state_topic: "/collision_monitor_state"
+    transform_tolerance: 0.1 # default 0.2
+    source_timeout: 5.0 # default 1.0
+    base_shift_correction: true
+    stop_pub_timeout: 2.0
+    # Polygons represent zone around the robot for "stop" and "slowdown" action types,
+    # and robot footprint for "approach" action type.
+    # Footprint could be "polygon" type with dynamically set footprint from footprint_topic
+    # or "circle" type with static footprint set by radius. "footprint_topic" parameter
+    # to be ignored in circular case.
+    polygons: ["PolygonSlow"] # "FootprintApproach"]
+    FootprintApproach:
+      type: "polygon"
+      action_type: "approach"
+      footprint_topic: "/local_costmap/published_footprint"
+      time_before_collision: 1.2
+      simulation_time_step: 0.1
+      min_points: 6
+      visualize: false
+      enabled: true
+    # PolygonStop:
+    #   type: "circle"
+    #   radius: 0.280
+    #   action_type: "stop"
+    #   max_points: 1
+    #   visualize: true
+    #   polygon_pub_topic: "/polygon_stop"
+    #   enable: true
+    # PolygonSlow:
+    #   type: "circle"
+    #   radius: 0.450
+    #   action_type: "slowdown"
+    #   max_points: 1
+    #   slowdown_ratio: 0.5
+    #   visualize: true
+    #   polygon_pub_topic: "/polygon_slowdown"
+    #   enable: true
+    observation_sources: ["scan"]
+    scan:
+      source_timeout: 0.2
+      type: "scan"
+      topic: "/fawkes_scans/Laser_urg_filtered_360"
+      min_height: 0.15
+      max_height: 2.0
+      enabled: true
