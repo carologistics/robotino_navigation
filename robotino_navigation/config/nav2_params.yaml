@@ -169,7 +169,7 @@ controller_server:
       CostCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 3.81
+        cost_weight: 1.0
         critical_cost: 300.0
         consider_footprint: true
         collision_cost: 1000000.0
@@ -200,7 +200,7 @@ controller_server:
         cost_power: 1
         cost_weight: 10.0
         offset_from_furthest: 5
-        threshold_to_consider: 0.5 # default: 1.4
+        threshold_to_consider: 0.5
       PathAngleCritic:
         enabled: true
         cost_power: 1
@@ -470,19 +470,18 @@ planner_server:
     #     w_smooth: 0.3
     #     w_data: 0.2
     #     tolerance: 1.0e-10
-    # GridBased:
-    #   # TODO: ours was "nav2_theta_star_planner/ThetaStarPlanner"
-    #   plugin: "nav2_theta_star_planner::ThetaStarPlanner"
-    #   how_many_corners: 8
-    #   w_euc_cost: 1.0
-    #   w_traversal_cost: 2.0
-    #   w_heuristic_cost: 1.0
     GridBased:
-      plugin: "nav2_cbs_planner_client::CBSPlannerClient"
-      solver_timeout: 10.0
-      agent_name: "robotinobase1"
-      use_final_approach_orientation: false
-      mapf_planner_id: "ConflictBased"
+      plugin: "nav2_theta_star_planner::ThetaStarPlanner"
+      how_many_corners: 8
+      w_euc_cost: 1.0
+      w_traversal_cost: 2.0
+      w_heuristic_cost: 1.0
+    # GridBased:
+    #   plugin: "nav2_cbs_planner_client::CBSPlannerClient"
+    #   solver_timeout: 10.0
+    #   agent_name: "robotinobase3"
+    #   use_final_approach_orientation: false
+    #   mapf_planner_id: "ConflictBased"
 
 smoother_server:
   ros__parameters:
