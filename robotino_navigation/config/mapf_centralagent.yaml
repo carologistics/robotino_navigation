@@ -1,0 +1,95 @@
+mapf_map_server:
+  ros__parameters:
+    use_sim_time: false
+    yaml_filename: "map.yaml"
+    topic_name: "/map"
+    frame_id: "map"
+
+mapf_map_saver:
+  ros__parameters:
+    use_sim_time: false
+    save_map_timeout: 5.0
+    free_thresh_default: 0.25
+    occupied_thresh_default: 0.65
+    map_subscribe_transient_local: true
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 15.0
+      publish_frequency: 15.0
+      global_frame: map
+      robot_base_frame: map
+      use_sim_time: false
+      robot_radius: 0.225
+      resolution: 0.015
+      lethal_cost_threshold: 90
+      track_unknown_space: false
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        enable: true
+        map_topic: /map
+        subscribe_to_updates: true
+        map_subscribe_transient_local: true
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        footprint_clearing_enabled: true
+        observation_sources: scan_robotinobase1 scan_robotinobase2 scan_robotinobase3
+        scan_robotinobase1:
+          topic: /robotinobase1/scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+          raytrace_max_range: 1.5
+          raytrace_min_range: 0.0
+          obstacle_max_range: 1.5
+          obstacle_min_range: 0.0
+        scan_robotinobase2:
+          topic: /robotinobase2/scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+          raytrace_max_range: 1.5
+          raytrace_min_range: 0.0
+          obstacle_max_range: 1.5
+          obstacle_min_range: 0.0
+        scan_robotinobase3:
+          topic: /robotinobase3/scan
+          max_obstacle_height: 2.0
+          clearing: true
+          marking: true
+          data_type: "LaserScan"
+          raytrace_max_range: 1.5
+          raytrace_min_range: 0.0
+          obstacle_max_range: 1.5
+          obstacle_min_range: 0.0
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"#+
+        cost_scaling_factor: 1.0
+        inflation_radius: 0.4
+        inflate_unknown: False
+        inflate_around_unknown: False
+      always_send_full_costmap: True
+
+mapf_planner_server:
+  ros__parameters:
+    expected_planner_frequency: 15.0
+    action_server_result_timeout: 10.0
+    number_of_agents: 1
+    agent_ids: ["robotinobase1"]
+    use_sim_time: True
+    planner_plugins: ["ConflictBased"]
+    ConflictBased:
+      plugin: "nav2_cbs_planner::CBSPlanner"
+      how_many_corners: 8
+      heuristics: "manhattan"
+      objective_function: "makespan"
+      allow_unknown: True
+      w_euc_cost: 1.0
+      w_traversal_cost: 2.0
+      terminal_checking_interval: 5000
+      use_final_approach_orientation: False
