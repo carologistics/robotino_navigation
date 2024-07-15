@@ -4,7 +4,7 @@ amcl:
     odom_frame_id: "robotinobase2/odom"
     scan_topic: /robotinobase2/scan
     initial_pose:
-      x: 5.0
+      x: 4.75
       y: 0.45
       z: 0.0
       yaw: 3.14
@@ -67,6 +67,12 @@ map_saver:
 
 planner_server:
   ros__parameters:
+    GridBased:
+      plugin: "nav2_cbs_planner_client::CBSPlannerClient"
+      solver_timeout: 10.0
+      agent_name: "robotinobase2"
+      use_final_approach_orientation: false
+      mapf_planner_id: "ConflictBased"
 
 behavior_server:
   ros__parameters:
