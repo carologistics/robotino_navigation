@@ -176,12 +176,12 @@ controller_server:
       CostCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 3.81
+        cost_weight: 1.0
         critical_cost: 300.0
         consider_footprint: true
         collision_cost: 1000000.0
-        near_goal_distance: 1.0
-        trajectory_point_step: 2
+        near_goal_distance: 0.5
+        trajectory_point_step: 10
       # ObstaclesCritic:
       #   enabled: true
       #   cost_power: 1
@@ -200,7 +200,7 @@ controller_server:
         max_path_occupancy_ratio: 0.05
         # TODO: ours was 3
         trajectory_point_step: 4
-        threshold_to_consider: 0.5 # default: 1.4
+        threshold_to_consider: 0.5
         offset_from_furthest: 20
         use_path_orientations: false
       PathFollowCritic:
@@ -208,7 +208,7 @@ controller_server:
         cost_power: 1
         cost_weight: 5.0
         offset_from_furthest: 5
-        threshold_to_consider: 0.5 # default: 1.4
+        threshold_to_consider: 0.5
       PathAngleCritic:
         enabled: true
         cost_power: 1
@@ -357,6 +357,7 @@ planner_server:
     expected_planner_frequency: 15.0
     use_sim_time: False
     planner_plugins: ["GridBased"] #"ConflictBased"
+    planner_plugins: ["GridBased"] #"ConflictBased"
     # GridBased:
     #   plugin: "nav2_navfn_planner/NavfnPlanner"
     #   tolerance: 0.15
@@ -380,7 +381,6 @@ planner_server:
     #     w_data: 0.2
     #     tolerance: 1.0e-10
     # GridBased:
-    #   # TODO: ours was "nav2_theta_star_planner/ThetaStarPlanner"
     #   plugin: "nav2_theta_star_planner::ThetaStarPlanner"
     #   how_many_corners: 8
     #   w_euc_cost: 1.0
@@ -389,7 +389,7 @@ planner_server:
     GridBased:
       plugin: "nav2_cbs_planner_client::CBSPlannerClient"
       solver_timeout: 10.0
-      agent_name: "robotinobase1"
+      agent_name: "robotinobase3"
       use_final_approach_orientation: false
       mapf_planner_id: "ConflictBased"
 
