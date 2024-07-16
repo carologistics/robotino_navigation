@@ -46,8 +46,8 @@
             <Sequence>
               <Wait wait_duration="1.0"/>
               <Spin spin_dist="0.523" />
+              <RecoverPose backup_dist="0.30" backup_speed="0.2" time_allowance="10" robot_footprint="0.45" />
             </Sequence>
-            <RecoverPose backup_dist="0.30" backup_speed="0.2" time_allowance="10" robot_footprint="0.45" />
             <!-- <BackUp backup_dist="0.30" backup_speed="0.05" time_allowance="10.0"/> -->
           </RoundRobin>
         </ReactiveFallback>
