@@ -6,11 +6,11 @@
 
 <root BTCPP_format="4" main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
-    <RecoveryNode number_of_retries="12" name="NavigateRecovery">
+    <RecoveryNode number_of_retries="3" name="NavigateRecovery">
       <Sequence name="NavigateWithReplanning">
         <ControllerSelector selected_controller="{selected_controller}" default_controller="FollowPath" topic_name="controller_selector"/>
         <PlannerSelector selected_planner="{selected_planner}" default_planner="GridBased" topic_name="planner_selector"/>
-        <RecoveryNode number_of_retries="2" name="ComputePathToPose">
+        <RecoveryNode number_of_retries="1" name="ComputePathToPose">
           <ComputePathToPose goal="{goal}" path="{path}" planner_id="{selected_planner}" error_code_id="{compute_path_error_code}"/>
           <ReactiveFallback name="ReactiveFallback_ComputePathToPose">
             <GoalUpdated/>
@@ -20,7 +20,7 @@
             </Sequence>
           </ReactiveFallback>
         </RecoveryNode>
-        <RecoveryNode number_of_retries="2" name="FollowPath">
+        <RecoveryNode number_of_retries="1" name="FollowPath">
           <FollowPath path="{path}" controller_id="{selected_controller}" error_code_id="{follow_path_error_code}"/>
             <ReactiveFallback name="FollowPathRecoveryFallback">
               <GoalUpdated/>
