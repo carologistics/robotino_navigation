@@ -158,7 +158,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(package_dir, "map", "RC2024_map.yaml"),
+        default_value=os.path.join(package_dir, "map", "RC2024_map_mod.yaml"),
         description="Full path to map yaml file to load",
     )
 
