@@ -26,6 +26,7 @@ install(
 
 install(PROGRAMS
   scripts/nav2goal_pose.py
+  scripts/extract_plan.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
