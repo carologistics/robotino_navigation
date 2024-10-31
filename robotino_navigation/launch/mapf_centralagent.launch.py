@@ -40,7 +40,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         launch_configuration[argname] = argval
 
     # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"yaml_filename": map_yaml_file, "number_of_agents": num_of_agents}
+    param_substitutions = {
+        "yaml_filename": map_yaml_file,
+        "number_of_agents": num_of_agents,
+        "use_sim_time": use_sim_time,
+    }
 
     configured_params = ParameterFile(
         RewrittenYaml(
@@ -89,6 +93,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 remappings=remappings,
                 condition=IfCondition(launch_plannerserver),
                 namespace=namespace,
+                # prefix= "konsole -e gdb -ex start --args"
+                # prefix= "gdbserver localhost:1200"
+                # prefix = "perf record -g -o /home/borse_saurabh/perf.data",
+                # prefix=['valgrind --tool=callgrind --dump-instr=yes -v --instr-atstart=no'],
             ),
             Node(
                 package="nav2_lifecycle_manager",
@@ -126,7 +134,7 @@ def generate_launch_description():
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         "use_sim_time",
-        default_value="false",
+        default_value="true",
         description="Use simulation (Gazebo) clock if true",
     )
 
@@ -164,7 +172,7 @@ def generate_launch_description():
 
     declare_launch_plannerserver_cmd = DeclareLaunchArgument(
         "num_of_agents",
-        default_value="1",
+        default_value="2",
         description="Wheather to start Rvizor not based on launch environment",
     )
     # Create the launch description and populate
