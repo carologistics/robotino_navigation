@@ -96,11 +96,8 @@ controller_server:
     min_theta_velocity_threshold: 0.0001 #default:0.0
     odom_topic: "/odom_filtered"
     failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
-    progress_checker_plugins: ["progress_checker"]
-    goal_checker_plugins: ["goal_checker"]
-    controller_plugins: ["FollowPath"]
     use_realtime_priority: false
-    # Progress checker parameters
+    progress_checker_plugins: ["progress_checker"]
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
       required_movement_radius: 0.5
@@ -108,18 +105,20 @@ controller_server:
       movement_time_allowance: 10.0
       xy_goal_tolerance: 0.05
       yaw_goal_tolerance: 0.08
-    #Goal checker parameters
+
+    goal_checker_plugins: ["goal_checker"]
     goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.25
       yaw_goal_tolerance: 0.25
       stateful: true
-    # Controller parameters- MPPI
-    FollowPath:
+
+    controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
+    FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
-      # Time_steps times model_dt times vx_max should be < than than halve of
-      # The local costmap size, otherwise the robot will never reach full speed
-      time_steps: 59  # model_dt depends on the controller frequency
+      time_steps: 59
+      # model_dt depends on the controller frequency, mdel_dt = 1/controller_frequency,
+      # prediction_horizon = time_steps * model_dt, prediction_horizon(m) = time_steps*model_dt*vx_max
       model_dt: 0.067
       batch_size: 2000 # robotino motion model likely needs to be adapted
       vx_std: 0.4
@@ -129,26 +128,20 @@ controller_server:
       vx_min: -0.7
       vy_max: 0.7
       wz_max: 1.25
-      iteration_count: 1
-      # TODO: ours was 0.7
-      prune_distance: 1.7
-      # TODO: ours was 0.5
+      iteration_count: 1 # TODO: ours was 0.7
+      prune_distance: 1.7 # TODO: ours was 0.5
       transform_tolerance: 0.1
-      # temperature closer to 0 -> use more optimal paths
-      # TODO: ours was 0.8
-      temperature: 0.3
+      temperature: 0.3 # temperature closer to 0 -> use more optimal paths
       gamma: 0.015
       motion_model: "Omni"
       visualize: false
       reset_period: 1.0 # (only in Humble)
-      # TODO: ours was false
-      regenerate_noises: true
+      regenerate_noises: false # TODO: ours was false
       TrajectoryVisualizer:
         trajectory_step: 5
         time_step: 3
       AckermannConstraints:
         min_turning_r: 0.2
-      # TODO: ours was: ["ConstraintCritic", "ObstaclesCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"]
       critics: [
         "ConstraintCritic", "CostCritic", "GoalCritic",
         "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic",
@@ -198,8 +191,7 @@ controller_server:
         cost_power: 1
         cost_weight: 14.0
         max_path_occupancy_ratio: 0.05
-        # TODO: ours was 3
-        trajectory_point_step: 4
+        trajectory_point_step: 4 # TODO: ours was 3
         threshold_to_consider: 0.5 # default: 1.4
         offset_from_furthest: 20
         use_path_orientations: false
@@ -220,6 +212,73 @@ controller_server:
       #   enabled: true
       #   twirling_cost_power: 1
       #   twirling_cost_weight: 10.0
+
+    FollowPath_DWB: # Controller parameters- DWB
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: True
+      min_vel_x: -0.5
+      min_vel_y: -0.5
+      max_vel_x: 0.5
+      max_vel_y: 0.5
+      max_vel_theta: 1.25
+      min_speed_xy: -0.7
+      max_speed_xy: 0.7
+      min_speed_theta: 0.0
+      acc_lim_x: 2.5
+      acc_lim_y: 2.5
+      acc_lim_theta: 3.2
+      decel_lim_x: -2.5
+      decel_lim_y: -2.5
+      decel_lim_theta: -3.0
+      vx_samples: 20
+      vy_samples: 5
+      vtheta_samples: 20
+      sim_time: 1.7
+      linear_granularity: 0.05
+      angular_granularity: 0.025
+      transform_tolerance: 0.2
+      xy_goal_tolerance: 0.25
+      trans_stopped_velocity: 0.25
+      short_circuit_trajectory_evaluation: True
+      limit_vel_cmd_in_traj: False
+      stateful: True
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      BaseObstacle.scale: 0.02
+      PathAlign.scale: 32.0
+      GoalAlign.scale: 24.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 32.0
+      GoalDist.scale: 24.0
+      RotateToGoal.scale: 32.0
+      RotateToGoal.slowing_factor: 5.0
+      RotateToGoal.lookahead_time: -1.0
+
+    FollowPath_RPP: # Controller parameters- Regular Pure Pursuit
+      plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
+      desired_linear_vel: 0.5
+      use_velocity_scaled_lookahead_dist: true
+      lookahead_time: 2.5
+      lookahead_dist: 0.6
+      min_lookahead_dist: 0.3
+      max_lookahead_dist: 0.9
+      use_rotate_to_heading: true
+      rotate_to_heading_angular_vel: 1.8
+      transform_tolerance: 0.1
+      min_approach_linear_velocity: 0.05
+      approach_velocity_scaling_dist: 1.5
+      use_collision_detection: true
+      max_allowed_time_to_collision_up_to_carrot: 3.0
+      use_regulated_linear_velocity_scaling: true
+      use_fixed_curvature_lookahead: false
+      curvature_lookahead_dist: 0.5
+      use_cost_regulated_linear_velocity_scaling: false
+      regulated_linear_scaling_min_radius: 0.75
+      regulated_linear_scaling_min_speed: 0.25
+      allow_reversing: false
+      rotate_to_heading_min_angle: 0.785
+      max_angular_accel: 3.2
+      max_robot_pose_search_dist: 2.5
 
 local_costmap:
   local_costmap:
