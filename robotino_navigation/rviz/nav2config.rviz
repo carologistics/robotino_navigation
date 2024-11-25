@@ -55,7 +55,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/robot_description
+        Value: /<namespace>/robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -97,7 +97,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: robotinobase1
+      TF Prefix: <namespace>
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -110,47 +110,47 @@ Visualization Manager:
         All Enabled: false
         map:
           Value: true
-        robotinobase1/SickLaser_Front:
+        <namespace>/SickLaser_Front:
           Value: true
-        robotinobase1/SickLaser_Rear:
+        <namespace>/SickLaser_Rear:
           Value: true
-        robotinobase1/anglebracketusb_link:
+        <namespace>/anglebracketusb_link:
           Value: true
-        robotinobase1/base_link:
+        <namespace>/base_link:
           Value: true
-        robotinobase1/command_bridge_link:
+        <namespace>/command_bridge_link:
           Value: true
-        robotinobase1/imu_link:
+        <namespace>/imu_link:
           Value: true
-        robotinobase1/ir1_sensor:
+        <namespace>/ir1_sensor:
           Value: true
-        robotinobase1/ir2_sensor:
+        <namespace>/ir2_sensor:
           Value: true
-        robotinobase1/ir3_sensor:
+        <namespace>/ir3_sensor:
           Value: true
-        robotinobase1/ir4_sensor:
+        <namespace>/ir4_sensor:
           Value: true
-        robotinobase1/ir5_sensor:
+        <namespace>/ir5_sensor:
           Value: true
-        robotinobase1/ir6_sensor:
+        <namespace>/ir6_sensor:
           Value: true
-        robotinobase1/ir7_sensor:
+        <namespace>/ir7_sensor:
           Value: true
-        robotinobase1/ir8_sensor:
+        <namespace>/ir8_sensor:
           Value: true
-        robotinobase1/ir9_sensor:
+        <namespace>/ir9_sensor:
           Value: true
-        robotinobase1/irsensor_merge:
+        <namespace>/irsensor_merge:
           Value: true
-        robotinobase1/laser_link:
+        <namespace>/laser_link:
           Value: true
-        robotinobase1/odom:
+        <namespace>/odom:
           Value: true
-        robotinobase1/wheel0_link:
+        <namespace>/wheel0_link:
           Value: true
-        robotinobase1/wheel1_link:
+        <namespace>/wheel1_link:
           Value: true
-        robotinobase1/wheel2_link:
+        <namespace>/wheel2_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -159,45 +159,45 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          robotinobase1/odom:
-            robotinobase1/base_link:
-              robotinobase1/SickLaser_Front:
+          <namespace>/odom:
+            <namespace>/base_link:
+              <namespace>/SickLaser_Front:
                 {}
-              robotinobase1/SickLaser_Rear:
+              <namespace>/SickLaser_Rear:
                 {}
-              robotinobase1/anglebracketusb_link:
+              <namespace>/anglebracketusb_link:
                 {}
-              robotinobase1/command_bridge_link:
+              <namespace>/command_bridge_link:
                 {}
-              robotinobase1/imu_link:
+              <namespace>/imu_link:
                 {}
-              robotinobase1/ir1_sensor:
+              <namespace>/ir1_sensor:
                 {}
-              robotinobase1/ir2_sensor:
+              <namespace>/ir2_sensor:
                 {}
-              robotinobase1/ir3_sensor:
+              <namespace>/ir3_sensor:
                 {}
-              robotinobase1/ir4_sensor:
+              <namespace>/ir4_sensor:
                 {}
-              robotinobase1/ir5_sensor:
+              <namespace>/ir5_sensor:
                 {}
-              robotinobase1/ir6_sensor:
+              <namespace>/ir6_sensor:
                 {}
-              robotinobase1/ir7_sensor:
+              <namespace>/ir7_sensor:
                 {}
-              robotinobase1/ir8_sensor:
+              <namespace>/ir8_sensor:
                 {}
-              robotinobase1/ir9_sensor:
+              <namespace>/ir9_sensor:
                 {}
-              robotinobase1/irsensor_merge:
+              <namespace>/irsensor_merge:
                 {}
-              robotinobase1/laser_link:
+              <namespace>/laser_link:
                 {}
-              robotinobase1/wheel0_link:
+              <namespace>/wheel0_link:
                 {}
-              robotinobase1/wheel1_link:
+              <namespace>/wheel1_link:
                 {}
-              robotinobase1/wheel2_link:
+              <namespace>/wheel2_link:
                 {}
       Update Interval: 0
       Value: true
@@ -231,7 +231,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase1/scan
+        Value: /<namespace>/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -305,7 +305,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /robotinobase1/particle_cloud
+        Value: /<namespace>/particle_cloud
       Value: true
     - Class: rviz_common/Group
       Displays:
@@ -323,13 +323,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap
+            Value: /<namespace>/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap_updates
+            Value: /<namespace>/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 0.30000001192092896
@@ -346,13 +346,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap
+            Value: /<namespace>/global_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/costmap_updates
+            Value: /<namespace>/global_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -381,7 +381,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/plan
+            Value: /<namespace>/plan
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -427,7 +427,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/global_costmap/published_footprint
+            Value: /<namespace>/global_costmap/published_footprint
           Value: true
       Enabled: true
       Name: Global Planner
@@ -447,13 +447,13 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/costmap
+            Value: /<namespace>/local_costmap/costmap
           Update Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/costmap_updates
+            Value: /<namespace>/local_costmap/costmap_updates
           Use Timestamp: false
           Value: true
         - Alpha: 1
@@ -482,7 +482,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/plan_smoothed
+            Value: /<namespace>/plan_smoothed
           Value: true
         - Class: rviz_default_plugins/MarkerArray
           Enabled: true
@@ -494,7 +494,7 @@ Visualization Manager:
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/marker
+            Value: /<namespace>/marker
           Value: true
         - Alpha: 1
           Class: rviz_default_plugins/Polygon
@@ -507,7 +507,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /robotinobase1/local_costmap/published_footprint
+            Value: /<namespace>/local_costmap/published_footprint
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
@@ -605,7 +605,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/waypoints
+        Value: /<namespace>/waypoints
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -618,7 +618,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/polygon_slowdown
+        Value: /<namespace>/polygon_slowdown
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -631,7 +631,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/polygon_stop
+        Value: /<namespace>/polygon_stop
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -663,7 +663,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /robotinobase1/irsensor_scan
+        Value: /<namespace>/irsensor_scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
