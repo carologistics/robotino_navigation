@@ -195,7 +195,7 @@ void MotorMove::execute(
     distance = calculate_distance(error); // Calculate distance to target.
     goal_handle->publish_feedback(feedback); // Publish feedback.
     float yaw = tf2::getYaw(error.pose.orientation); // Calculate yaw to target.
-    if (std::fabs(yaw) > 0.0872665f || distance < 0.05) { // adapted threshold to also take negtive deviations into account JW
+    if (std::fabs(yaw) > 0.0872665f && distance < 0.05) { // adapted threshold to also take negtive deviations into account JW
 
       RCLCPP_INFO(this->get_logger(), "Distance to yes");
       rclcpp::Time previous_time = current_time; // Store previous time.
