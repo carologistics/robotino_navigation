@@ -214,6 +214,17 @@ void MotorMove::execute(
       cmd_vel.angular.z = output(2, 0); // Set angular velocity.
       cmd_vel_->publish(cmd_vel); // Publish velocity command.
 
+    } else {
+      // Fehler sind innerhalb der Toleranz: Roboter stoppen und Ziel abschließen
+      geometry_msgs::msg::Twist stop_cmd;
+      stop_cmd.linear.x = 0.0;
+      stop_cmd.linear.y = 0.0;
+      stop_cmd.angular.z = 0.0;
+      cmd_vel_->publish(stop_cmd);
+      
+      goal_handle->succeed(std::make_shared<MotorMoveAction::Result>());
+      RCLCPP_INFO(this->get_logger(), "Ziel erreicht.");
+      return;
     }
     RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance); // Log distance.
     RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw); // Log yaw.
