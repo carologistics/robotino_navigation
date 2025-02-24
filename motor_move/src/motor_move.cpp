@@ -211,13 +211,7 @@ void MotorMove::execute(
       cmd_vel.linear.y = output(1, 0); // Set linear y velocity.
       cmd_vel.angular.z = output(2, 0); // Set angular velocity.
       cmd_vel_->publish(cmd_vel); // Publish velocity command.
-    }
-    RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance); // Log distance.
-    RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw); // Log yaw.
-    RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f", error.pose.position.x,
-                error.pose.position.y); // Log position deltas.
-    loop_rate.sleep(); // Sleep to maintain loop rate.
-  } else {
+    }else {
     geometry_msgs::msg::Twist stop_cmd;
     stop_cmd.linear.x = 0.0;
     stop_cmd.linear.y = 0.0;
@@ -227,7 +221,13 @@ void MotorMove::execute(
     goal_handle->succeed(std::make_shared<MotorMoveAction::Result>());
     RCLCPP_INFO(this->get_logger(), "Ziel erreicht.");
     return;
-  }
+    RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance); // Log distance.
+    RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw); // Log yaw.
+    RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f", error.pose.position.x,
+                error.pose.position.y); // Log position deltas.
+    loop_rate.sleep(); // Sleep to maintain loop rate.
+    }
+  } 
 }
 } // namespace motor_move
 
