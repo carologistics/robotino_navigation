@@ -73,10 +73,10 @@ MotorMove::MotorMove(const rclcpp::NodeOptions &options)
   Kp << 1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8;
 
   Eigen::MatrixXd Ki(3, 3); // Integral gain matrix.
-  Ki << 0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32;
+  Ki << 0.38, 0, 0, 0, 0.38, 0, 0, 0, 0.38;
 
   Eigen::MatrixXd Kd(3, 3); // Derivative gain matrix.
-  Kd << 0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08;
+  Kd << 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2;
 
   // Declare parameters for control gains as flattened vectors.
   std::vector<double> default_parameter = {0, 0, 0, 0, 0, 0, 0, 0, 0};
