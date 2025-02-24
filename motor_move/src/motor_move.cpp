@@ -70,10 +70,10 @@ MotorMove::MotorMove(const rclcpp::NodeOptions &options)
 
   // Initialize control matrices (Kp, Ki, Kd)
   Eigen::MatrixXd Kp(3, 3); // Proportional gain matrix.
-  Kp << 2, 0, 0, 0, 1, 0, 0, 0, 1;
+  Kp << 2, 0, 0, 0, 2, 0, 0, 0, 2;
 
   Eigen::MatrixXd Ki(3, 3); // Integral gain matrix.
-  Ki << 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1;
+  Ki << 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5;
 
   Eigen::MatrixXd Kd(3, 3); // Derivative gain matrix.
   Kd << 0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01;
