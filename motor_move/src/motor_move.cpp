@@ -73,7 +73,7 @@ MotorMove::MotorMove(const rclcpp::NodeOptions &options)
   Kp << 2, 0, 0, 0, 2, 0, 0, 0, 2;
 
   Eigen::MatrixXd Ki(3, 3); // Integral gain matrix.
-  Ki << 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5;
+  Ki << 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2;
 
   Eigen::MatrixXd Kd(3, 3); // Derivative gain matrix.
   Kd << 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0;
