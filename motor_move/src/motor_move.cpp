@@ -217,6 +217,16 @@ void MotorMove::execute(
     RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f", error.pose.position.x,
                 error.pose.position.y); // Log position deltas.
     loop_rate.sleep(); // Sleep to maintain loop rate.
+  } else {
+    geometry_msgs::msg::Twist stop_cmd;
+    stop_cmd.linear.x = 0.0;
+    stop_cmd.linear.y = 0.0;
+    stop_cmd.angular.z = 0.0;
+    cmd_vel_->publish(stop_cmd);
+    
+    goal_handle->succeed(std::make_shared<MotorMoveAction::Result>());
+    RCLCPP_INFO(this->get_logger(), "Ziel erreicht.");
+    return;
   }
 }
 } // namespace motor_move
