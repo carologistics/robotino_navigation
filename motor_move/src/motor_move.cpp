@@ -70,7 +70,7 @@ MotorMove::MotorMove(const rclcpp::NodeOptions &options)
 
   // Initialize control matrices (Kp, Ki, Kd)
   Eigen::MatrixXd Kp(3, 3); // Proportional gain matrix.
-  Kp << 1, 0, 0, 0, 1, 0, 0, 0, 1;
+  Kp << 2, 0, 0, 0, 1, 0, 0, 0, 1;
 
   Eigen::MatrixXd Ki(3, 3); // Integral gain matrix.
   Ki << 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1;
@@ -195,7 +195,7 @@ void MotorMove::execute(
     distance = calculate_distance(error); // Calculate distance to target.
     goal_handle->publish_feedback(feedback); // Publish feedback.
     float yaw = tf2::getYaw(error.pose.orientation); // Calculate yaw to target.
-    if (std::fabs(yaw) > 0.0872665f || std::fabs(distance) > 0.05) { // adapted threshold to also take negtive deviations into account JW
+    if (yaw > 0.0872665f || distance > 0.05) { // Check thresholds for yaw and distance.
 
       RCLCPP_INFO(this->get_logger(), "Distance to yes");
       rclcpp::Time previous_time = current_time; // Store previous time.
@@ -206,33 +206,16 @@ void MotorMove::execute(
       error_matrix << error.pose.position.x, error.pose.position.y, yaw; // Fill error matrix.
       Eigen::MatrixXd output = mimo_.compute(error_matrix, delta_t.seconds()); // Compute control output.
       RCLCPP_INFO(this->get_logger(), "Output delta %f", output(0, 0));
-      RCLCPP_INFO(this->get_logger(), "Controller output y (linear.y): %f", output(1, 0)); //JW: log y-axis output
-
       geometry_msgs::msg::Twist cmd_vel; // Create Twist message for velocity commands.
       cmd_vel.linear.x = output(0, 0); // Set linear x velocity.
       cmd_vel.linear.y = output(1, 0); // Set linear y velocity.
       cmd_vel.angular.z = output(2, 0); // Set angular velocity.
       cmd_vel_->publish(cmd_vel); // Publish velocity command.
-
-    } else {
-      // Fehler sind innerhalb der Toleranz: Roboter stoppen und Ziel abschließen
-      geometry_msgs::msg::Twist stop_cmd;
-      stop_cmd.linear.x = 0.0;
-      stop_cmd.linear.y = 0.0;
-      stop_cmd.angular.z = 0.0;
-      cmd_vel_->publish(stop_cmd);
-      
-      goal_handle->succeed(std::make_shared<MotorMoveAction::Result>());
-      RCLCPP_INFO(this->get_logger(), "Ziel erreicht.");
-      return;
     }
     RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance); // Log distance.
     RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw); // Log yaw.
     RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f", error.pose.position.x,
                 error.pose.position.y); // Log position deltas.
-    RCLCPP_INFO(this->get_logger(), "Error in base_link frame: x=%.3f  y=%.3f  yaw=%.3f",
-            error.pose.position.x, error.pose.position.y, yaw); //JW
-
     loop_rate.sleep(); // Sleep to maintain loop rate.
   }
 }
