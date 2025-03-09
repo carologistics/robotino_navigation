@@ -25,7 +25,7 @@ amcl:
     save_pose_rate: 0.5
     tf_broadcast: true
     transform_tolerance: 1.0
-    scan_topic: /fawkes_scans/Laser_urg_filtered_360
+    scan_topic: /scan
 
     # values from fawkes AMCL
     # alpha values
@@ -305,7 +305,7 @@ local_costmap:
         footprint_clearing_enabled: True
         observation_sources: scan_lidar scan_ir
         scan_lidar:
-          topic: /fawkes_scans/Laser_urg_filtered_360
+          topic: /scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -377,7 +377,7 @@ global_costmap:
         footprint_clearing_enabled: true
         observation_sources: scan
         scan:
-          topic: /fawkes_scans/Laser_urg_filtered_360
+          topic: /scan
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -565,7 +565,7 @@ collision_monitor:
     scan:
       source_timeout: 0.2
       type: "scan"
-      topic: "/fawkes_scans/Laser_urg_filtered_360"
+      topic: "/scan"
       min_height: 0.15
       max_height: 2.0
       enabled: true
