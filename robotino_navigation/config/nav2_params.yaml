@@ -306,6 +306,7 @@ local_costmap:
         observation_sources: scan_lidar scan_ir
         scan_lidar:
           topic: /scan
+          sensor_frame: laser_link
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -316,6 +317,7 @@ local_costmap:
           obstacle_min_range: 0.0
         scan_ir:
           topic: /irsensor_scan
+          sensor_frame: irscan_link
           max_obstacle_height: 2.0
           clearing: True
           marking: True
