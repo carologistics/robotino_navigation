@@ -1,5 +1,5 @@
-
 #!/usr/bin/env python3
+# Licensed under MIT. See LICENSE file. Copyright Carologistics.
 # MIT License
 #
 # Copyright (c) 2024
@@ -38,7 +38,7 @@ from nav2_common.launch import RewrittenYaml
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
-    bringup_dir = get_package_share_directory("robotino_navigation")
+    get_package_share_directory("robotino_navigation")
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration("namespace")
@@ -49,11 +49,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
+    filter_mask_yaml_file = LaunchConfiguration("filter_mask")
 
-    lifecycle_nodes = ["costmap_filter_info_server"]
+    lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
     # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time}
+    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml_file}
 
     configured_params = ParameterFile(
         RewrittenYaml(
@@ -85,11 +86,21 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ("/" + launch_configuration["namespace"] + "/map", "/map"),
     ]
 
-    os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
-
     # Create list of nodes to launch
     load_nodes = GroupAction(
         actions=[
+            Node(
+                package="nav2_map_server",
+                executable="map_server",
+                name="filter_mask_server",
+                namespace=namespace,
+                output="screen",
+                respawn=use_respawn,
+                respawn_delay=2.0,
+                parameters=[configured_params, configured_host_params],
+                arguments=["--ros-args", "--log-level", log_level],
+                remappings=remappings,
+            ),
             Node(
                 package="nav2_map_server",
                 executable="costmap_filter_info_server",
@@ -97,7 +108,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),
@@ -156,13 +167,19 @@ def generate_launch_description():
         description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask",
+        default_value=os.path.join(package_dir, "map", "filter_mask.yaml"),
+        description="Full path to yaml file to load",
+    )
+
     declare_use_respawn_cmd = DeclareLaunchArgument(
         "use_respawn",
         default_value="False",
         description="Whether to respawn if a node crashes. Applied when composition is disabled.",
     )
 
-    declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="info", description="log level")
+    declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="error", description="log level")
 
     launch_mapserver_argument = DeclareLaunchArgument(
         "launch_map_filter",
@@ -185,7 +202,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_cmd)
     ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
-
+    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
