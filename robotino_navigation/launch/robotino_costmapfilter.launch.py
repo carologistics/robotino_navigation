@@ -17,7 +17,7 @@ from nav2_common.launch import RewrittenYaml
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
-    bringup_dir = get_package_share_directory("robotino_navigation")
+    get_package_share_directory("robotino_navigation")
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration("namespace")
@@ -65,8 +65,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ("/" + launch_configuration["namespace"] + "/tf_static", "/tf_static"),
         ("/" + launch_configuration["namespace"] + "/map", "/map"),
     ]
-
-    os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
 
     # Create list of nodes to launch
     load_nodes = GroupAction(
@@ -150,13 +148,19 @@ def generate_launch_description():
         description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
     )
 
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask",
+        default_value=os.path.join(package_dir, "map", "filter_mask.yaml"),
+        description="Full path to yaml file to load",
+    )
+
     declare_use_respawn_cmd = DeclareLaunchArgument(
         "use_respawn",
         default_value="False",
         description="Whether to respawn if a node crashes. Applied when composition is disabled.",
     )
 
-    declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="info", description="log level")
+    declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="error", description="log level")
 
     launch_mapserver_argument = DeclareLaunchArgument(
         "launch_map_filter",

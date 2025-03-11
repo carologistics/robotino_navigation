@@ -38,6 +38,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     input_params_file = LaunchConfiguration("params_file")
     input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
+    input_filter_mask_yaml_file = LaunchConfiguration("filter_mask")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -46,6 +47,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     map_yaml_file = find_file(input_map_yaml_file.perform(context), [bringup_dir + "/map/"])
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
+        sys.exit(1)
+    filter_mask_yaml_file = find_file(input_filter_mask_yaml_file.perform(context), [bringup_dir + "/map/"])
+    if filter_mask_yaml_file is None:
+        print("Can not find %s, abort!", input_filter_mask_yaml_file.perform(context))
         sys.exit(1)
     params_file = find_file(input_params_file.perform(context), [bringup_dir + "/config/"])
     if params_file is None:
@@ -77,18 +82,19 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "launch_rviz": launch_rviz,
             }.items(),
         ),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
-                launch_arguments={
-                    "namespace": namespace,
-                    "use_sim_time": use_sim_time,
-                    "autostart": autostart,
-                    "params_file": params_file,
-                    "host_params_file": host_params_file,
-                    "use_respawn": use_respawn,
-                    "launch_map_filter": launch_mapfilter,
-                }.items(),
-            ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
+            launch_arguments={
+                "namespace": namespace,
+                "filter_mask": filter_mask_yaml_file,
+                "use_sim_time": use_sim_time,
+                "autostart": autostart,
+                "params_file": params_file,
+                "host_params_file": host_params_file,
+                "use_respawn": use_respawn,
+                "launch_map_filter": launch_mapfilter,
+            }.items(),
+        ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_navigation.launch.py")),
             launch_arguments={
@@ -178,6 +184,12 @@ def generate_launch_description():
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
         default_value=os.path.join(package_dir, "map", "map_sf_empty.yaml"),
+        description="Full path to map yaml file to load",
+    )
+
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask",
+        default_value=os.path.join(package_dir, "map", "filter_mask.yaml"),
         description="Full path to map yaml file to load",
     )
 
@@ -271,6 +283,7 @@ def generate_launch_description():
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
     ld.add_action(declare_team_name_cmd)
+    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
