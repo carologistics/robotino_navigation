@@ -407,6 +407,7 @@ global_costmap:
         plugin: "nav2_costmap_2d::KeepoutFilter"
         enabled: true
         filter_info_topic: "/costmap_filter_info"
+        transform_tolerance: 0.2
       always_send_full_costmap: true
 
 map_server:
