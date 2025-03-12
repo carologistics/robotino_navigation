@@ -8,7 +8,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
@@ -30,7 +29,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_map_filter = LaunchConfiguration("launch_map_filter")
     filter_mask_yaml = LaunchConfiguration("filter_mask_yaml")
 
-    lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
+    lifecycle_nodes = ["costmap_filter_info_server"]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
@@ -92,7 +91,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
-                condition=IfCondition(launch_map_filter),
                 namespace=namespace,
             ),
             Node(
@@ -107,7 +105,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     {"node_names": lifecycle_nodes},
                 ],
                 namespace=namespace,
-                condition=IfCondition(launch_map_filter),
             ),
         ]
     )
@@ -187,7 +184,6 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_filter_mask_yaml_cmd)
 

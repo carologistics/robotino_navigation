@@ -24,21 +24,19 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration("namespace")
-    launch_rviz = LaunchConfiguration("launch_rviz")
     launch_mps_map_gen = LaunchConfiguration("launch_mps_map_gen")
     use_composition = LaunchConfiguration("use_composition")
     input_map_yaml_file = LaunchConfiguration("map")
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     use_respawn = LaunchConfiguration("use_respawn")
-    launch_mapserver = LaunchConfiguration("launch_mapserver")
-    launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
     input_params_file = LaunchConfiguration("params_file")
     input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
     input_filter_mask_yaml_file = LaunchConfiguration("filter_mask")
+    launch_costmap_filter = LaunchConfiguration("launch_costmap_filter")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -65,6 +63,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     if launch_mps_map_gen_value:
         mps_map_gen_dir = get_package_share_directory("mps_map_gen")
 
+    launch_costmap_filter_value = launch_costmap_filter.perform(context).lower() in ["true", "1", "t", "y", "yes"]
+
     # Specify the actions
     actions = [
         IncludeLaunchDescription(
@@ -76,23 +76,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "autostart": autostart,
                 "params_file": params_file,
                 "host_params_file": host_params_file,
-                "use_composition": use_composition,
                 "use_respawn": use_respawn,
-                "launch_mapserver": launch_mapserver,
-                "launch_rviz": launch_rviz,
-            }.items(),
-        ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
-            launch_arguments={
-                "namespace": namespace,
-                "filter_mask": filter_mask_yaml_file,
-                "use_sim_time": use_sim_time,
-                "autostart": autostart,
-                "params_file": params_file,
-                "host_params_file": host_params_file,
-                "use_respawn": use_respawn,
-                "launch_map_filter": launch_mapfilter,
             }.items(),
         ),
         IncludeLaunchDescription(
@@ -128,6 +112,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             }.items(),
         ),
     ]
+
     if launch_mps_map_gen_value:
         actions.extend(
             [
@@ -149,6 +134,25 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 )
             ]
         )
+
+    if launch_costmap_filter_value:
+        actions.extend(
+            [
+                IncludeLaunchDescription(
+                    PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
+                    launch_arguments={
+                        "namespace": namespace,
+                        "use_sim_time": use_sim_time,
+                        "autostart": autostart,
+                        "params_file": params_file,
+                        "host_params_file": host_params_file,
+                        "use_respawn": use_respawn,
+                        "filter_mask": filter_mask_yaml_file,
+                    }.items(),
+                ),
+            ]
+        )
+
     bringup_cmd_group = GroupAction(actions)
 
     return [bringup_cmd_group]
@@ -162,12 +166,6 @@ def generate_launch_description():
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
 
     declare_namespace_cmd = DeclareLaunchArgument("namespace", default_value="", description="Top-level namespace")
-
-    declare_launch_rviz_cmd = DeclareLaunchArgument(
-        "launch_rviz",
-        default_value="false",
-        description="Weather to launch rviz or not",
-    )
 
     declare_launch_mps_map_gen_cmd = DeclareLaunchArgument(
         "launch_mps_map_gen",
@@ -230,18 +228,6 @@ def generate_launch_description():
 
     declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="info", description="log level")
 
-    declare_launchmapserver_cmd = DeclareLaunchArgument(
-        "launch_mapserver",
-        default_value="true",
-        description="whether to launch map server or not",
-    )
-
-    declare_launchmapfilter_cmd = DeclareLaunchArgument(
-        "launch_mapfilter",
-        default_value="true",
-        description="whether to launch keepout filer or not",
-    )
-
     declare_launch_nav2rviz_cmd = DeclareLaunchArgument(
         "launch_nav2rviz",
         default_value="false",
@@ -260,6 +246,12 @@ def generate_launch_description():
         description="Which team name registered for the RefBox (important for mps_map_gen)",
     )
 
+    declare_costmap_filter_cmd = DeclareLaunchArgument(
+        "launch_costmap_filter",
+        default_value="false",
+        description="Weather to launch costmap filter or not",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -268,8 +260,6 @@ def generate_launch_description():
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_launch_rviz_cmd)
-    ld.add_action(declare_launch_mps_map_gen_cmd)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
@@ -278,12 +268,12 @@ def generate_launch_description():
     ld.add_action(declare_use_composition_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(declare_launchmapserver_cmd)
-    ld.add_action(declare_launchmapfilter_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
     ld.add_action(declare_team_name_cmd)
     ld.add_action(declare_filter_mask_yaml_cmd)
+    ld.add_action(declare_costmap_filter_cmd)
+    ld.add_action(declare_launch_mps_map_gen_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
