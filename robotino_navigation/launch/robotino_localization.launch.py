@@ -8,7 +8,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
@@ -28,9 +27,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
-    LaunchConfiguration("launch_rviz")
-    launch_mapserver = LaunchConfiguration("launch_mapserver")
-
     lifecycle_nodes = ["map_server", "amcl"]
 
     # Create our own temporary YAML files that include substitutions
@@ -81,7 +77,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
-                condition=IfCondition(launch_mapserver),
                 namespace=namespace,
             ),
             Node(
@@ -162,18 +157,6 @@ def generate_launch_description():
 
     declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="info", description="log level")
 
-    launch_rviz_argument = DeclareLaunchArgument(
-        "launch_rviz",
-        default_value="false",
-        description="Wheather to start Rvizor not based on launch environment",
-    )
-
-    launch_mapserver_argument = DeclareLaunchArgument(
-        "launch_mapserver",
-        default_value="false",
-        description="Wheather to launch map server or not",
-    )
-
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -189,8 +172,6 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(launch_rviz_argument)
-    ld.add_action(launch_mapserver_argument)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))

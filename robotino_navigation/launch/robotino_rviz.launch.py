@@ -23,6 +23,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     namespace = LaunchConfiguration("namespace")
     launch_rviz = LaunchConfiguration("launch_rviz")
     LaunchConfiguration("rviz_config")
+    log_level = LaunchConfiguration("log_level")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -45,7 +46,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         package="rviz2",
         executable="rviz2",
         namespace=namespace,
-        arguments=["-d", new_rviz_config_path],
+        arguments=["-d", new_rviz_config_path, "--ros-args", "--log-level", log_level],
         output="screen",
         parameters=[{"namespace", launch_configuration["namespace"]}],
         remappings=[
@@ -96,6 +97,8 @@ def generate_launch_description():
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
 
+    declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="info", description="log level")
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -103,6 +106,7 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_launch_rviz_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
+    ld.add_action(declare_log_level_cmd)
 
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
 

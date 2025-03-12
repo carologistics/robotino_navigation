@@ -1,26 +1,5 @@
 #!/usr/bin/env python3
 # Licensed under MIT. See LICENSE file. Copyright Carologistics.
-# MIT License
-#
-# Copyright (c) 2024
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -29,7 +8,6 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
-from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
@@ -48,10 +26,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
-    launch_map_filter = LaunchConfiguration("launch_map_filter")
     filter_mask_yaml_file = LaunchConfiguration("filter_mask")
 
-    lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
+    lifecycle_nodes = ["costmap_filter_info_server"]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml_file}
@@ -89,18 +66,18 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     # Create list of nodes to launch
     load_nodes = GroupAction(
         actions=[
-            Node(
-                package="nav2_map_server",
-                executable="map_server",
-                name="filter_mask_server",
-                namespace=namespace,
-                output="screen",
-                respawn=use_respawn,
-                respawn_delay=2.0,
-                parameters=[configured_params, configured_host_params],
-                arguments=["--ros-args", "--log-level", log_level],
-                remappings=remappings,
-            ),
+            # Node(
+            #     package="nav2_map_server",
+            #     executable="map_server",
+            #     name="filter_mask_server",
+            #     namespace=namespace,
+            #     output="screen",
+            #     respawn=use_respawn,
+            #     respawn_delay=2.0,
+            #     parameters=[configured_params, configured_host_params],
+            #     arguments=["--ros-args", "--log-level", log_level],
+            #     remappings=remappings
+            # ),
             Node(
                 package="nav2_map_server",
                 executable="costmap_filter_info_server",
@@ -111,7 +88,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
-                condition=IfCondition(launch_map_filter),
                 namespace=namespace,
             ),
             Node(
@@ -126,7 +102,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     {"node_names": lifecycle_nodes},
                 ],
                 namespace=namespace,
-                condition=IfCondition(launch_map_filter),
             ),
         ]
     )
@@ -181,12 +156,6 @@ def generate_launch_description():
 
     declare_log_level_cmd = DeclareLaunchArgument("log_level", default_value="error", description="log level")
 
-    launch_mapserver_argument = DeclareLaunchArgument(
-        "launch_map_filter",
-        default_value="true",
-        description="Wheather to launch map server or not",
-    )
-
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -200,7 +169,6 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_filter_mask_yaml_cmd)
 
