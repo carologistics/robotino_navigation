@@ -37,6 +37,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     team_name = LaunchConfiguration("team_name")
     input_filter_mask_yaml_file = LaunchConfiguration("filter_mask")
     launch_costmap_filter = LaunchConfiguration("launch_costmap_filter")
+    border_thickness = LaunchConfiguration("border_thickness")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -130,6 +131,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                         "recv_port_public": "4444",
                         "crypto_key": "randomkey",
                         "map_client": "/map_server/map",
+                        "border_thickness": border_thickness,
                     }.items(),
                 )
             ]
@@ -252,6 +254,12 @@ def generate_launch_description():
         description="Weather to launch costmap filter or not",
     )
 
+    declare_border_thickness_cmd = DeclareLaunchArgument(
+        "border_thickness",
+        default_value="0.4",
+        description="Border thickness for the map",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -274,6 +282,7 @@ def generate_launch_description():
     ld.add_action(declare_filter_mask_yaml_cmd)
     ld.add_action(declare_costmap_filter_cmd)
     ld.add_action(declare_launch_mps_map_gen_cmd)
+    ld.add_action(declare_border_thickness_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
