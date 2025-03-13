@@ -1,13 +1,13 @@
 amcl:
   ros__parameters:
     use_sim_time: false
+    map_topic: /mps_map
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
     do_beamskip: false
     global_frame_id: "map"
-    map_topic: /map
     laser_model_type: "likelihood_field"
     odom_frame_id: "odom"
     set_initial_pose: true
@@ -116,7 +116,7 @@ controller_server:
     controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
     FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 59
+      time_steps: 30
       # model_dt depends on the controller frequency, mdel_dt = 1/controller_frequency,
       # prediction_horizon = time_steps * model_dt, prediction_horizon(m) = time_steps*model_dt*vx_max
       model_dt: 0.067
@@ -378,7 +378,7 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: true
-        map_topic: /map
+        map_topic: /mps_map_bounded
         subscribe_to_updates: true
         map_subscribe_transient_local: true
       obstacle_layer:
