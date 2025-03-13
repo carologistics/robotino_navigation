@@ -8,7 +8,6 @@ amcl:
     beam_skip_threshold: 0.3
     do_beamskip: false
     global_frame_id: "map"
-    map_topic: /map
     laser_model_type: "likelihood_field"
     odom_frame_id: "odom"
     set_initial_pose: true
@@ -379,7 +378,7 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: true
-        map_topic: /map
+        map_topic: /mps_map_bounded
         subscribe_to_updates: true
         map_subscribe_transient_local: true
       obstacle_layer:
