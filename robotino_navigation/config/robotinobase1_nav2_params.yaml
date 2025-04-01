@@ -25,8 +25,12 @@ local_costmap:
       global_frame: robotinobase1/odom
       robot_base_frame: robotinobase1/base_link
       obstacle_layer:
-        scan:
+        scan_lidar:
           topic: /robotinobase1/scan
+          sensor_frame: robotinobase1/laser_link
+        scan_ir:
+          topic: /robotinobase1/irsensor_scan
+          sensor_frame: robotinobase1/irscan_link
 
 global_costmap:
   global_costmap:
@@ -35,6 +39,7 @@ global_costmap:
       obstacle_layer:
         scan:
           topic: /robotinobase1/scan
+          sensor_frame: robotinobase1/laser_link
 
 map_server:
   ros__parameters:
