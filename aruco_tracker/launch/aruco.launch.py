@@ -17,4 +17,10 @@ def generate_launch_description():
              executable='aruco',
              name='aruco',
          ),
+        Node(
+            package='ros2_usb_camera',
+            executable='usb_cam_node_exe',
+            name='usb_cam',
+            parameters=[{'video_device': '/dev/video2'}]
+        )
     ])
