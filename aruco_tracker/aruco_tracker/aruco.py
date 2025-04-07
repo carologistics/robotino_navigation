@@ -49,7 +49,7 @@ class ArucoDetector(Node):
     def transform_to_map(self, marker_id, tvec,rvecs):
         try:
             marker_pose = PoseStamped()
-            marker_pose.header.frame_id = "camera_link"
+            marker_pose.header.frame_id = "robotinobase2/camera_link"
             marker_pose.header.stamp = self.get_clock().now().to_msg()
 
             tvec = tvec.flatten()
@@ -63,12 +63,12 @@ class ArucoDetector(Node):
             marker_pose.pose.orientation.x = rvecs[0]
             marker_pose.pose.orientation.y = rvecs[1]
             marker_pose.pose.orientation.z = rvecs[2]
-            transformed_pose = self.tf_buffer.transform(marker_pose, "base_link", timeout=rclpy.duration.Duration(seconds=1.0))
+            transformed_pose = self.tf_buffer.transform(marker_pose, "robotinobase2/base_link", timeout=rclpy.duration.Duration(seconds=1.0))
 
         # Now broadcast as TransformStamped (optional, if needed elsewhere)
             transform_msg = TransformStamped()
             transform_msg.header.stamp = self.get_clock().now().to_msg()
-            transform_msg.header.frame_id = "base_link"
+            transform_msg.header.frame_id = "robotinobase2/base_link"
             transform_msg.child_frame_id = f"aruco_marker_{marker_id}"
 
             transform_msg.transform.translation.x = transformed_pose.pose.position.x
