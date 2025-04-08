@@ -65,6 +65,8 @@ map_saver:
 
 planner_server:
   ros__parameters:
+    MapfPlanner:
+      agent_name: "robotinobase3"
 
 behavior_server:
   ros__parameters:

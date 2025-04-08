@@ -65,12 +65,8 @@ map_saver:
 
 planner_server:
   ros__parameters:
-    GridBased:
-      plugin: "nav2_cbs_planner_client::CBSPlannerClient"
-      solver_timeout: 10.0
+    MapfPlanner:
       agent_name: "robotinobase3"
-      use_final_approach_orientation: false
-      mapf_planner_id: "ConflictBased"
 
 behavior_server:
   ros__parameters:

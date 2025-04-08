@@ -77,21 +77,18 @@ global_costmap:
 
 mapf_planner_server:
   ros__parameters:
-    expected_planner_frequency: 0.0
+    planner_plugins: ["ConflictBased"]
+    expected_planner_frequency: 1.0
     action_server_result_timeout: 10.0
+    costmap_update_timeout: 1.0
     number_of_agents: 3
     agent_ids: ["robotinobase1", "robotinobase2", "robotinobase3"]
     use_sim_time: True
-    planner_plugins: ["ConflictBased"]
     ConflictBased:
       plugin: "nav2_cbs_planner::CBSPlanner"
-      stay_at_goal: true
+      how_many_corners: 8
       allow_unknown: true
       w_euc_cost: 1.0
       w_traversal_cost: 2.0
       terminal_checking_interval: 5000
       use_final_approach_orientation: false
-      how_many_corners: 8
-      heuristics: "manhattan"
-      objective_function: "sumofcost"
-      robot_radius: 0.225
