@@ -29,7 +29,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     log_level = LaunchConfiguration("log_level")
     launch_mapserver = LaunchConfiguration("launch_mapserver")
     launch_plannerserver = LaunchConfiguration("launch_plannerserver")
-    num_of_agents = LaunchConfiguration("num_of_agents")
+    num_of_agents = LaunchConfiguration("num_agents")
 
     lifecycle_nodes = ["mapf_map_server"]
     if launch_plannerserver:
@@ -171,7 +171,7 @@ def generate_launch_description():
     )
 
     declare_launch_plannerserver_cmd = DeclareLaunchArgument(
-        "num_of_agents",
+        "num_agents",
         default_value="2",
         description="Wheather to start Rvizor not based on launch environment",
     )
