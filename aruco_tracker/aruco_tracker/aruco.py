@@ -7,6 +7,7 @@ import numpy as np
 from cv_bridge import CvBridge
 import tf2_ros
 import tf2_geometry_msgs
+from transforms3d.euler import euler2quat
 from geometry_msgs.msg import TransformStamped
 # todo:transform the detected object's coordinates to the map frame.
 # 2 node,pos and tf,
@@ -27,25 +28,32 @@ class ArucoDetector(Node):
                                        [0, 539.27016132, 234.15780227], 
                                        [0, 0, 1]], dtype=np.float32)  # Replace with your calibration
         self.dist_coeffs = np.array([0.11646948,-0.43243322,-0.00127437,0.00096187,0.46947971], dtype=np.float32)  # Replace with your calibration
-        
+        self.last_seen_ids = set()
         self.subscription = self.create_subscription(Image, '/image_raw', self.image_callback, 10)
         self.get_logger().info("Aruco Detector Node Started")
     
     def image_callback(self, msg):
+        self.subscriptions = None
         frame = self.br.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         corners, ids, _ = cv.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
-        
+        current_ids = set()
+        now = self.get_clock().now()
         if ids is not None:
             rvecs, tvecs, _ = cv.aruco.estimatePoseSingleMarkers(corners, self.marker_size, self.camera_matrix, self.dist_coeffs)
             for i in range(len(ids)):
-                self.transform_to_map(ids[i][0], tvecs[i],rvecs[i])
+                marker_id = ids[i][0]
+                self.marker_last_seen[marker_id] = now 
+                self.transform_to_map(marker_id, tvecs[i], rvecs[i])
                 cv.aruco.drawDetectedMarkers(frame, corners, ids)
                 cv.drawFrameAxes(frame, self.camera_matrix, self.dist_coeffs, rvecs[i], tvecs[i], 0.05)
-        
-        #cv.imshow("Aruco Marker Detection", frame)
-        #cv.waitKey(1)
-    
+
+        # Remove transforms for markers not seen this time
+        vanished_ids = self.last_seen_ids - current_ids
+        for marker_id in vanished_ids:
+            pass
+
+        self.last_seen_ids = current_ids
     def transform_to_map(self, marker_id, tvec,rvecs):
         try:
             marker_pose = PoseStamped()
@@ -59,10 +67,11 @@ class ArucoDetector(Node):
 
             # This is a placeholder. Convert rvecs properly to a quaternion if needed
             rvecs = rvecs.flatten()
-            marker_pose.pose.orientation.w = 1.0
-            marker_pose.pose.orientation.x = rvecs[0]
-            marker_pose.pose.orientation.y = rvecs[1]
-            marker_pose.pose.orientation.z = rvecs[2]
+            quat = euler2quat(rvecs[0],rvecs[1], rvecs[2])
+            marker_pose.pose.orientation.w = quat[0]
+            marker_pose.pose.orientation.x = quat[1]
+            marker_pose.pose.orientation.y = quat[2]
+            marker_pose.pose.orientation.z = quat[3]
             transformed_pose = self.tf_buffer.transform(marker_pose, "robotinobase2/base_link", timeout=rclpy.duration.Duration(seconds=1.0))
 
         # Now broadcast as TransformStamped (optional, if needed elsewhere)
@@ -83,8 +92,7 @@ class ArucoDetector(Node):
             self.get_logger().warn("No transformation found from camera_link to map.")
         except tf2_ros.ExtrapolationException:
             self.get_logger().warn("Extrapolation error in TF lookup.")
-
-
+    
 def main(args=None):
     rclpy.init(args=args)
     node = ArucoDetector()
@@ -95,8 +103,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-# self.camera_matrix = np.array([[845.888936, 0, 308.327619], 
-#                                        [0, 845.085376, 261.230568], 
-#                                        [0, 0, 1]], dtype=np.float32)  # Replace with your calibration
-#         self.dist_coeffs = np.array([0.032691,0.237275,0.006616 ,-0.007537,0.0], dtype=np.float32)  # Replace with your calibration
-        
