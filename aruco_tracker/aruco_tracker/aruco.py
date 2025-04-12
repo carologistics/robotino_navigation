@@ -28,12 +28,11 @@ class ArucoDetector(Node):
                                        [0, 539.27016132, 234.15780227], 
                                        [0, 0, 1]], dtype=np.float32)  # Replace with your calibration
         self.dist_coeffs = np.array([0.11646948,-0.43243322,-0.00127437,0.00096187,0.46947971], dtype=np.float32)  # Replace with your calibration
-        self.last_seen_ids = set()
         self.subscription = self.create_subscription(Image, '/image_raw', self.image_callback, 10)
         self.get_logger().info("Aruco Detector Node Started")
     
     def image_callback(self, msg):
-        self.subscriptions = None
+        self.subscription = None
         frame = self.br.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         corners, ids, _ = cv.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
@@ -42,18 +41,12 @@ class ArucoDetector(Node):
         if ids is not None:
             rvecs, tvecs, _ = cv.aruco.estimatePoseSingleMarkers(corners, self.marker_size, self.camera_matrix, self.dist_coeffs)
             for i in range(len(ids)):
-                marker_id = ids[i][0]
-                self.marker_last_seen[marker_id] = now 
-                self.transform_to_map(marker_id, tvecs[i], rvecs[i])
+                
+                self.transform_to_map(ids[i][0], tvecs[i], rvecs[i])
                 cv.aruco.drawDetectedMarkers(frame, corners, ids)
                 cv.drawFrameAxes(frame, self.camera_matrix, self.dist_coeffs, rvecs[i], tvecs[i], 0.05)
 
-        # Remove transforms for markers not seen this time
-        vanished_ids = self.last_seen_ids - current_ids
-        for marker_id in vanished_ids:
-            pass
 
-        self.last_seen_ids = current_ids
     def transform_to_map(self, marker_id, tvec,rvecs):
         try:
             marker_pose = PoseStamped()
