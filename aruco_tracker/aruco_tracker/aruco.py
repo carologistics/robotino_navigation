@@ -24,10 +24,10 @@ class ArucoDetector(Node):
         self.parameters = cv.aruco.DetectorParameters()
         self.marker_size = 0.05  # Adjust based on actual size in meters
         
-        self.camera_matrix = np.array([[541.83897791, 0, 312.34902706], 
-                                       [0, 539.27016132, 234.15780227], 
+        self.camera_matrix = np.array([[602.368163 , 0, 316.403913], 
+                                       [0, 600.842440, 247.873301], 
                                        [0, 0, 1]], dtype=np.float32)  # Replace with your calibration
-        self.dist_coeffs = np.array([0.11646948,-0.43243322,-0.00127437,0.00096187,0.46947971], dtype=np.float32)  # Replace with your calibration
+        self.dist_coeffs = np.array([0.105207, -0.241722, -0.000910, -0.001297 ,0.000000], dtype=np.float32)  # Replace with your calibration
         self.subscription = self.create_subscription(Image, '/image_raw', self.image_callback, 10)
         self.get_logger().info("Aruco Detector Node Started")
     
@@ -45,6 +45,8 @@ class ArucoDetector(Node):
                 self.transform_to_map(ids[i][0], tvecs[i], rvecs[i])
                 cv.aruco.drawDetectedMarkers(frame, corners, ids)
                 cv.drawFrameAxes(frame, self.camera_matrix, self.dist_coeffs, rvecs[i], tvecs[i], 0.05)
+                pts = np.int32(corners[i][0])
+                cv.fillConvexPoly(frame, pts, (0, 255, 0))  # Green filled box
 
 
     def transform_to_map(self, marker_id, tvec,rvecs):
@@ -96,3 +98,27 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+#todo:add bounding box
+
+# camera matrix real sense
+# 602.368163 0.000000 316.403913
+# 0.000000 600.842440 247.873301
+# 0.000000 0.000000 1.000000
+
+# distortion
+# 0.105207 -0.241722 -0.000910 -0.001297 0.000000
+
+# rectification
+# 1.000000 0.000000 0.000000
+# 0.000000 1.000000 0.000000
+# 0.000000 0.000000 1.000000
+
+# projection
+# 608.750885 0.000000 315.699972 0.000000
+# 0.000000 608.146404 247.587353 0.000000
+# 0.000000 0.000000 1.000000 0.000000
+0.105207, -0.241722, -0.000910, -0.001297 ,0.000000
+#  self.camera_matrix = np.array([[541.83897791, 0, 312.34902706], 
+#                                        [0, 539.27016132, 234.15780227], 
+#                                        [0, 0, 1]], dtype=np.float32)  # Replace with your calibration
+#self.dist_coeffs = np.array([0.11646948,-0.43243322,-0.00127437,0.00096187,0.46947971], dtype=np.float32)  # Replace with your calibration
