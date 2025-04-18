@@ -3,7 +3,6 @@ amcl:
     base_frame_id: "robotinobase2/base_link"
     odom_frame_id: "robotinobase2/odom"
     scan_topic: /robotinobase2/scan
-    map_topic: /map
     initial_pose:
       x: 5.0
       y: 0.45
@@ -31,6 +30,8 @@ local_costmap:
         scan_ir:
           topic: /robotinobase2/irsensor_scan
           sensor_frame: robotinobase2/irscan_link
+      keepout_filter:
+        filter_info_topic: "/robotinobase2/costmap_filter_info"
 
 global_costmap:
   global_costmap:
@@ -40,10 +41,17 @@ global_costmap:
         scan:
           topic: /robotinobase2/scan
           sensor_frame: robotinobase2/laser_link
+      keepout_filter:
+        filter_info_topic: "/robotinobase2/costmap_filter_info"
 
 map_server:
   ros__parameters:
     yaml_filename: "map.yaml"
+
+costmap_filter_info_server:
+  ros__parameters:
+    filter_info_topic: "/robotinobase2/costmap_filter_info"
+    mask_topic: "/robotinobase2/keepout_filter_mask"
 
 map_saver:
   ros__parameters:
