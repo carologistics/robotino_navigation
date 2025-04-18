@@ -25,7 +25,7 @@ class ArucoDetector(Node):
         self.dist_coeffs = np.array([0.11646948,-0.43243322,-0.00127437,0.00096187,0.46947971], dtype=np.float32)  # Replace with your calibration
         self.aruco_dict = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_ARUCO_ORIGINAL)
         self.parameters = cv.aruco.DetectorParameters()
-        self.marker_size = 0.05  # Adjust based on actual size in meters
+        self.marker_size = 0.13  # Adjust based on actual size in meters
         
         
         self.subscription = self.create_subscription(Image, '/image_raw', self.image_callback, 10)
