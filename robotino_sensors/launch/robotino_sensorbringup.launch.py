@@ -65,6 +65,23 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     "launch_ekf": launch_ekf,
                 }.items(),
             ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    [
+                        PathJoinSubstitution(
+                            [
+                                FindPackageShare("aruco_tracker"),
+                                "launch",
+                                "aruco.launch.py",
+                            ]
+                        )
+                    ]
+                ),
+                launch_arguments={
+                    "namespace": namespace,
+                    "use_sim_time": use_sim_time,
+                }.items(),
+            ),
         ]
     )
 
