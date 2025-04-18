@@ -3,7 +3,6 @@ amcl:
     base_frame_id: "robotinobase1/base_link"
     odom_frame_id: "robotinobase1/odom"
     scan_topic: /robotinobase1/scan
-    map_topic: /mps_map
     initial_pose:
       x: 5.5
       y: 0.45

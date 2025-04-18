@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licensed under MIT. See LICENSE file. Copyright Carologistics.
 # MIT License
 #
 # Copyright (c) 2024
