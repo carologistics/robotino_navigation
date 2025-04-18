@@ -38,10 +38,12 @@ class ArucoDetector(Node):
         corners, ids, _ = cv.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
         current_ids = set()
         now = self.get_clock().now()
-        if ids is not 0 and not 1023:
+        if ids is not None:
             rvecs, tvecs, _ = cv.aruco.estimatePoseSingleMarkers(corners, self.marker_size, self.camera_matrix, self.dist_coeffs)
             for i in range(len(ids)):
-                
+                tag_id = ids[i][0]
+                if tag_id in [0, 1023]:
+                    continue  # Skip these tags
                 self.transform_to_map(ids[i][0], tvecs[i], rvecs[i])
                 cv.aruco.drawDetectedMarkers(frame, corners, ids)
                 cv.drawFrameAxes(frame, self.camera_matrix, self.dist_coeffs, rvecs[i], tvecs[i], 0.05)
