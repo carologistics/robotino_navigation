@@ -9,8 +9,8 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             arguments=[
-                '--x', '-0.1', '--y', '0', '--z', '1',
-                '--yaw', '3.14159', '--pitch', '1.57', '--roll', '0', '--frame-id', 'robotinobase2/base_link', '--child-frame-id', 'robotinobase2/camera_link']
+                '--x', '0.05', '--y', '0', '--z', '0.5',
+                '--qw','0.5','--qx','0.5','--qy','0.5','--qz','0.5', '--frame-id', 'robotinobase2/base_link', '--child-frame-id', 'robotinobase2/camera_link']
         ),
         Node(
              package='aruco_tracker',
@@ -21,5 +21,6 @@ def generate_launch_description():
             package='usb_cam',
             executable='usb_cam_node_exe',
             name='usb_cam',
+            parameter=[{'video_device':'/dev/video0'}]
         )
     ])
