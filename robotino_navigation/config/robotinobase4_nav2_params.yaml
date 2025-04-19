@@ -3,11 +3,7 @@ amcl:
     base_frame_id: "robotinobase4/base_link"
     odom_frame_id: "robotinobase4/odom"
     scan_topic: /robotinobase4/scan
-    initial_pose:
-      x: 5.0
-      y: 0.45
-      z: 0.0
-      yaw: 3.14
+    map_topic: /map
 
 bt_navigator:
   ros__parameters:
@@ -37,6 +33,8 @@ global_costmap:
   global_costmap:
     ros__parameters:
       robot_base_frame: robotinobase4/base_link
+      static_layer:
+        map_topic: /map
       obstacle_layer:
         scan:
           topic: /robotinobase4/scan
@@ -44,14 +42,19 @@ global_costmap:
       keepout_filter:
         filter_info_topic: "/robotinobase4/costmap_filter_info"
 
-map_server:
-  ros__parameters:
-    yaml_filename: "map.yaml"
-
 costmap_filter_info_server:
   ros__parameters:
     filter_info_topic: "/robotinobase4/costmap_filter_info"
     mask_topic: "/robotinobase4/keepout_filter_mask"
+
+filter_mask_server:
+  ros__parameters:
+    topic_name: "/robotinobase4/keepout_filter_mask"
+    yaml_filename: "filter_mask.yaml"
+
+map_server:
+  ros__parameters:
+    yaml_filename: "map.yaml"
 
 map_saver:
   ros__parameters:
