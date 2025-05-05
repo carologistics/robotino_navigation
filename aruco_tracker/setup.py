@@ -22,7 +22,8 @@ setup(
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [ 'aruco = aruco_tracker.aruco:main'
+        'console_scripts': [
+            'aruco = aruco_tracker.aruco:main'
         ],
     },
 )
