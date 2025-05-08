@@ -143,6 +143,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 ),
                 launch_arguments={
                     "namespace": namespace,
+                    "start_mapper": "true",
                 }.items(),
             ),
             # Spawn Rviz2 node for visualization
