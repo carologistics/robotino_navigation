@@ -20,11 +20,19 @@ using GoalHandleMotorMove = rclcpp_action::ServerGoalHandle<MotorMoveAction>;
 using PoseStamped = geometry_msgs::msg::PoseStamped;
 using TransformStamped = geometry_msgs::msg::TransformStamped;
 using Pose = geometry_msgs::msg::Pose;
+
+struct PoseError {
+  float distance;    // euklidische 3D-Distanz
+  float yaw_error;   // Yaw-Abweichung in Radianten
+};
+
 class MotorMove : public rclcpp::Node {
 public:
   explicit MotorMove(
       const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
   ~MotorMove();
+  inline float calculate_distance(const geometry_msgs::msg::PoseStamped &target_pose);  
+
 
 private:
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_;
@@ -53,7 +61,6 @@ private:
 
   void handle_accepted(const std::shared_ptr<GoalHandleMotorMove> goal_handle);
   void execute(const std::shared_ptr<GoalHandleMotorMove> goal_handle);
-  inline float calculate_distance(const PoseStamped pose);
   double quaternionToYaw(const geometry_msgs::msg::Quaternion &q);
 
   std::string namespace_;

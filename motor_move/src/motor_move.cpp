@@ -158,21 +158,47 @@ void MotorMove::handle_accepted(
   std::thread{std::bind(&MotorMove::execute, this, _1), goal_handle}.detach(); // Start goal execution in a new thread.
 }
 
-// Calculate distance to a target pose
-inline float MotorMove::calculate_distance(const PoseStamped pose) {
-  return std::sqrt(pose.pose.position.x * pose.pose.position.x +
-                   pose.pose.position.y * pose.pose.position.y); // error? Should multiply z by itself.
-}
+inline float MotorMove::calculate_distance(const geometry_msgs::msg::PoseStamped &target_pose) {
+  // 1) Roboter-Pose im odom-Frame abfragen (base_link → odom)
+  geometry_msgs::msg::TransformStamped base_tf;
+  try {
+    base_tf = tf_buffer_->lookupTransform(
+      odom_frame_,         // Ziel-Frame: odom
+      base_frame_,         // Quelle-Frame: base_link
+      tf2::TimePointZero   // neuester verfügbarer Transform
+    );
+  } catch (const tf2::TransformException &ex) {
+    RCLCPP_WARN(this->get_logger(),
+                "lookupTransform odom->base_link failed: %s", ex.what());
+    return std::numeric_limits<float>::infinity();
+  }
 
-// // Convert a quaternion to yaw angle
-// double MotorMove::quaternionToYaw(const geometry_msgs::msg::Quaternion &q) {
-//   tf2::Quaternion tf2_quat; // TF2 quaternion.
-//   tf2::convert(q, tf2_quat); // Convert geometry_msgs quaternion to TF2 quaternion.
-//   tf2::Matrix3x3 m(tf2_quat); // Create a rotation matrix from the quaternion.
-//   double roll, pitch, yaw; // Variables to store roll, pitch, and yaw.
-//   m.getRPY(roll, pitch, yaw); // Extract roll, pitch, and yaw.
-//   return yaw; // Return yaw angle.
-// }
+  // 2) In tf2::Transform umwandeln
+  tf2::Transform tf_base;
+  tf2::fromMsg(base_tf.transform, tf_base);
+
+  // 3) Ziel-Pose im odom-Frame als tf2::Transform aufbauen
+  tf2::Transform tf_target;
+  tf_target.setOrigin(tf2::Vector3(
+    target_pose.pose.position.x,
+    target_pose.pose.position.y,
+    target_pose.pose.position.z
+  ));
+  tf2::Quaternion q(
+    target_pose.pose.orientation.x,
+    target_pose.pose.orientation.y,
+    target_pose.pose.orientation.z,
+    target_pose.pose.orientation.w
+  );
+  tf_target.setRotation(q);
+
+  // 4) Relative Transform (base_link⁻¹ * target) berechnen
+  tf2::Transform tf_diff = tf_base.inverseTimes(tf_target);
+
+  // 5) Aus der Differenz den euklidischen Abstand extrahieren
+  auto d = tf_diff.getOrigin();
+  return std::sqrt(d.x()*d.x() + d.y()*d.y() + d.z()*d.z());
+}
 
 // Execute the goal
 void MotorMove::execute(
@@ -183,6 +209,7 @@ void MotorMove::execute(
   (void)goal_handle; // Silence unused variable warning.
   rclcpp::Rate loop_rate(15); // Set loop rate to 15 Hz.
   rclcpp::Time current_time = this->now(); // Get current time.
+
   while (rclcpp::ok()) { // Main loop.
     if (goal_handle->is_canceling()) { // Check if goal is canceling.
       goal_handle->publish_feedback(feedback); // Publish feedback.
@@ -190,11 +217,15 @@ void MotorMove::execute(
       return; // Exit the loop.
     }
     RCLCPP_INFO(this->get_logger(), "Execute goal");
-    PoseStamped error =
-        to_frame(std::make_shared<PoseStamped>(target_pose_), base_frame_); // Transform target pose to base frame.
-    distance = calculate_distance(error); // Calculate distance to target.
-    goal_handle->publish_feedback(feedback); // Publish feedback.
-    float yaw = tf2::getYaw(error.pose.orientation); // Calculate yaw to target.
+    
+    // Feedback-Distanz berechnen – beide Koordinaten im odom-Frame:
+    distance = calculate_distance(target_pose_);
+    goal_handle->publish_feedback(feedback);
+
+    // Yaw weiterhin im base_frame berechnen, um Winkelkorrektur zu steuern:
+    auto error = to_frame(std::make_shared<PoseStamped>(target_pose_), base_frame_);
+    float yaw = tf2::getYaw(error.pose.orientation);
+
     if (yaw > 0.0872665f || distance > 0.05) { // Check thresholds for yaw and distance.
 
       RCLCPP_INFO(this->get_logger(), "Distance to yes");
