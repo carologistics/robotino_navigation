@@ -9,7 +9,7 @@
     <RecoveryNode number_of_retries="3" name="NavigateRecovery">
       <Sequence name="NavigateWithReplanning">
         <ControllerSelector selected_controller="{selected_controller}" default_controller="FollowPath_MPPI" topic_name="controller_selector"/>
-        <PlannerSelector selected_planner="{selected_planner}" default_planner="GridBased" topic_name="planner_selector"/>
+        <PlannerSelector selected_planner="{selected_planner}" default_planner="MapfPlanner" topic_name="planner_selector"/>
         <RecoveryNode number_of_retries="1" name="ComputePathToPose">
           <ComputePathToPose goal="{goal}" path="{path}" planner_id="{selected_planner}" error_code_id="{compute_path_error_code}"/>
           <ReactiveFallback name="ReactiveFallback_ComputePathToPose">
