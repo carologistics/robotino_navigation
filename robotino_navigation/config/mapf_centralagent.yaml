@@ -81,8 +81,8 @@ mapf_planner_server:
     expected_planner_frequency: 1.0
     action_server_result_timeout: 10.0
     costmap_update_timeout: 1.0
-    number_of_agents: 3
-    agent_ids: ["robotinobase1", "robotinobase2", "robotinobase3"]
+    number_of_agents: 1
+    agent_ids: ["robotinobase1"]
     use_sim_time: True
     ConflictBased:
       plugin: "nav2_cbs_planner::CBSPlanner"

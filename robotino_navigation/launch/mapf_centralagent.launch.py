@@ -29,7 +29,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     log_level = LaunchConfiguration("log_level")
     launch_mapserver = LaunchConfiguration("launch_mapserver")
     launch_plannerserver = LaunchConfiguration("launch_plannerserver")
-    num_of_agents = LaunchConfiguration("num_agents")
+    num_of_agents = LaunchConfiguration("number_of_agents")
 
     lifecycle_nodes = ["mapf_map_server"]
     if launch_plannerserver:
@@ -124,7 +124,7 @@ def generate_launch_description():
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
 
-    declare_namespace_cmd = DeclareLaunchArgument("namespace", default_value="", description="Top-level namespace")
+    declare_namespace_cmd = DeclareLaunchArgument("namespace", default_value="mapf", description="Top-level namespace")
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
@@ -170,9 +170,9 @@ def generate_launch_description():
         description="Wheather to start Rvizor not based on launch environment",
     )
 
-    declare_launch_plannerserver_cmd = DeclareLaunchArgument(
-        "num_agents",
-        default_value="2",
+    declare_launch_num_agents_cmd = DeclareLaunchArgument(
+        "number_of_agents",
+        default_value="1",
         description="Wheather to start Rvizor not based on launch environment",
     )
     # Create the launch description and populate
@@ -191,6 +191,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_cmd)
     ld.add_action(declare_launch_mapserver_cmd)
     ld.add_action(declare_launch_plannerserver_cmd)
+    ld.add_action(declare_launch_num_agents_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
