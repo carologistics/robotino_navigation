@@ -36,7 +36,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
     input_params_file = LaunchConfiguration("params_file")
-    input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
 
     launch_configuration = {}
@@ -50,10 +49,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     params_file = find_file(input_params_file.perform(context), [bringup_dir + "/config/"])
     if params_file is None:
         print("Can not find %s, abort!", input_params_file.perform(context))
-        sys.exit(1)
-    host_params_file = find_file(input_host_params_file.perform(context), [bringup_dir + "/config/"])
-    if host_params_file is None:
-        print("Can not find %s, abort!", input_host_params_file.perform(context))
         sys.exit(1)
 
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
@@ -70,7 +65,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
                 "params_file": params_file,
-                "host_params_file": host_params_file,
                 "use_composition": use_composition,
                 "use_respawn": use_respawn,
                 "launch_mapserver": launch_mapserver,
@@ -84,7 +78,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
                 "params_file": params_file,
-                "host_params_file": host_params_file,
                 "use_composition": use_composition,
                 "use_respawn": use_respawn,
             }.items(),
@@ -96,7 +89,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
                 "params_file": params_file,
-                "host_params_file": host_params_file,
                 "use_respawn": use_respawn,
                 "launch_map_filter": launch_mapfilter,
             }.items(),
@@ -181,16 +173,6 @@ def generate_launch_description():
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
-    declare_host_params_file_cmd = DeclareLaunchArgument(
-        "host_params_file",
-        default_value=[
-            os.path.join(package_dir, "config/"),
-            LaunchConfiguration("namespace"),
-            "_nav2_params",
-            ".yaml",
-        ],
-        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
-    )
 
     declare_autostart_cmd = DeclareLaunchArgument(
         "autostart",
@@ -249,7 +231,6 @@ def generate_launch_description():
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
-    ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_composition_cmd)
     ld.add_action(declare_use_respawn_cmd)

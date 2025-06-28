@@ -47,7 +47,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
-    LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     LaunchConfiguration("launch_rviz")
@@ -161,11 +160,6 @@ def generate_launch_description():
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
-    declare_host_params_file_cmd = DeclareLaunchArgument(
-        "host_params_file",
-        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
-        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
-    )
 
     declare_use_respawn_cmd = DeclareLaunchArgument(
         "use_respawn",
@@ -198,7 +192,6 @@ def generate_launch_description():
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
-    ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)

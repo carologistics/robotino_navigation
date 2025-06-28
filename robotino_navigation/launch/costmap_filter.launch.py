@@ -46,7 +46,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
-    # host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
@@ -65,15 +64,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ),
         allow_substs=True,
     )
-    # configured_host_params = ParameterFile(
-    #     RewrittenYaml(
-    #         source_file=host_params_file,
-    #         root_key=namespace,
-    #         param_rewrites=param_substitutions,
-    #         convert_types=True,
-    #     ),
-    #     allow_substs=True,
-    # )
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():

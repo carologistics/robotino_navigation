@@ -25,7 +25,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
-    host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     LaunchConfiguration("launch_rviz")
@@ -33,27 +32,19 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["map_server", "amcl"]
 
-    # Create our own temporary YAML files that include substitutions
+    # Create parameter substitutions for dynamic values
     param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": map_yaml_file}
 
+    # Create parameter files - base config is now generic (no root_key needed)
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
-            root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
         ),
         allow_substs=True,
     )
-    configured_host_params = ParameterFile(
-        RewrittenYaml(
-            source_file=host_params_file,
-            root_key=namespace,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
-        allow_substs=True,
-    )
+    
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -78,7 +69,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, configured_host_params],
+                parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_mapserver),
@@ -91,7 +82,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, configured_host_params],
+                parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 namespace=namespace,
@@ -148,11 +139,6 @@ def generate_launch_description():
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
-    declare_host_params_file_cmd = DeclareLaunchArgument(
-        "host_params_file",
-        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
-        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
-    )
 
     declare_use_respawn_cmd = DeclareLaunchArgument(
         "use_respawn",
@@ -185,7 +171,6 @@ def generate_launch_description():
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
-    ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)

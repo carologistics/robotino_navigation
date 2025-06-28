@@ -24,7 +24,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
-    host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
@@ -32,13 +31,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
-    # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
+    # Create parameter substitutions and files - base config is now generic
+    param_substitutions = {"use_sim_time": use_sim_time}
 
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
-            root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
         ),
@@ -144,11 +142,6 @@ def generate_launch_description():
         description="Full path to the ROS2 parameters file to use for all launched nodes",
     )
 
-    declare_host_params_file_cmd = DeclareLaunchArgument(
-        "host_params_file",
-        default_value=[os.path.join(package_dir, "config/"), LaunchConfiguration("namespace"), "_nav2_params.yaml"],
-        description="Full path to the host-specific ROS2 parameters file to use for all launched nodes",
-    )
 
     declare_use_respawn_cmd = DeclareLaunchArgument(
         "use_respawn",
@@ -184,8 +177,6 @@ def generate_launch_description():
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
     ld.add_action(launch_mapserver_argument)
-    ld.add_action(declare_host_params_file_cmd)
-    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
