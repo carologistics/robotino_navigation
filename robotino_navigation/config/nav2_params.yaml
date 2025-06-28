@@ -425,6 +425,8 @@ costmap_filter_info_server:
     type: 0
     filter_info_topic: "/costmap_filter_info"
     mask_topic: "/keepout_filter_mask"
+    filter_info_topic: "/costmap_filter_info"
+    mask_topic: "/keepout_filter_mask"
     base: 0.0
     multiplier: 1.0
 
@@ -506,6 +508,11 @@ behavior_server:
       plugin: "nav2_behaviors::Wait"
     assisted_teleop:
       plugin: "nav2_behaviors::AssistedTeleop"
+    # Generic costmap and footprint topics (will be namespaced automatically)
+    local_costmap_topic: /local_costmap/costmap_raw
+    global_costmap_topic: /global_costmap/costmap_raw
+    local_footprint_topic: /local_costmap/published_footprint
+    global_footprint_topic: /global_costmap/published_footprint
     local_frame: odom
     global_frame: map
     robot_base_frame: base_link
@@ -550,54 +557,40 @@ velocity_smoother:
 collision_monitor:
   ros__parameters:
     use_sim_time: false
-    # TODO ours was "bae_link"
-    base_frame_id: "base_footprint"
+    base_frame_id: "base_link"
     odom_frame_id: "odom"
     cmd_vel_in_topic: "/cmd_vel_smoothed"
     cmd_vel_out_topic: "/cmd_vel"
-    # TODO ours was "/cm_state"
-    state_topic: "/collision_monitor_state"
-    transform_tolerance: 0.1 # default 0.2
-    source_timeout: 5.0 # default 1.0
+    state_topic: "/cm_state"
+    transform_tolerance: 0.1  # default 0.2
+    source_timeout: 5.0  # default 1.0
     base_shift_correction: true
     stop_pub_timeout: 2.0
     # Polygons represent zone around the robot for "stop" and "slowdown" action types,
     # and robot footprint for "approach" action type.
-    # Footprint could be "polygon" type with dynamically set footprint from footprint_topic
-    # or "circle" type with static footprint set by radius. "footprint_topic" parameter
-    # to be ignored in circular case.
-    polygons: ["PolygonSlow"] # "FootprintApproach"]
-    FootprintApproach:
-      type: "polygon"
-      action_type: "approach"
-      footprint_topic: "/local_costmap/published_footprint"
-      time_before_collision: 1.2
-      simulation_time_step: 0.1
-      min_points: 6
-      visualize: false
+    polygons: ["PolygonStop", "PolygonSlow"]
+    PolygonStop:
+      type: "circle"
+      radius: 0.280
+      action_type: "stop"
+      max_points: 1
+      visualize: true
+      polygon_pub_topic: "/polygon_stop"
       enabled: true
-    # PolygonStop:
-    #   type: "circle"
-    #   radius: 0.280
-    #   action_type: "stop"
-    #   max_points: 1
-    #   visualize: true
-    #   polygon_pub_topic: "/polygon_stop"
-    #   enable: true
-    # PolygonSlow:
-    #   type: "circle"
-    #   radius: 0.450
-    #   action_type: "slowdown"
-    #   max_points: 1
-    #   slowdown_ratio: 0.5
-    #   visualize: true
-    #   polygon_pub_topic: "/polygon_slowdown"
-    #   enable: true
+    PolygonSlow:
+      type: "circle"
+      radius: 0.450
+      action_type: "slowdown"
+      max_points: 1
+      slowdown_ratio: 0.5
+      visualize: true
+      polygon_pub_topic: "/polygon_slowdown"
+      enabled: true
     observation_sources: ["scan"]
     scan:
       source_timeout: 0.2
       type: "scan"
-      topic: "/scan"
+      topic: "/irsensor_scan"  # Use IR sensor scan like robot-specific configs
       min_height: 0.15
       max_height: 2.0
       enabled: true

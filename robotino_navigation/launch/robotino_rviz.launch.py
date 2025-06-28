@@ -49,15 +49,15 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         output="screen",
         parameters=[{"namespace", launch_configuration["namespace"]}],
         remappings=[
-            ("/" + launch_configuration["namespace"] + "/map", "/map"),
-            ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
-            ("/" + launch_configuration["namespace"] + "/tf_static", "tf_static"),
-            ("/goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
+            ("map", "/map"),                  # /{namespace}/map -> /map (shared global map)
+            ("tf", "/tf"),                   # /{namespace}/tf -> /tf (global tf for visualization)
+            ("tf_static", "/tf_static"),     # /{namespace}/tf_static -> /tf_static
+            ("goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
             (
-                "/clicked_point",
+                "clicked_point",
                 "/" + launch_configuration["namespace"] + "/clicked_point",
             ),
-            ("/initialpose", "/" + launch_configuration["namespace"] + "/initialpose"),
+            ("initialpose", "/" + launch_configuration["namespace"] + "/initialpose"),
         ],
     )
 

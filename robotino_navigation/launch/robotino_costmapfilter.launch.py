@@ -59,11 +59,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    # Create the remappings for the nodes
+    # Use namespace-aware remappings for cleaner, generic configuration
     remappings = [
-        ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
-        ("/" + launch_configuration["namespace"] + "/tf_static", "/tf_static"),
-        ("/" + launch_configuration["namespace"] + "/map", "/map"),
+        ('/tf', 'tf'),                    # /tf -> /{namespace}/tf  
+        ('/tf_static', 'tf_static'),      # /tf_static -> /{namespace}/tf_static
+        ('map', '/map'),                  # /{namespace}/map -> /map (shared global map)
     ]
 
     os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
