@@ -39,9 +39,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
+    # Decentralized TF: Each robot maintains its own independent TF tree
+    # Only remap map to shared global map, keep TF completely separate per robot
     remappings = [
-        ('/tf', 'tf'),                    # /tf -> /{namespace}/tf  
-        ('/tf_static', 'tf_static'),      # /tf_static -> /{namespace}/tf_static
         ('map', '/map'),                  # /{namespace}/map -> /map (shared global map)
     ]
 

@@ -2,6 +2,7 @@ amcl:
   ros__parameters:
     use_sim_time: false
     map_topic: /map
+    map_topic: /map
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9

@@ -29,7 +29,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
-            root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
         ),

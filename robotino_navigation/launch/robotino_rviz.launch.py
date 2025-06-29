@@ -50,8 +50,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         parameters=[{"namespace", launch_configuration["namespace"]}],
         remappings=[
             ("map", "/map"),                  # /{namespace}/map -> /map (shared global map)
-            ("tf", "/tf"),                   # /{namespace}/tf -> /tf (global tf for visualization)
-            ("tf_static", "/tf_static"),     # /{namespace}/tf_static -> /tf_static
+            # Note: TF topics are NOT remapped - each robot maintains its own TF tree
             ("goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
             (
                 "clicked_point",
