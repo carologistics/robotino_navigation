@@ -25,7 +25,7 @@ amcl:
     save_pose_rate: 0.5
     tf_broadcast: true
     transform_tolerance: 1.0
-    scan_topic: /scan
+    scan_topic: /fawkes_scans/Laser_urg_filtered_360
 
     # values from fawkes AMCL
     # alpha values
@@ -89,13 +89,13 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
-    use_sim_time: false
+    use_sim_time: False
     controller_frequency: 15.0
-    min_x_velocity_threshold: 0.0001  # default:0.0
-    min_y_velocity_threshold: 0.0001  # default:0.0
-    min_theta_velocity_threshold: 0.0001  # default:0.0
+    min_x_velocity_threshold: 0.0001 #default:0.0
+    min_y_velocity_threshold: 0.0001 #default:0.0
+    min_theta_velocity_threshold: 0.0001 #default:0.0
     odom_topic: "/odom_filtered"
-    failure_tolerance: 0.0  # default: 0.3, The maximum duration in seconds the called controller plugin can fail
+    failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
     use_realtime_priority: false
     progress_checker_plugins: ["progress_checker"]
     progress_checker:
@@ -114,13 +114,13 @@ controller_server:
       stateful: true
 
     controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
-    FollowPath_MPPI:  # Controller parameters- MPPI
+    FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 59
+      time_steps: 30
       # model_dt depends on the controller frequency, mdel_dt = 1/controller_frequency,
       # prediction_horizon = time_steps * model_dt, prediction_horizon(m) = time_steps*model_dt*vx_max
       model_dt: 0.067
-      batch_size: 2000  # robotino motion model likely needs to be adapted
+      batch_size: 2000 # robotino motion model likely needs to be adapted
       vx_std: 0.4
       vy_std: 0.4
       wz_std: 1.0
@@ -128,15 +128,15 @@ controller_server:
       vx_min: -1.5
       vy_max: 1.5
       wz_max: 1.25
-      iteration_count: 1  # TODO: ours was 0.7
-      prune_distance: 1.7  # TODO: ours was 0.5
+      iteration_count: 1 # TODO: ours was 0.7
+      prune_distance: 1.7 # TODO: ours was 0.5
       transform_tolerance: 0.1
-      temperature: 0.3  # temperature closer to 0 -> use more optimal paths
+      temperature: 0.3 # temperature closer to 0 -> use more optimal paths
       gamma: 0.015
       motion_model: "Omni"
       visualize: false
-      reset_period: 1.0  # (only in Humble)
-      regenerate_noises: false  # TODO: ours was false
+      reset_period: 1.0 # (only in Humble)
+      regenerate_noises: false # TODO: ours was false
       TrajectoryVisualizer:
         trajectory_step: 5
         time_step: 3
@@ -155,13 +155,13 @@ controller_server:
         # TODO: ours was 3
         cost_power: 1
         cost_weight: 5.0
-        threshold_to_consider: 0.5  # default: 1.4
+        threshold_to_consider: 0.5 # default: 1.4
       GoalAngleCritic:
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.5  # default: 1.4
-      PreferForwardCritic:  # we do not really care about facing forward, disable it
+        threshold_to_consider: 0.5 # default: 1.4
+      PreferForwardCritic: # we do not really care about facing forward, disable it
         enabled: false
         cost_power: 1
         cost_weight: 5.0
@@ -184,15 +184,15 @@ controller_server:
         collision_cost: 1000.0
         collision_margin_distance: 0.075
         near_goal_distance: 0.1
-        inflation_radius: 0.4  # (only in Humble)
-        cost_scaling_factor: 5.0  # (only in Humble)
+        inflation_radius: 0.4 # (only in Humble)
+        cost_scaling_factor: 5.0 # (only in Humble)
       PathAlignCritic:
         enabled: true
         cost_power: 1
         cost_weight: 14.0
         max_path_occupancy_ratio: 0.05
-        trajectory_point_step: 4  # TODO: ours was 3
-        threshold_to_consider: 0.5  # default: 1.4
+        trajectory_point_step: 4 # TODO: ours was 3
+        threshold_to_consider: 0.5 # default: 1.4
         offset_from_furthest: 25
         use_path_orientations: false
       PathFollowCritic:
@@ -200,7 +200,7 @@ controller_server:
         cost_power: 1
         cost_weight: 10.0
         offset_from_furthest: 5
-        threshold_to_consider: 0.5  # default: 1.4
+        threshold_to_consider: 0.5 # default: 1.4
       PathAngleCritic:
         enabled: true
         cost_power: 1
@@ -208,14 +208,14 @@ controller_server:
         offset_from_furthest: 4
         threshold_to_consider: 0.5
         max_angle_to_furthest: 1.0
-        # TwirlingCritic:
-        #   enabled: true
-        #   twirling_cost_power: 1
-        #   twirling_cost_weight: 10.0
+      # TwirlingCritic:
+      #   enabled: true
+      #   twirling_cost_power: 1
+      #   twirling_cost_weight: 10.0
 
-    FollowPath_DWB:  # Controller parameters- DWB
+    FollowPath_DWB: # Controller parameters- DWB
       plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: true
+      debug_trajectory_details: True
       min_vel_x: -0.5
       min_vel_y: -0.5
       max_vel_x: 0.5
@@ -239,9 +239,9 @@ controller_server:
       transform_tolerance: 0.2
       xy_goal_tolerance: 0.25
       trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: true
-      limit_vel_cmd_in_traj: false
-      stateful: true
+      short_circuit_trajectory_evaluation: True
+      limit_vel_cmd_in_traj: False
+      stateful: True
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
       BaseObstacle.scale: 0.02
       PathAlign.scale: 32.0
@@ -254,7 +254,7 @@ controller_server:
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
 
-    FollowPath_RPP:  # Controller parameters- Regular Pure Pursuit
+    FollowPath_RPP: # Controller parameters- Regular Pure Pursuit
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
       desired_linear_vel: 0.5
       use_velocity_scaled_lookahead_dist: true
@@ -285,6 +285,7 @@ local_costmap:
     ros__parameters:
       update_frequency: 15.0
       publish_frequency: 15.0
+      transform_tolerance: 0.2
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: false
@@ -306,7 +307,7 @@ local_costmap:
         footprint_clearing_enabled: true
         observation_sources: scan_lidar scan_ir
         scan_lidar:
-          topic: /scan
+          topic: /fawkes_scans/Laser_urg_filtered_360
           sensor_frame: laser_link
           max_obstacle_height: 2.0
           clearing: true
@@ -336,6 +337,7 @@ local_costmap:
         plugin: "nav2_costmap_2d::KeepoutFilter"
         enabled: true
         filter_info_topic: "/costmap_filter_info"
+        transform_tolerance: 0.2
       # voxel_layer:
       #   plugin: "nav2_costmap_2d::VoxelLayer"
       #   enabled: true
@@ -361,9 +363,9 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
-      # footprint_padding: 0.075  # robot footprint padding in mtr.
-      update_frequency: 15.0        # default 1.0
-      publish_frequency: 15.0       # default 1.0
+      #footprint_padding: 0.075  #robot footprint padding in mtr.
+      update_frequency: 15.0        #default 1.0
+      publish_frequency: 15.0       #default 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: false
@@ -376,7 +378,7 @@ global_costmap:
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: true
-        map_topic: /map
+        map_topic: /mps_map_bounded
         subscribe_to_updates: true
         map_subscribe_transient_local: true
       obstacle_layer:
@@ -385,7 +387,8 @@ global_costmap:
         footprint_clearing_enabled: true
         observation_sources: scan
         scan:
-          topic: /scan
+          topic: /fawkes_scans/Laser_urg_filtered_360
+          sensor_frame: laser_link
           max_obstacle_height: 2.0
           clearing: true
           marking: true
@@ -398,12 +401,13 @@ global_costmap:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 1.0
         inflation_radius: 0.4
-        inflate_unknown: false
-        inflate_around_unknown: false
+        inflate_unknown: False
+        inflate_around_unknown: False
       keepout_filter:
         plugin: "nav2_costmap_2d::KeepoutFilter"
         enabled: true
         filter_info_topic: "/costmap_filter_info"
+        transform_tolerance: 0.2
       always_send_full_costmap: true
 
 map_server:
@@ -419,10 +423,17 @@ costmap_filter_info_server:
   ros__parameters:
     use_sim_time: true
     type: 0
-    filter_info_topic: "/robotinobase1/costmap_filter_info"
-    mask_topic: "/robotinobase1/keepout_filter_mask"
+    filter_info_topic: "/costmap_filter_info"
+    mask_topic: "/keepout_filter_mask"
     base: 0.0
     multiplier: 1.0
+
+filter_mask_server:
+  ros__parameters:
+    use_sim_time: true
+    frame_id: "map"
+    topic_name: "/keepout_filter_mask"
+    yaml_filename: "filter_mask.yaml"
 
 map_saver:
   ros__parameters:
@@ -435,7 +446,7 @@ map_saver:
 planner_server:
   ros__parameters:
     expected_planner_frequency: 15.0
-    use_sim_time: false
+    use_sim_time: False
     planner_plugins: ["GridBased"]
     # GridBased:
     #   plugin: "nav2_navfn_planner/NavfnPlanner"
@@ -523,9 +534,9 @@ waypoint_follower:
 
 velocity_smoother:
   ros__parameters:
-    use_sim_time: false
+    use_sim_time: False
     smoothing_frequency: 15.0
-    scale_velocities: false
+    scale_velocities: False
     feedback: "OPEN_LOOP"
     max_velocity: [1.0, 1.0, 1.25]
     min_velocity: [-1.0, -1.0, -1.25]
@@ -546,8 +557,8 @@ collision_monitor:
     cmd_vel_out_topic: "/cmd_vel"
     # TODO ours was "/cm_state"
     state_topic: "/collision_monitor_state"
-    transform_tolerance: 0.1  # default 0.2
-    source_timeout: 5.0  # default 1.0
+    transform_tolerance: 0.1 # default 0.2
+    source_timeout: 5.0 # default 1.0
     base_shift_correction: true
     stop_pub_timeout: 2.0
     # Polygons represent zone around the robot for "stop" and "slowdown" action types,
@@ -555,7 +566,7 @@ collision_monitor:
     # Footprint could be "polygon" type with dynamically set footprint from footprint_topic
     # or "circle" type with static footprint set by radius. "footprint_topic" parameter
     # to be ignored in circular case.
-    polygons: ["PolygonSlow"]  # "FootprintApproach"]
+    polygons: ["PolygonSlow"] # "FootprintApproach"]
     FootprintApproach:
       type: "polygon"
       action_type: "approach"
@@ -586,7 +597,7 @@ collision_monitor:
     scan:
       source_timeout: 0.2
       type: "scan"
-      topic: "/scan"
+      topic: "/fawkes_scans/Laser_urg_filtered_360"
       min_height: 0.15
       max_height: 2.0
       enabled: true

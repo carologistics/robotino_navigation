@@ -109,14 +109,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "rviz_config": rviz_config,
             }.items(),
         ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
-            launch_arguments={
-                "namespace": namespace,
-                "launch_rviz": launch_nav2rviz,
-                "rviz_config": rviz_config,
-            }.items(),
-        ),
     ]
     if launch_mps_map_gen_value:
         actions.extend(
