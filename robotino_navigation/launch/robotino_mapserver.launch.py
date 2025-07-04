@@ -70,12 +70,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    # Create the remappings for the nodes
-    remappings = []
-    #    ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
-    #    ("/" + launch_configuration["namespace"] + "/tf_static", "/tf_static"),
-    #    ("/" + launch_configuration["namespace"] + "/map", "/map"),
-    # ]
+    #remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]          # /{namespace}/map -> /map (shared global map)]
+
 
     os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
 
@@ -92,7 +88,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
-                namespace=namespace,
                 condition=IfCondition(launch_mapserver),
             ),
             # Node(
@@ -118,7 +113,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     {"autostart": autostart},
                     {"node_names": lifecycle_nodes},
                 ],
-                namespace=namespace,
             ),
         ]
     )

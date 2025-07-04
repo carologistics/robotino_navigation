@@ -6,3 +6,4 @@
 .config.yaml
 **.mypy_cache/
 *.swp
+nav2_bringup/

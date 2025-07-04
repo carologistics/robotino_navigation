@@ -59,9 +59,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Decentralized TF: Each robot maintains its own independent TF tree
     # Only remap map to shared global map, keep TF completely separate per robot
-    remappings = [
-        ('map', '/map'),                  # /{namespace}/map -> /map (shared global map)
-    ]
+    remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]          # /{namespace}/map -> /map (shared global map)]
+
 
     os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
 
@@ -92,7 +91,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),
-                namespace=namespace,
             ),
             Node(
                 package="nav2_lifecycle_manager",
@@ -105,7 +103,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     {"autostart": autostart},
                     {"node_names": lifecycle_nodes},
                 ],
-                namespace=namespace,
                 condition=IfCondition(launch_map_filter),
             ),
         ]

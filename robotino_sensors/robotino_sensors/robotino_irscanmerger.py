@@ -25,7 +25,7 @@ class Robotino3IrScanMerger(Node):
         self.Laserscan_qos_profile = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT, durability=QoSDurabilityPolicy.VOLATILE, depth=5
         )
-        self.declare_parameter("frame_prefix", "robotinobase1")
+        #self.declare_parameter("frame_prefix", "robotinobase1")
 
         # Initialize subscribers for all ir sensors
         for i in range(num_ir_sensors):
@@ -94,7 +94,7 @@ class Robotino3IrScanMerger(Node):
         if self.clock_received:
             msg = LaserScan()
             msg.header.frame_id = (
-                self.get_parameter("frame_prefix").get_parameter_value().string_value + "/" + "irsensor_merge"
+                "/" + "irsensor_merge"
             )
             msg.header.stamp = self.time_stamp
             msg.angle_min = 0.0

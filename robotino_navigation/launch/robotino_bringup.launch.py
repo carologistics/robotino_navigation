@@ -12,6 +12,7 @@ from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import PushROSNamespace
 
 from robotino_utils import find_file
 
@@ -57,10 +58,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Specify the actions
     actions = [
+        PushROSNamespace('robotinobase1'),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_localization.launch.py")),
             launch_arguments={
-                "namespace": namespace,
                 "map": map_yaml_file,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
@@ -74,7 +75,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_navigation.launch.py")),
             launch_arguments={
-                "namespace": namespace,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
                 "params_file": params_file,
@@ -85,7 +85,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
             launch_arguments={
-                "namespace": namespace,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
                 "params_file": params_file,
@@ -93,14 +92,13 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "launch_map_filter": launch_mapfilter,
             }.items(),
         ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
-            launch_arguments={
-                "namespace": namespace,
-                "launch_rviz": launch_nav2rviz,
-                "rviz_config": rviz_config,
-            }.items(),
-        ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
+        #     launch_arguments={
+        #         "launch_rviz": launch_nav2rviz,
+        #         "rviz_config": rviz_config,
+        #     }.items(),
+        # ),
     ]
     if launch_mps_map_gen_value:
         actions.extend(
@@ -108,7 +106,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(os.path.join(mps_map_gen_dir, "mps_map_gen.launch.py")),
                     launch_arguments={
-                        "namespace": namespace,
+    
                         "use_sim_time": use_sim_time,
                         "get_data_from_refbox": "true",
                         "publish_wait_pos": "true",

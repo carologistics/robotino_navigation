@@ -51,7 +51,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             {"autostart": autostart},
             {"node_names": lifecycle_nodes},
         ],
-        namespace=namespace,
     )
 
     start_collision_monitor_cmd = Node(
@@ -60,7 +59,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         output="screen",
         emulate_tty=True,
         parameters=[configured_params, {"use_sim_time": use_sim_time}],
-        namespace=namespace,
     )
 
     return [start_lifecycle_manager_cmd, start_collision_monitor_cmd]

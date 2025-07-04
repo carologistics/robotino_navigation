@@ -49,14 +49,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         output="screen",
         parameters=[{"namespace", launch_configuration["namespace"]}],
         remappings=[
-            ("map", "/map"),                  # /{namespace}/map -> /map (shared global map)
+            # /{namespace}/map -> /map (shared global map)
             # Note: TF topics are NOT remapped - each robot maintains its own TF tree
-            ("goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
-            (
-                "clicked_point",
-                "/" + launch_configuration["namespace"] + "/clicked_point",
-            ),
-            ("initialpose", "/" + launch_configuration["namespace"] + "/initialpose"),
+            ("goal_pose", "/goal_pose"),
+            ("clicked_point","clicked_point"),
+            ("initialpose", "initialpose"),
         ],
     )
 

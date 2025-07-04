@@ -114,7 +114,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     sensor_config_file,
                     host_config_file,
                 ],
-                remappings=[("/cloud", namespace_frontlaser + "/cloud")],
+                remappings=[("/cloud", "cloud")],
             ),
             Node(
                 package="sick_scan_xd",
@@ -126,7 +126,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     sensor_config_file,
                     host_config_file,
                 ],
-                remappings=[("/cloud", namespace_rearlaser + "/cloud")],
+                remappings=[("/cloud", "cloud")],
             ),
             # Launch Integrate laserscan launch file
             IncludeLaunchDescription(

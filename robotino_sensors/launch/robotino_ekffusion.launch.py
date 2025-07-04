@@ -35,19 +35,20 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             {
                 "use_sim_time": use_sim_time,
                 "map_frame": "map",
-                "odom_frame": launch_configuration["namespace"] + "/odom",
-                "base_link_frame": launch_configuration["namespace"] + "/base_link",
-                "world_frame": launch_configuration["namespace"] + "/odom",
+                "odom_frame": "/odom",
+                "base_link_frame": "/base_link",
+                "world_frame": "/odom",
                 "odom0": "/" + launch_configuration["namespace"] + "/odom",
                 "imu0": "/" + launch_configuration["namespace"] + "/imu",
             },
         ],
-        namespace=namespace,
         remappings=[
             (
                 "/" + launch_configuration["namespace"] + "/odometry/filtered",
                 "/" + launch_configuration["namespace"] + "/odom_filtered",
             ),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
         ],
     )
 
