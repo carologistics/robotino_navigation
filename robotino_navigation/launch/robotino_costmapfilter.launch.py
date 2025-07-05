@@ -28,11 +28,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
+    filter_mask_yaml = LaunchConfiguration("filter_mask_yaml")
 
-    lifecycle_nodes = ["costmap_filter_info_server"]
+    lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
     # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time}
+    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
 
     configured_params = ParameterFile(
         RewrittenYaml(
@@ -70,6 +71,19 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     # Create list of nodes to launch
     load_nodes = GroupAction(
         actions=[
+            Node(
+                package="nav2_map_server",
+                executable="map_server",
+                name="filter_mask_server",
+                condition=IfCondition(use_sim_time and launch_map_filter),
+                output="screen",
+                respawn=use_respawn,
+                emulate_tty=True,
+                parameters=[configured_params, configured_host_params],
+                arguments=["--ros-args", "--log-level", log_level],
+                remappings=remappings,
+                namespace=namespace,
+            ),
             Node(
                 package="nav2_map_server",
                 executable="costmap_filter_info_server",
@@ -150,6 +164,12 @@ def generate_launch_description():
         description="Wheather to launch map server or not",
     )
 
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask_yaml",
+        default_value=os.path.join(package_dir, "map", "filter_mask.yaml"),
+        description="Full path to filter mask yaml file to load",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -165,6 +185,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_cmd)
     ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
+    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
