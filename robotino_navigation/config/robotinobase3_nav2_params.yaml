@@ -38,7 +38,7 @@ global_costmap:
     ros__parameters:
       robot_base_frame: robotinobase3/base_link
       static_layer:
-        map_topic: /mps_map
+        map_topic: /map
       obstacle_layer:
         scan:
           topic: /robotinobase3/scan
