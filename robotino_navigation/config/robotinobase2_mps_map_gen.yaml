@@ -5,7 +5,7 @@ amcl:
     scan_topic: /robotinobase2/scan
     map_topic: /mps_map
     initial_pose:
-      x: 5.0
+      x: 5.5
       y: 0.45
       z: 0.0
       yaw: 3.14
@@ -27,8 +27,12 @@ local_costmap:
       obstacle_layer:
         scan_lidar:
           topic: /robotinobase2/scan
+          sensor_frame: robotinobase2/laser_link
         scan_ir:
           topic: /robotinobase2/irsensor_scan
+          sensor_frame: robotinobase2/irscan_link
+      keepout_filter:
+        filter_info_topic: "/robotinobase2/costmap_filter_info"
 
 global_costmap:
   global_costmap:
@@ -37,8 +41,16 @@ global_costmap:
       obstacle_layer:
         scan:
           topic: /robotinobase2/scan
+          sensor_frame: robotinobase2/laser_link
       static_layer:
-        map_topic: /mps_map_bounded
+        map_topic: /mps_map
+      keepout_filter:
+        filter_info_topic: "/robotinobase2/costmap_filter_info"
+
+costmap_filter_info_server:
+  ros__parameters:
+    filter_info_topic: "/robotinobase2/costmap_filter_info"
+    mask_topic: "/robotinobase2/keepout_filter_mask"
 
 map_server:
   ros__parameters:

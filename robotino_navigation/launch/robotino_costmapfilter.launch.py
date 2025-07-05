@@ -1,26 +1,5 @@
 #!/usr/bin/env python3
 # Licensed under MIT. See LICENSE file. Copyright Carologistics.
-# MIT License
-#
-# Copyright (c) 2024
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -45,19 +24,30 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
-    LaunchConfiguration("host_params_file")
+    host_params_file = LaunchConfiguration("host_params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
+    filter_mask_yaml = LaunchConfiguration("filter_mask_yaml")
 
-    lifecycle_nodes = ["costmap_filter_info_server"]
+    lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
     # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time}
+    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
 
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
+            root_key=namespace,
+            param_rewrites=param_substitutions,
+            convert_types=True,
+        ),
+        allow_substs=True,
+    )
+
+    configured_host_params = ParameterFile(
+        RewrittenYaml(
+            source_file=host_params_file,
             root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
@@ -83,12 +73,25 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         actions=[
             Node(
                 package="nav2_map_server",
+                executable="map_server",
+                name="filter_mask_server",
+                condition=IfCondition(use_sim_time and launch_map_filter),
+                output="screen",
+                respawn=use_respawn,
+                emulate_tty=True,
+                parameters=[configured_params, configured_host_params],
+                arguments=["--ros-args", "--log-level", log_level],
+                remappings=remappings,
+                namespace=namespace,
+            ),
+            Node(
+                package="nav2_map_server",
                 executable="costmap_filter_info_server",
                 name="costmap_filter_info_server",
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),
@@ -161,6 +164,12 @@ def generate_launch_description():
         description="Wheather to launch map server or not",
     )
 
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask_yaml",
+        default_value=os.path.join(package_dir, "map", "filter_mask.yaml"),
+        description="Full path to filter mask yaml file to load",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -176,6 +185,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_cmd)
     ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
+    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
