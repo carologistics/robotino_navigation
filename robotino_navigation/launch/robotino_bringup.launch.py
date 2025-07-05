@@ -58,7 +58,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Specify the actions
     actions = [
-        PushROSNamespace('robotinobase1'),
+        PushROSNamespace(namespace),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_localization.launch.py")),
             launch_arguments={
@@ -92,13 +92,13 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "launch_map_filter": launch_mapfilter,
             }.items(),
         ),
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
-        #     launch_arguments={
-        #         "launch_rviz": launch_nav2rviz,
-        #         "rviz_config": rviz_config,
-        #     }.items(),
-        # ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
+            launch_arguments={
+                "launch_rviz": launch_nav2rviz,
+                "rviz_config": rviz_config,
+            }.items(),
+        ),
     ]
     if launch_mps_map_gen_value:
         actions.extend(
