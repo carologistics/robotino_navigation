@@ -7,7 +7,7 @@ from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.actions import OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node, PushROSNamespace
+from launch_ros.actions import Node
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -24,9 +24,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    # Use GroupAction with PushROSNamespace for proper namespace handling
+    # Use GroupAction without PushROSNamespace since namespace is handled by parent
     load_nodes = GroupAction([
-        PushROSNamespace(namespace),
         Node(
             condition=IfCondition(launch_ekf),
             package="robot_localization",
