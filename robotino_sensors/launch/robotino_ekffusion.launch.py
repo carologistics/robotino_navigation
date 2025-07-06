@@ -3,11 +3,11 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.actions import OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushROSNamespace
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -24,35 +24,36 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    ekf_node = Node(
-        condition=IfCondition(launch_ekf),
-        package="robot_localization",
-        executable="ekf_node",
-        name="ekf_filter_node",
-        output="screen",
-        parameters=[
-            os.path.join(bringup_dir, "config", "ekf.yaml"),
-            {
-                "use_sim_time": use_sim_time,
-                "map_frame": "map",
-                "odom_frame": "/odom",
-                "base_link_frame": "/base_link",
-                "world_frame": "/odom",
-                "odom0": "/" + launch_configuration["namespace"] + "/odom",
-                "imu0": "/" + launch_configuration["namespace"] + "/imu",
-            },
-        ],
-        remappings=[
-            (
-                "/" + launch_configuration["namespace"] + "/odometry/filtered",
-                "/" + launch_configuration["namespace"] + "/odom_filtered",
-            ),
-            ("/tf", "tf"),
-            ("/tf_static", "tf_static"),
-        ],
-    )
+    # Use GroupAction with PushROSNamespace for proper namespace handling
+    load_nodes = GroupAction([
+        PushROSNamespace(namespace),
+        Node(
+            condition=IfCondition(launch_ekf),
+            package="robot_localization",
+            executable="ekf_node",
+            name="ekf_filter_node",
+            output="screen",
+            parameters=[
+                os.path.join(bringup_dir, "config", "ekf.yaml"),
+                {
+                    "use_sim_time": use_sim_time,
+                    "map_frame": "map",
+                    "odom_frame": "odom",
+                    "base_link_frame": "base_link",
+                    "world_frame": "odom",
+                    "odom0": "odom",
+                    "imu0": "imu",
+                },
+            ],
+            remappings=[
+                ("odometry/filtered", "odom_filtered"),
+                ("/tf", "tf"),
+                ("/tf_static", "tf_static"),
+            ],
+        )
+    ])
 
-    return [ekf_node]
+    return [load_nodes]
 
 
 def generate_launch_description():

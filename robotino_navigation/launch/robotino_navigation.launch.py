@@ -67,7 +67,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 respawn_delay=2.0,
                 parameters=[configured_params],
                 arguments=['--ros-args', '--log-level', log_level],
-                remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
+                remappings=remappings + [('cmd_vel', 'cmd_vel_nav'), ('/trajectories', 'trajectories')],
             ),
             Node(
                 package='nav2_smoother',

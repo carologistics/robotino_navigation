@@ -66,7 +66,7 @@ bt_navigator:
     use_sim_time: false
     global_frame: map
     robot_base_frame: base_link
-    odom_topic: "/odom_filtered"
+    odom_topic: "odom_filtered"
     transform_tolerance: 0.1
     default_nav_to_pose_bt_xml: $(find-pkg-share robotino_navigation)/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml
     goal_blackboard_id: goal
@@ -94,7 +94,7 @@ controller_server:
     min_x_velocity_threshold: 0.0001 #default:0.0
     min_y_velocity_threshold: 0.0001 #default:0.0
     min_theta_velocity_threshold: 0.0001 #default:0.0
-    odom_topic: "/odom_filtered"
+    odom_topic: "odom_filtered"
     failure_tolerance: 0.0 # default: 0.3, The maximum duration in seconds the called controller plugin can fail
     use_realtime_priority: false
     progress_checker_plugins: ["progress_checker"]
@@ -542,7 +542,7 @@ velocity_smoother:
     min_velocity: [-1.0, -1.0, -1.25]
     max_accel: [2.0, 2.0, 3.2]
     max_decel: [-2.0, -2.0, -3.2]
-    odom_topic: "/odom_filtered"
+    odom_topic: "odom_filtered"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0

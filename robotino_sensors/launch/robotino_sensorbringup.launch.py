@@ -10,7 +10,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.actions import PushROSNamespace
 
 def launch_nodes_withconfig(context, *args, **kwargs):
 
@@ -27,7 +26,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     # launch robotinobase controllers with individual namespaces
     load_launchfiles = GroupAction(
         actions=[
-            PushROSNamespace('robotinobase1'),
             # Launch robotinobase1 controller
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
@@ -42,6 +40,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     ]
                 ),
                 launch_arguments={
+                    "namespace": namespace,
                     "use_sim_time": use_sim_time,
                     "launch_rviz": launch_rviz,
                 }.items(),
@@ -60,6 +59,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     ]
                 ),
                 launch_arguments={
+                    "namespace": namespace,
                     "use_sim_time": use_sim_time,
                     "launch_ekf": launch_ekf,
                 }.items(),
