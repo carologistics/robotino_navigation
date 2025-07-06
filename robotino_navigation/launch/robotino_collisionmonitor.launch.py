@@ -9,7 +9,6 @@ from launch.actions import OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
-from nav2_common.launch import RewrittenYaml
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -23,15 +22,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     lifecycle_nodes = ["collision_monitor"]
     autostart = True
 
-    # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time}
-
+    # Create parameter files - base config is now generic (no substitutions needed)
     configured_params = ParameterFile(
-        RewrittenYaml(
-            source_file=params_file,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
+        params_file,
         allow_substs=True,
     )
 

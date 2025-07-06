@@ -12,7 +12,10 @@ from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition
 from launch_ros.actions import PushROSNamespace
+from launch_ros.descriptions import ParameterFile
+from nav2_common.launch import ReplaceString, RewrittenYaml
 
 from robotino_utils import find_file
 
@@ -25,6 +28,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration("namespace")
+    use_namespace = LaunchConfiguration("use_namespace")
     launch_rviz = LaunchConfiguration("launch_rviz")
     launch_mps_map_gen = LaunchConfiguration("launch_mps_map_gen")
     use_composition = LaunchConfiguration("use_composition")
@@ -37,6 +41,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
     team_name = LaunchConfiguration("team_name")
+    params_file = LaunchConfiguration("params_file")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -46,7 +51,25 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
-    params_file = os.path.join(bringup_dir, "config", "nav2_params.yaml")
+
+    # Handle parameter file with namespace support similar to nav2_bringup
+    # Replace '<robot_namespace>' keyword with actual namespace if use_namespace is True
+    params_file_processed = ReplaceString(
+        source_file=params_file,
+        replacements={'<robot_namespace>': ('/', namespace)},
+        condition=IfCondition(use_namespace),
+    )
+
+    # Configure parameters with proper namespace handling
+    configured_params = ParameterFile(
+        RewrittenYaml(
+            source_file=params_file_processed,
+            root_key=namespace,
+            param_rewrites={},
+            convert_types=True,
+        ),
+        allow_substs=True,
+    )
 
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
     if launch_mps_map_gen_value:
@@ -54,14 +77,15 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Specify the actions
     actions = [
-        PushROSNamespace(namespace),
+        PushROSNamespace(condition=IfCondition(use_namespace), namespace=namespace),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_localization.launch.py")),
             launch_arguments={
+                "namespace": namespace,
                 "map": map_yaml_file,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
-                "params_file": params_file,
+                "params_file": params_file_processed,
                 "use_composition": use_composition,
                 "use_respawn": use_respawn,
                 "launch_mapserver": launch_mapserver,
@@ -71,9 +95,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_navigation.launch.py")),
             launch_arguments={
+                "namespace": namespace,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
-                "params_file": params_file,
+                "params_file": params_file_processed,
                 "use_composition": use_composition,
                 "use_respawn": use_respawn,
             }.items(),
@@ -81,9 +106,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
             launch_arguments={
+                "namespace": namespace,
                 "use_sim_time": use_sim_time,
                 "autostart": autostart,
-                "params_file": params_file,
+                "params_file": params_file_processed,
                 "use_respawn": use_respawn,
                 "launch_map_filter": launch_mapfilter,
                 "filter_mask_yaml": os.path.join(bringup_dir, "map", "filter_mask.yaml"),
@@ -92,6 +118,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_rviz.launch.py")),
             launch_arguments={
+                "namespace": namespace,
                 "launch_rviz": launch_nav2rviz,
                 "rviz_config": rviz_config,
             }.items(),
@@ -103,7 +130,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(os.path.join(mps_map_gen_dir, "mps_map_gen.launch.py")),
                     launch_arguments={
-    
+                        "namespace": namespace,
                         "use_sim_time": use_sim_time,
                         "get_data_from_refbox": "true",
                         "publish_wait_pos": "true",
@@ -131,6 +158,12 @@ def generate_launch_description():
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
 
     declare_namespace_cmd = DeclareLaunchArgument("namespace", default_value="", description="Top-level namespace")
+
+    declare_use_namespace_cmd = DeclareLaunchArgument(
+        "use_namespace",
+        default_value="true",
+        description="Whether to apply a namespace to the navigation stack",
+    )
 
     declare_launch_rviz_cmd = DeclareLaunchArgument(
         "launch_rviz",
@@ -221,6 +254,7 @@ def generate_launch_description():
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
+    ld.add_action(declare_use_namespace_cmd)
     ld.add_action(declare_launch_rviz_cmd)
     ld.add_action(declare_launch_mps_map_gen_cmd)
     ld.add_action(declare_map_yaml_cmd)

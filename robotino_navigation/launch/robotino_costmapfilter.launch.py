@@ -12,7 +12,6 @@ from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
-from nav2_common.launch import RewrittenYaml
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -30,7 +29,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
-    # Create parameter files - base config is now generic (no root_key needed)
+    # Create parameter files - Use the processed params file passed from bringup
     configured_params = ParameterFile(
         params_file,
         allow_substs=True,

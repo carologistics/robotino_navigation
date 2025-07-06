@@ -33,7 +33,6 @@ from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
-from nav2_common.launch import RewrittenYaml
 
 
 def launch_nodes_withconfig(context, *args, **kwargs):
@@ -52,15 +51,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["filter_mask_server", "costmap_filter_info_server"]
 
-    # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": mask}
-
+    # Create parameter files - base config is now generic (no substitutions needed)
     configured_params = ParameterFile(
-        RewrittenYaml(
-            source_file=params_file,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
+        params_file,
         allow_substs=True,
     )
 
@@ -83,7 +76,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, {"yaml_filename": mask, "use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),
@@ -95,7 +88,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, {"use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),

@@ -113,7 +113,7 @@ controller_server:
       yaw_goal_tolerance: 0.25
       stateful: true
 
-    controller_plugins: ["FollowPath", "FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
+    controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
     FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 30
