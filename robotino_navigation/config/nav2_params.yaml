@@ -113,7 +113,46 @@ controller_server:
       yaw_goal_tolerance: 0.25
       stateful: true
 
-    controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
+    controller_plugins: ["FollowPath", "FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
+    FollowPath: # Default controller - uses DWB
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: True
+      min_vel_x: 0.0
+      min_vel_y: 0.0
+      max_vel_x: 1.0
+      max_vel_y: 1.0
+      max_vel_theta: 1.0
+      min_speed_xy: 0.0
+      max_speed_xy: 1.0
+      min_speed_theta: 0.0
+      acc_lim_x: 2.5
+      acc_lim_y: 2.5
+      acc_lim_theta: 3.2
+      decel_lim_x: -2.5
+      decel_lim_y: -2.5
+      decel_lim_theta: -3.2
+      vx_samples: 20
+      vy_samples: 20
+      vtheta_samples: 40
+      sim_time: 1.0
+      linear_granularity: 0.05
+      angular_granularity: 0.025
+      transform_tolerance: 0.2
+      xy_goal_tolerance: 0.05
+      trans_stopped_velocity: 0.25
+      short_circuit_trajectory_evaluation: True
+      stateful: True
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      BaseObstacle.scale: 0.02
+      PathAlign.scale: 32.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.scale: 24.0
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 32.0
+      GoalDist.scale: 24.0
+      RotateToGoal.scale: 32.0
+      RotateToGoal.slowing_factor: 5.0
+      RotateToGoal.lookahead_time: -1.0
     FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 30
@@ -171,7 +210,7 @@ controller_server:
         cost_power: 1
         cost_weight: 3.81
         critical_cost: 300.0
-        consider_footprint: true
+        consider_footprint: false
         collision_cost: 1000000.0
         near_goal_distance: 1.0
         trajectory_point_step: 2
@@ -180,7 +219,7 @@ controller_server:
         cost_power: 1
         repulsion_weight: 1.5
         critical_weight: 20.0
-        consider_footprint: true # default: false, incerase the computation cost, uses robot footprint information
+        consider_footprint: false # default: false, incerase the computation cost, uses robot footprint information
         collision_cost: 1000.0
         collision_margin_distance: 0.075
         near_goal_distance: 0.1

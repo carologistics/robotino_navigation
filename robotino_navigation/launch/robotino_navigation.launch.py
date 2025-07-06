@@ -44,7 +44,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]          # /{namespace}/map -> /map (shared global map)]
 
     # Create parameter substitutions for dynamic values
-    param_substitutions = {"use_sim_time": use_sim_time, "autostart": autostart}
+    param_substitutions = {
+        "use_sim_time": use_sim_time, 
+        "autostart": autostart,
+        "yaml_filename": "map.yaml"  # Default value - will be overridden by map servers in other launch files
+    }
 
     # Create parameter files - base config is now generic (no root_key needed)
     configured_params = ParameterFile(

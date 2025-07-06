@@ -42,7 +42,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     get_package_share_directory("mps_map_gen")
 
     # Create the launch configuration variables
-    namespace = LaunchConfiguration("namespace")
     map_yaml_file = LaunchConfiguration("map")
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
@@ -70,7 +69,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    #remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]          # /{namespace}/map -> /map (shared global map)]
+    remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]          # /{namespace}/map -> /map (shared global map)]
 
 
     os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
