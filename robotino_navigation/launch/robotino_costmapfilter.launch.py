@@ -20,7 +20,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     bringup_dir = get_package_share_directory("robotino_navigation")
 
     # Create the launch configuration variables
-    namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
@@ -31,22 +30,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
-    # Create parameter substitutions and files - base config is now generic
-    param_substitutions = {"use_sim_time": use_sim_time}
+    # Create our own temporary YAML files that include substitutions
+    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
 
     configured_params = ParameterFile(
         RewrittenYaml(
             source_file=params_file,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
-        allow_substs=True,
-    )
-
-    configured_host_params = ParameterFile(
-        RewrittenYaml(
-            source_file=host_params_file,
-            root_key=namespace,
             param_rewrites=param_substitutions,
             convert_types=True,
         ),
@@ -75,10 +64,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 emulate_tty=True,
-                parameters=[configured_params, configured_host_params],
+                parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
-                namespace=namespace,
             ),
             Node(
                 package="nav2_map_server",
@@ -87,7 +75,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, configured_host_params],
+                parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),
@@ -173,6 +161,7 @@ def generate_launch_description():
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
     ld.add_action(launch_mapserver_argument)
+    ld.add_action(declare_filter_mask_yaml_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
