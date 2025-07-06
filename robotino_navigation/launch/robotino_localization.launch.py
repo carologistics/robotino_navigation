@@ -32,16 +32,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["map_server", "amcl"]
 
-    # Create parameter substitutions for dynamic values
-    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": map_yaml_file}
-
     # Create parameter files - base config is now generic (no root_key needed)
     configured_params = ParameterFile(
-        RewrittenYaml(
-            source_file=params_file,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
+        params_file,
         allow_substs=True,
     )
     
@@ -67,7 +60,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, {"yaml_filename": map_yaml_file, "use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_mapserver),
@@ -79,7 +72,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, {"use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
             ),

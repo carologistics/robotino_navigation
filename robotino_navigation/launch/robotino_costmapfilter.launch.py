@@ -30,15 +30,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
-    # Create our own temporary YAML files that include substitutions
-    param_substitutions = {"use_sim_time": use_sim_time, "yaml_filename": filter_mask_yaml}
-
+    # Create parameter files - base config is now generic (no root_key needed)
     configured_params = ParameterFile(
-        RewrittenYaml(
-            source_file=params_file,
-            param_rewrites=param_substitutions,
-            convert_types=True,
-        ),
+        params_file,
         allow_substs=True,
     )
 
@@ -60,11 +54,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 package="nav2_map_server",
                 executable="map_server",
                 name="filter_mask_server",
-                condition=IfCondition(use_sim_time and launch_map_filter),
+                condition=IfCondition(launch_map_filter),
                 output="screen",
                 respawn=use_respawn,
                 emulate_tty=True,
-                parameters=[configured_params],
+                parameters=[configured_params, {"yaml_filename": filter_mask_yaml, "use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
             ),
@@ -75,7 +69,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[configured_params, {"use_sim_time": use_sim_time}],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings,
                 condition=IfCondition(launch_map_filter),

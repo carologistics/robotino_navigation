@@ -36,7 +36,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
-    input_params_file = LaunchConfiguration("params_file")
     team_name = LaunchConfiguration("team_name")
 
     launch_configuration = {}
@@ -47,10 +46,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
-    params_file = find_file(input_params_file.perform(context), [bringup_dir + "/config/"])
-    if params_file is None:
-        print("Can not find %s, abort!", input_params_file.perform(context))
-        sys.exit(1)
+    params_file = os.path.join(bringup_dir, "config", "nav2_params.yaml")
 
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
     if launch_mps_map_gen_value:
@@ -90,6 +86,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "params_file": params_file,
                 "use_respawn": use_respawn,
                 "launch_map_filter": launch_mapfilter,
+                "filter_mask_yaml": os.path.join(bringup_dir, "map", "filter_mask.yaml"),
             }.items(),
         ),
         IncludeLaunchDescription(
