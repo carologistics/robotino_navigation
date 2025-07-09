@@ -32,8 +32,6 @@ local_costmap:
           sensor_frame: robotinobase1/irscan_link
       keepout_filter:
         filter_info_topic: "/robotinobase1/costmap_filter_info"
-        scan_ir:
-          topic: /robotinobase1/irsensor_scan
 
 global_costmap:
   global_costmap:
