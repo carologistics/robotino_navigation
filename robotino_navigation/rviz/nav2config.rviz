@@ -97,7 +97,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: <namespace>
+      TF Prefix:
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -110,47 +110,47 @@ Visualization Manager:
         All Enabled: false
         map:
           Value: true
-        <namespace>/SickLaser_Front:
+        /SickLaser_Front:
           Value: true
-        <namespace>/SickLaser_Rear:
+        /SickLaser_Rear:
           Value: true
-        <namespace>/anglebracketusb_link:
+        /anglebracketusb_link:
           Value: true
-        <namespace>/base_link:
+        /base_link:
           Value: true
-        <namespace>/command_bridge_link:
+        /command_bridge_link:
           Value: true
-        <namespace>/imu_link:
+        /imu_link:
           Value: true
-        <namespace>/ir1_sensor:
+        /ir1_sensor:
           Value: true
-        <namespace>/ir2_sensor:
+        /ir2_sensor:
           Value: true
-        <namespace>/ir3_sensor:
+        /ir3_sensor:
           Value: true
-        <namespace>/ir4_sensor:
+        /ir4_sensor:
           Value: true
-        <namespace>/ir5_sensor:
+        /ir5_sensor:
           Value: true
-        <namespace>/ir6_sensor:
+        /ir6_sensor:
           Value: true
-        <namespace>/ir7_sensor:
+        /ir7_sensor:
           Value: true
-        <namespace>/ir8_sensor:
+        /ir8_sensor:
           Value: true
-        <namespace>/ir9_sensor:
+        /ir9_sensor:
           Value: true
-        <namespace>/irsensor_merge:
+        /irsensor_merge:
           Value: true
-        <namespace>/laser_link:
+        /laser_link:
           Value: true
-        <namespace>/odom:
+        /odom:
           Value: true
-        <namespace>/wheel0_link:
+        /wheel0_link:
           Value: true
-        <namespace>/wheel1_link:
+        /wheel1_link:
           Value: true
-        <namespace>/wheel2_link:
+        /wheel2_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -159,45 +159,45 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          <namespace>/odom:
-            <namespace>/base_link:
-              <namespace>/SickLaser_Front:
+          /odom:
+            /base_link:
+              /SickLaser_Front:
                 {}
-              <namespace>/SickLaser_Rear:
+              /SickLaser_Rear:
                 {}
-              <namespace>/anglebracketusb_link:
+              /anglebracketusb_link:
                 {}
-              <namespace>/command_bridge_link:
+              /command_bridge_link:
                 {}
-              <namespace>/imu_link:
+              /imu_link:
                 {}
-              <namespace>/ir1_sensor:
+              /ir1_sensor:
                 {}
-              <namespace>/ir2_sensor:
+              /ir2_sensor:
                 {}
-              <namespace>/ir3_sensor:
+              /ir3_sensor:
                 {}
-              <namespace>/ir4_sensor:
+              /ir4_sensor:
                 {}
-              <namespace>/ir5_sensor:
+              /ir5_sensor:
                 {}
-              <namespace>/ir6_sensor:
+              /ir6_sensor:
                 {}
-              <namespace>/ir7_sensor:
+              /ir7_sensor:
                 {}
-              <namespace>/ir8_sensor:
+              /ir8_sensor:
                 {}
-              <namespace>/ir9_sensor:
+              /ir9_sensor:
                 {}
-              <namespace>/irsensor_merge:
+              /irsensor_merge:
                 {}
-              <namespace>/laser_link:
+              /laser_link:
                 {}
-              <namespace>/wheel0_link:
+              /wheel0_link:
                 {}
-              <namespace>/wheel1_link:
+              /wheel1_link:
                 {}
-              <namespace>/wheel2_link:
+              /wheel2_link:
                 {}
       Update Interval: 0
       Value: true
@@ -494,7 +494,7 @@ Visualization Manager:
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /<namespace>/marker
+            Value: /<namespace>/trajectories
           Value: true
         - Alpha: 1
           Class: rviz_default_plugins/Polygon

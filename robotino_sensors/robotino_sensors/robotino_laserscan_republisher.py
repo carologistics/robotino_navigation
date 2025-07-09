@@ -13,13 +13,13 @@ class Robotino3ScanRemap(Node):
         super().__init__("robotino_laserscan_republisher")
 
         # Initialize subscribers for laser scan data
-        self.create_subscription(LaserScan, self.get_namespace() + "/SickLaser_Front", self.FrontScan_cb, 10)
+        self.create_subscription(LaserScan, "SickLaser_Front", self.FrontScan_cb, 10)
         self.create_subscription(Clock, "/clock", self.Timer_cb, 10)
-        self.create_subscription(LaserScan, self.get_namespace() + "/SickLaser_Rear", self.RearScan_cb, 10)
+        self.create_subscription(LaserScan, "SickLaser_Rear", self.RearScan_cb, 10)
 
         # Initialize publishers for laser scan data
-        self.Front_publisher = self.create_publisher(LaserScan, self.get_namespace() + "/SickLaser_Front_Remaped", 10)
-        self.Rear_publisher = self.create_publisher(LaserScan, self.get_namespace() + "/SickLaser_Rear_Remaped", 10)
+        self.Front_publisher = self.create_publisher(LaserScan, "SickLaser_Front_Remaped", 10)
+        self.Rear_publisher = self.create_publisher(LaserScan, "SickLaser_Rear_Remaped", 10)
 
         # Initialize parameters
         self.clock_received = False

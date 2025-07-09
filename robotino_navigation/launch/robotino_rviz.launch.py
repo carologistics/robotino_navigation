@@ -44,16 +44,14 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         condition=IfCondition(launch_rviz),
         package="rviz2",
         executable="rviz2",
-        namespace=namespace,
         arguments=["-d", new_rviz_config_path],
         output="screen",
-        parameters=[{"namespace", launch_configuration["namespace"]}],
+        parameters=[{"namespace": launch_configuration["namespace"]}],
         remappings=[
-            # /{namespace}/map -> /map (shared global map)
-            # Note: TF topics are NOT remapped - each robot maintains its own TF tree
+            # Global topics that should remain global
             ("goal_pose", "/goal_pose"),
-            ("clicked_point","clicked_point"),
-            ("initialpose", "initialpose"),
+            ("clicked_point", "/clicked_point"),
+            ("initialpose", "/initialpose"),
         ],
     )
 
