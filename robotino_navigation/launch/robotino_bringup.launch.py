@@ -36,7 +36,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
     input_filter_mask_yaml_file = LaunchConfiguration("filter_mask")
-    launch_costmap_filter = LaunchConfiguration("launch_costmap_filter")
+    launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     border_thickness = LaunchConfiguration("border_thickness")
 
     launch_configuration = {}
@@ -63,8 +63,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
     if launch_mps_map_gen_value:
         mps_map_gen_dir = get_package_share_directory("mps_map_gen")
-
-    launch_costmap_filter_value = launch_costmap_filter.perform(context).lower() in ["true", "1", "t", "y", "yes"]
 
     # Specify the actions
     actions = [
@@ -136,25 +134,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 )
             ]
         )
-
-    if launch_costmap_filter_value:
-        actions.extend(
-            [
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_costmapfilter.launch.py")),
-                    launch_arguments={
-                        "namespace": namespace,
-                        "use_sim_time": use_sim_time,
-                        "autostart": autostart,
-                        "params_file": params_file,
-                        "host_params_file": host_params_file,
-                        "use_respawn": use_respawn,
-                        "filter_mask": filter_mask_yaml_file,
-                    }.items(),
-                ),
-            ]
-        )
-
     bringup_cmd_group = GroupAction(actions)
 
     return [bringup_cmd_group]
@@ -249,8 +228,8 @@ def generate_launch_description():
     )
 
     declare_costmap_filter_cmd = DeclareLaunchArgument(
-        "launch_costmap_filter",
-        default_value="false",
+        "launch_mapfilter",
+        default_value="true",
         description="Weather to launch costmap filter or not",
     )
 
