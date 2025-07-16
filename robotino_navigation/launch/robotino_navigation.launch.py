@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # Licensed under MIT. See LICENSE file. Copyright Carologistics.
 import os
-from datetime import datetime
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -185,14 +184,6 @@ def generate_launch_description():
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
     stdout_color_envvar = SetEnvironmentVariable("RCUTILS_COLORIZED_OUTPUT", "1")
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    stdout_log_dir_envvar = SetEnvironmentVariable(
-        "ROS_LOG_DIR", os.makedirs(os.path.join(os.getcwd(), "ros_log", timestamp), exist_ok=True)
-    )
-
-    stdout_format_envar = SetEnvironmentVariable(
-        "RCUTILS_CONSOLE_OUTPUT_FORMAT", "[{severity}] [{time}] [{name}] [{function_name}] [{line}]: {message}"
-    )
 
     declare_namespace_cmd = DeclareLaunchArgument("namespace", default_value="", description="Top-level namespace")
 
@@ -234,8 +225,6 @@ def generate_launch_description():
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
     ld.add_action(stdout_color_envvar)
-    ld.add_action(stdout_log_dir_envvar)
-    ld.add_action(stdout_format_envar)
 
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
