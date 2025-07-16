@@ -71,7 +71,7 @@ bt_navigator:
     default_nav_to_pose_bt_xml: $(find-pkg-share robotino_navigation)/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml
     goal_blackboard_id: goal
     path_blackboard_id: path
-    bt_loop_duration: 10s
+    bt_loop_duration: 10
     default_server_timeout: 1000
     wait_for_service_timeout: 200
     action_server_result_timeout: 1000.0
