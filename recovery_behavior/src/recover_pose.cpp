@@ -43,14 +43,15 @@ ResultStatus RecoverPoseCls::onRun(
 
   if (!nav2_util::getCurrentPose(initial_local_pose, *tf_, local_frame_,
                                  robot_base_frame_, transform_tolerance_)) {
-    RCLCPP_ERROR(logger_, "Initial robot pose is not available.");
+    RCLCPP_ERROR(logger_, "Initial local robot pose is not available."
+                          " - Exiting RecoverPoseAction");
     return ResultStatus{Status::FAILED, RecoverPoseActionResult::TF_ERROR};
   }
 
-  RCLCPP_ERROR(logger_, "Initial_local robot pose: %f, %f, %f",
-               initial_local_pose.pose.position.x,
-               initial_local_pose.pose.position.y,
-               tf2::getYaw(initial_local_pose.pose.orientation));
+  RCLCPP_INFO(logger_, "Initial local robot pose: %f, %f, %f",
+              initial_local_pose.pose.position.x,
+              initial_local_pose.pose.position.y,
+              tf2::getYaw(initial_local_pose.pose.orientation));
 
   geometry_msgs::msg::Pose2D pose2d_local;
   pose2d_local.x = initial_local_pose.pose.position.x;
@@ -59,26 +60,28 @@ ResultStatus RecoverPoseCls::onRun(
 
   if (!nav2_util::getCurrentPose(initial_global_pose, *tf_, global_frame_,
                                  robot_base_frame_, transform_tolerance_)) {
-    RCLCPP_ERROR(logger_, "Initial robot pose is not available.");
+    RCLCPP_ERROR(logger_, "Initial global robot pose is not available."
+                          " - Exiting RecoverPoseAction");
     return ResultStatus{Status::FAILED, RecoverPoseActionResult::TF_ERROR};
   }
 
-  RCLCPP_ERROR(logger_, "Initial_global robot pose: %f, %f, %f",
-               initial_global_pose.pose.position.x,
-               initial_global_pose.pose.position.y,
-               tf2::getYaw(initial_global_pose.pose.orientation));
+  RCLCPP_INFO(logger_, "Initial global robot pose: %f, %f, %f",
+              initial_global_pose.pose.position.x,
+              initial_global_pose.pose.position.y,
+              tf2::getYaw(initial_global_pose.pose.orientation));
 
   geometry_msgs::msg::Pose2D pose2d_global;
   pose2d_global.x = initial_global_pose.pose.position.x;
   pose2d_global.y = initial_global_pose.pose.position.y;
   pose2d_global.theta = tf2::getYaw(initial_global_pose.pose.orientation);
 
-  RCLCPP_INFO(logger_, "[onRun]:RecoverPoseAction configured, simulating ahead "
+  RCLCPP_INFO(logger_, "[onRun]:RecoverPoseAction configured, simulating ahead"
                        "for collision check");
 
   if (!isCollisionFree(command_dist_, pose2d_local, pose2d_global)) {
     this->stopRobot();
-    RCLCPP_WARN(logger_, "Collision Ahead - Exiting RecoverPose behavior");
+    RCLCPP_WARN(logger_, "[isCollisionFree]: Collision Ahead"
+                         "- Exiting RecoverPoseAction");
     return ResultStatus{Status::FAILED,
                         RecoverPoseActionResult::COLLISION_AHEAD};
   }
@@ -94,16 +97,16 @@ ResultStatus RecoverPoseCls::onCycleUpdate() {
   if (time_remaining.seconds() < 0.0 &&
       command_time_allowance_.seconds() > 0.0) {
     stopRobot();
-    RCLCPP_WARN(logger_,
-                "[onCycleUpdate]:Exceeded time allowance before reaching the "
-                "RecoverPoseAction goal - Exiting RecoverPoseAction");
+    RCLCPP_ERROR(logger_,
+                 "[onCycleUpdate]:Exceeded time allowance before reaching the "
+                 "RecoverPoseAction goal - Exiting RecoverPoseAction");
     return ResultStatus{Status::FAILED, RecoverPoseActionResult::NONE};
   }
 
   if (!nav2_util::getCurrentPose(current_pose, *tf_, local_frame_,
                                  robot_base_frame_, transform_tolerance_)) {
-    RCLCPP_ERROR(logger_,
-                 "[onCycleUpdate]: Current robot pose is not available.");
+    RCLCPP_ERROR(logger_, "[onCycleUpdate]: Current robot pose is not available"
+                          "- Exiting RecoverPoseAction");
     return ResultStatus{Status::FAILED, RecoverPoseActionResult::TF_ERROR};
   }
 
@@ -134,7 +137,8 @@ ResultStatus RecoverPoseCls::onCycleUpdate() {
 
   // if (!dynamicCollisionCheck(distance, cmd_vel->twist, pose2d)) {
   //   this->stopRobot();
-  //   RCLCPP_WARN(this->logger_, "Collision Ahead - Exiting DriveOnHeading");
+  //   RCLCPP_WARN(logger_, "[dynamicCollisionCheck]: Collision Ahead"
+  //              "- Exiting RecoverPoseAction");
   //   return ResultStatus{Status::FAILED,
   //                       RecoverPoseActionResult::COLLISION_AHEAD};
   // }
@@ -182,14 +186,15 @@ bool RecoverPoseCls::isCollisionFree(
     if (this->global_collision_checker_->isCollisionFree(pose2d_global,
                                                          fetch_global_data)) {
       RCLCPP_INFO(logger_,
-                  "[global_collision_checker_]: Declared availibility of free "
+                  "[globalCostmap]: Declared availibility of free "
                   "space at: %f, %f, %f ",
                   pose2d_global.x, pose2d_global.y, pose2d_global.theta);
       if (this->local_collision_checker_->isCollisionFree(pose2d_local,
                                                           fetch_local_data)) {
-        // RCLCPP_INFO(logger_, "[local_collision_checker_]: Declared
-        // availibility of free space at: %f, %f, %f ", pose2d_local.x,
-        // pose2d_local.y, pose2d_local.theta);
+        RCLCPP_INFO(logger_,
+                    "[localCostmap]: Declared "
+                    "availibility of free space at: %f, %f, %f ",
+                    pose2d_local.x, pose2d_local.y, pose2d_local.theta);
         angle_heading = i;
         return true;
       }
@@ -200,7 +205,7 @@ bool RecoverPoseCls::isCollisionFree(
 
   RCLCPP_INFO(
       logger_,
-      "[collision_checkers]: Unable to identify the free space around robot");
+      "[isCollisionFree]: Unable to identify the free space around robot");
   return false;
 }
 
