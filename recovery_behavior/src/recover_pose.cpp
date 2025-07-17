@@ -39,6 +39,11 @@ ResultStatus RecoverPoseCls::onRun(
   angle_threshold = (std::atan2((robot_radius / 2), command_dist_));
   angle_heading = 0.0;
 
+  RCLCPP_INFO(logger_,
+              "Distance to target: %f, Speed: %f, "
+              "Time allowance: %f",
+              command_dist_, command_speed_, command_time_allowance_.seconds());
+
   end_time_ = this->clock_->now() + command_time_allowance_;
 
   if (!nav2_util::getCurrentPose(initial_local_pose, *tf_, local_frame_,
@@ -75,7 +80,7 @@ ResultStatus RecoverPoseCls::onRun(
   pose2d_global.y = initial_global_pose.pose.position.y;
   pose2d_global.theta = tf2::getYaw(initial_global_pose.pose.orientation);
 
-  RCLCPP_INFO(logger_, "[onRun]:RecoverPoseAction configured, simulating ahead"
+  RCLCPP_INFO(logger_, "[onRun]:RecoverPoseAction configured, simulating ahead "
                        "for collision check");
 
   if (!isCollisionFree(command_dist_, pose2d_local, pose2d_global)) {
@@ -117,6 +122,8 @@ ResultStatus RecoverPoseCls::onCycleUpdate() {
   double distance = hypot(diff_x, diff_y);
   feedback_->distance_traveled = distance;
   this->action_server_->publish_feedback(feedback_);
+
+  RCLCPP_INFO(logger_, "Current distance to goal: %f", distance);
 
   if (distance >= std::fabs(command_dist_)) {
     this->stopRobot();

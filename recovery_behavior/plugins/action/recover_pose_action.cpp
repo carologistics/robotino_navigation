@@ -11,8 +11,7 @@ RecoverPoseAction::RecoverPoseAction(const std::string &xml_tag_name,
                                      const std::string &action_name,
                                      const BT::NodeConfiguration &conf)
     : BtActionNode<recovery_msgs::action::RecoverPose>(xml_tag_name,
-                                                       action_name, conf),
-      initialized_(false) {}
+                                                       action_name, conf) {}
 
 void RecoverPoseAction::initialize() {
   double dist;
@@ -31,11 +30,11 @@ void RecoverPoseAction::initialize() {
   goal_.speed = speed;
   goal_.time_allowance = rclcpp::Duration::from_seconds(time_allowance);
   goal_.robot_footprint = robot_footprint;
-  initialized_ = true;
+  // initialized_ = true;
 }
 
 void RecoverPoseAction::on_tick() {
-  if (!initialized_) {
+  if (!BT::isStatusActive(status())) {
     initialize();
   }
 

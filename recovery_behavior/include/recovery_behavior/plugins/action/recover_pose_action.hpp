@@ -64,8 +64,8 @@ public:
    */
   static BT::PortsList providedPorts() {
     return providedBasicPorts(
-        {BT::InputPort<double>("backup_dist", 0.15, "Distance to backup"),
-         BT::InputPort<double>("backup_speed", 0.025,
+        {BT::InputPort<double>("backup_dist", 0.50, "Distance to backup"),
+         BT::InputPort<double>("backup_speed", 0.25,
                                "Speed at which to backup"),
          BT::InputPort<double>("time_allowance", 10.0,
                                "Allowed time for reversing"),
@@ -76,7 +76,7 @@ public:
   }
 
 private:
-  bool initialized_;
+  // bool initialized_;
 };
 
 } // namespace nav2_behavior_tree
