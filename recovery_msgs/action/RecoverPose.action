@@ -1,8 +1,7 @@
 #goal definition
-geometry_msgs/Point target
-float32 speed
+geometry_msgs/Point recovery_distance
+float32 recovery_speed
 builtin_interfaces/Duration time_allowance
-float32 robot_footprint
 ---
 #result definition
 

@@ -15,21 +15,18 @@ RecoverPoseAction::RecoverPoseAction(const std::string &xml_tag_name,
 
 void RecoverPoseAction::initialize() {
   double dist;
-  getInput("backup_dist", dist);
+  getInput("recovery_distance", dist);
   double speed;
-  getInput("backup_speed", speed);
+  getInput("recovery_speed", speed);
   double time_allowance;
   getInput("time_allowance", time_allowance);
-  double robot_footprint;
-  getInput("robot_footprint", robot_footprint);
 
   // Populate the input message
-  goal_.target.x = dist;
-  goal_.target.y = 0.0;
-  goal_.target.z = 0.0;
-  goal_.speed = speed;
+  goal_.recovery_distance.x = dist;
+  goal_.recovery_distance.y = 0.0;
+  goal_.recovery_distance.z = 0.0;
+  goal_.recovery_speed = speed;
   goal_.time_allowance = rclcpp::Duration::from_seconds(time_allowance);
-  goal_.robot_footprint = robot_footprint;
   // initialized_ = true;
 }
 

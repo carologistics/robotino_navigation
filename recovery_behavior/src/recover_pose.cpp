@@ -33,8 +33,8 @@ void RecoverPoseCls::onConfigure() {
 
 ResultStatus RecoverPoseCls::onRun(
     const std::shared_ptr<const RecoverPoseAction::Goal> command) {
-  command_dist_ = command->target.x;
-  command_speed_ = command->speed;
+  command_dist_ = command->recovery_distance.x;
+  command_speed_ = command->recovery_speed;
   command_time_allowance_ = command->time_allowance;
   angle_threshold = (std::atan2((robot_radius / 2), command_dist_));
   angle_heading = 0.0;
@@ -183,12 +183,6 @@ bool RecoverPoseCls::isCollisionFree(
     pose2d_global.y = global_pose.y + posechange_x * sin(global_pose.theta) +
                       posechange_y * cos(global_pose.theta);
     pose2d_global.theta = global_pose.theta;
-
-    // RCLCPP_INFO(logger_, "Simulating robot pose for heading angle: %f,:", i);
-    // RCLCPP_ERROR(logger_, "Simulating robot_local pose: %f, %f, %f",
-    // pose2d_local.x, pose2d_local.y, pose2d_local.theta);
-    // RCLCPP_ERROR(logger_, "Simulating robot_global pose: %f, %f, %f",
-    // pose2d_global.x, pose2d_global.y, pose2d_global.theta);
 
     if (this->global_collision_checker_->isCollisionFree(pose2d_global,
                                                          fetch_global_data)) {

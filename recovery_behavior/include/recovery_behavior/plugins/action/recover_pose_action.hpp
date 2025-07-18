@@ -64,13 +64,11 @@ public:
    */
   static BT::PortsList providedPorts() {
     return providedBasicPorts(
-        {BT::InputPort<double>("backup_dist", 0.50, "Distance to backup"),
-         BT::InputPort<double>("backup_speed", 0.25,
+        {BT::InputPort<double>("recovery_distance", 0.50, "Distance to backup"),
+         BT::InputPort<double>("recovery_speed", 0.25,
                                "Speed at which to backup"),
          BT::InputPort<double>("time_allowance", 10.0,
                                "Allowed time for reversing"),
-         BT::InputPort<double>("robot_footprint", 0.450,
-                               "Footprint of robot base"),
          BT::OutputPort<ActionResult::_error_code_type>(
              "error_code_id", "The RecoverPose behavior server error code")});
   }
