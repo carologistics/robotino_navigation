@@ -72,9 +72,9 @@ bt_navigator:
     goal_blackboard_id: goal
     path_blackboard_id: path
     bt_loop_duration: 10
-    default_server_timeout: 10
-    wait_for_service_timeout: 1000
-    action_server_result_timeout: 900.0
+    default_server_timeout: 20000
+    wait_for_service_timeout: 200
+    action_server_result_timeout: 20000.0
     navigators: ["navigate_to_pose", "navigate_through_poses"]
     navigate_to_pose:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
@@ -305,7 +305,7 @@ local_costmap:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
         footprint_clearing_enabled: true
-        observation_sources: scan_lidar scan_ir
+        observation_sources: scan_lidar #scan_ir
         scan_lidar:
           topic: /scan
           sensor_frame: laser_link

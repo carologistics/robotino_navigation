@@ -78,11 +78,11 @@ global_costmap:
 mapf_planner_server:
   ros__parameters:
     planner_plugins: ["ConflictBased"]
-    expected_planner_frequency: 1.0
-    action_server_result_timeout: 10.0
+    expected_planner_frequency: 15.0
+    action_server_result_timeout: 20.0
     costmap_update_timeout: 1.0
-    number_of_agents: 1
-    agent_ids: ["robotinobase1"]
+    number_of_agents: 2
+    agent_ids: ["robotinobase1", "robotinobase2"]
     use_sim_time: True
     ConflictBased:
       plugin: "nav2_cbs_planner::CBSPlanner"
