@@ -98,9 +98,18 @@ MotorMove::MotorMove(const rclcpp::NodeOptions &options)
               matrix_to_string(Kd_retrieved).c_str());
 
   // Set control gains in the MIMO controller.
-  mimo_.set_Kp(Kp);
-  mimo_.set_Ki(Ki);
-  mimo_.set_Kd(Kd);
+  // Use retrieved parameters if they are non-zero, otherwise use defaults
+  Eigen::MatrixXd Kp_to_use = (Kp_retrieved.array().abs().sum() > 1e-6) ? Kp_retrieved : Kp;
+  Eigen::MatrixXd Ki_to_use = (Ki_retrieved.array().abs().sum() > 1e-6) ? Ki_retrieved : Ki;
+  Eigen::MatrixXd Kd_to_use = (Kd_retrieved.array().abs().sum() > 1e-6) ? Kd_retrieved : Kd;
+  
+  mimo_.set_Kp(Kp_to_use);
+  mimo_.set_Ki(Ki_to_use);
+  mimo_.set_Kd(Kd_to_use);
+  
+  RCLCPP_INFO(this->get_logger(), "Using Kp:\n%s", matrix_to_string(Kp_to_use).c_str());
+  RCLCPP_INFO(this->get_logger(), "Using Ki:\n%s", matrix_to_string(Ki_to_use).c_str());
+  RCLCPP_INFO(this->get_logger(), "Using Kd:\n%s", matrix_to_string(Kd_to_use).c_str());
 
   // Initialize TF2 buffer and listener for transformations.
   tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
@@ -205,7 +214,13 @@ void MotorMove::execute(
       Eigen::MatrixXd error_matrix(3, 1); // Create error matrix.
       error_matrix << error.pose.position.x, error.pose.position.y, yaw; // Fill error matrix.
       Eigen::MatrixXd output = mimo_.compute(error_matrix, delta_t.seconds()); // Compute control output.
-      RCLCPP_INFO(this->get_logger(), "Output delta %f", output(0, 0));
+      
+      // Enhanced debugging for x vs y axis issue
+      RCLCPP_INFO(this->get_logger(), "Error matrix - x: %f, y: %f, yaw: %f", 
+                  error_matrix(0, 0), error_matrix(1, 0), error_matrix(2, 0));
+      RCLCPP_INFO(this->get_logger(), "PID Output - x: %f, y: %f, yaw: %f", 
+                  output(0, 0), output(1, 0), output(2, 0));
+      
       geometry_msgs::msg::Twist cmd_vel; // Create Twist message for velocity commands.
       cmd_vel.linear.x = output(0, 0); // Set linear x velocity.
       cmd_vel.linear.y = output(1, 0); // Set linear y velocity.
@@ -220,12 +235,11 @@ void MotorMove::execute(
     
     goal_handle->succeed(std::make_shared<MotorMoveAction::Result>());
     RCLCPP_INFO(this->get_logger(), "Ziel erreicht.");
-    return;
     RCLCPP_INFO(this->get_logger(), "Distance to target: %f", distance); // Log distance.
     RCLCPP_INFO(this->get_logger(), "Yaw to target: %f", yaw); // Log yaw.
     RCLCPP_INFO(this->get_logger(), "Delta x: %f y: %f", error.pose.position.x,
                 error.pose.position.y); // Log position deltas.
-    loop_rate.sleep(); // Sleep to maintain loop rate.
+    return;
     }
   } 
 }
