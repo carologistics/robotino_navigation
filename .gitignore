@@ -6,3 +6,5 @@
 .config.yaml
 **.mypy_cache/
 *.swp
+*_mail
+*.log
