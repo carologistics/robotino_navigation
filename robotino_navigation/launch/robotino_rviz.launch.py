@@ -2,108 +2,108 @@
 # Licensed under MIT. See LICENSE file. Copyright Carologistics.
 import os
 
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import EmitEvent
 from launch.actions import OpaqueFunction
 from launch.actions import RegisterEventHandler
-from launch.conditions import IfCondition
+from launch.actions import Shutdown
 from launch.event_handlers import OnProcessExit
-from launch.events import Shutdown
 from launch.substitutions import LaunchConfiguration
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 
-def launch_nodes_withconfig(context, *args, **kwargs):
-    # Get the launch directory
-    bringup_dir = get_package_share_directory("robotino_navigation")
+def launch_rviz_with_templated_config(context, *args, **kwargs):
+    # Resolve launch arguments
+    namespace = LaunchConfiguration("namespace").perform(context)
+    launch_rviz = LaunchConfiguration("launch_rviz").perform(context)
+    rviz_config = LaunchConfiguration("rviz_config").perform(context)
 
-    # Create the launch configuration variables
-    namespace = LaunchConfiguration("namespace")
-    launch_rviz = LaunchConfiguration("launch_rviz")
-    LaunchConfiguration("rviz_config")
+    if launch_rviz.lower() not in ("true", "1", "yes"):
+        return []
 
-    launch_configuration = {}
-    for argname, argval in context.launch_configurations.items():
-        launch_configuration[argname] = argval
+    # Read RViz template
+    with open(rviz_config, "r") as f:
+        content = f.read()
 
-    rviz_config_file = launch_configuration["rviz_config"]
-    # Replace placeholders with actual values
-    with open(rviz_config_file, "r") as file:
-        rviz_template_content = file.read()
-    namespace = context.launch_configurations["namespace"]
-    replaced_content = rviz_template_content.replace("<namespace>", namespace)
+    # Replace placeholder
+    content = content.replace("<namespace>", namespace)
 
-    # Write the modified content to a new RVIZ2 configuration file
-    new_rviz_config_path = os.path.join(bringup_dir, "rviz", namespace + "_nav2config.rviz")
-    with open(new_rviz_config_path, "w") as file:
-        file.write(replaced_content)
+    # Write generated RViz config
+    tmp_dir = os.path.join("/tmp", "rviz")
+    os.makedirs(tmp_dir, exist_ok=True)
 
-    start_namespaced_rviz_cmd = Node(
-        condition=IfCondition(launch_rviz),
+    new_rviz_config = os.path.join(
+        tmp_dir,
+        f"{namespace or 'global'}_nav2config.rviz",
+    )
+
+    with open(new_rviz_config, "w") as f:
+        f.write(content)
+
+    # RViz node
+    start_rviz_cmd = Node(
         package="rviz2",
         executable="rviz2",
-        namespace=namespace,
-        arguments=["-d", new_rviz_config_path],
+        name="rviz2",
         output="screen",
-        parameters=[{"namespace", launch_configuration["namespace"]}],
+        arguments=["-d", new_rviz_config],
+        namespace=namespace,
         remappings=[
-            ("/" + launch_configuration["namespace"] + "/map", "/map"),
-            ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
-            ("/" + launch_configuration["namespace"] + "/tf_static", "tf_static"),
-            ("/goal_pose", "/" + launch_configuration["namespace"] + "/goal_pose"),
-            (
-                "/clicked_point",
-                "/" + launch_configuration["namespace"] + "/clicked_point",
-            ),
-            ("/initialpose", "/" + launch_configuration["namespace"] + "/initialpose"),
+            (PathJoinSubstitution(["/", namespace, "map"]), "/map"),
+            (PathJoinSubstitution(["/", namespace, "tf"]), "/tf"),
+            (PathJoinSubstitution(["/", namespace, "tf_static"]), "/tf_static"),
+            ("/goal_pose", PathJoinSubstitution(["/", namespace, "goal_pose"])),
+            ("/clicked_point", PathJoinSubstitution(["/", namespace, "clicked_point"])),
+            ("/initialpose", PathJoinSubstitution(["/", namespace, "initialpose"])),
         ],
     )
 
-    exit_event_handler_namespaced = RegisterEventHandler(
-        condition=IfCondition(launch_rviz),
+    # Shutdown launch when RViz exits
+    exit_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=start_namespaced_rviz_cmd,
-            on_exit=EmitEvent(event=Shutdown(reason="rviz exited")),
-        ),
+            target_action=start_rviz_cmd,
+            on_exit=Shutdown(reason="RViz exited"),
+        )
     )
 
-    return [start_namespaced_rviz_cmd, exit_event_handler_namespaced]
+    return [start_rviz_cmd, exit_event_handler]
 
 
 def generate_launch_description():
-
-    package_dir = get_package_share_directory("robotino_navigation")
-
-    # Declare the launch arguments
-    declare_namespace_cmd = DeclareLaunchArgument(
-        "namespace",
-        default_value="",
-        description=(
-            "Top-level namespace. The value will be used to replace the "
-            "<robot_namespace> keyword on the rviz config file."
-        ),
-    )
-
-    declare_launch_rviz_cmd = DeclareLaunchArgument(
-        "launch_rviz", default_value="true", description="Whether to start rviz or not"
-    )
-
-    declare_rviz_config_file_cmd = DeclareLaunchArgument(
-        "rviz_config",
-        default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
-        description="Full path to the RVIZ config file to use for all launched nodes",
-    )
-
-    # Create the launch description and populate
     ld = LaunchDescription()
 
-    # Declare the launch options
-    ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_launch_rviz_cmd)
-    ld.add_action(declare_rviz_config_file_cmd)
+    ld.add_action(
+        DeclareLaunchArgument(
+            "namespace",
+            default_value="",
+            description="Top-level namespace",
+        )
+    )
 
-    ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
+    ld.add_action(
+        DeclareLaunchArgument(
+            "launch_rviz",
+            default_value="true",
+            description="Whether to start RViz",
+        )
+    )
+
+    ld.add_action(
+        DeclareLaunchArgument(
+            "rviz_config",
+            default_value=PathJoinSubstitution(
+                [
+                    FindPackageShare("robotino_navigation"),
+                    "rviz",
+                    "nav2config.rviz",
+                ]
+            ),
+            description="RViz configuration file",
+        )
+    )
+
+    ld.add_action(OpaqueFunction(function=launch_rviz_with_templated_config))
 
     return ld

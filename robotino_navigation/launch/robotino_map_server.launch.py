@@ -4,9 +4,9 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import SetEnvironmentVariable
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
-from launch.substitutions import TextSubstitution
 from launch_ros.actions import Node
 from launch_ros.descriptions import ParameterFile
 from launch_ros.substitutions import FindPackageShare
@@ -16,24 +16,31 @@ from nav2_common.launch import RewrittenYaml
 def generate_launch_description():
 
     # -----------------------------------------------------
+    # Package shares
+    # -----------------------------------------------------
+    robotino_share = FindPackageShare("robotino_navigation")
+    FindPackageShare("mps_map_gen")  # keep side-effect if package must exist
+
+    # -----------------------------------------------------
     # Launch configurations
     # -----------------------------------------------------
     namespace = LaunchConfiguration("namespace")
-    mask = LaunchConfiguration("mask")
+    map_yaml_file = LaunchConfiguration("map")
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     params_file = LaunchConfiguration("params_file")
     use_respawn = LaunchConfiguration("use_respawn")
     log_level = LaunchConfiguration("log_level")
+    launch_mapserver = LaunchConfiguration("launch_mapserver")
 
-    lifecycle_nodes = ["filter_mask_server", "costmap_filter_info_server"]
+    lifecycle_nodes = ["map_server"]
 
     # -----------------------------------------------------
-    # Parameter substitutions
+    # Parameter rewriting
     # -----------------------------------------------------
     param_substitutions = {
         "use_sim_time": use_sim_time,
-        "yaml_filename": mask,
+        "yaml_filename": map_yaml_file,
     }
 
     configured_params = ParameterFile(
@@ -47,84 +54,55 @@ def generate_launch_description():
     )
 
     # -----------------------------------------------------
-    # Remappings
-    # -----------------------------------------------------
-    remappings = [
-        (
-            PathJoinSubstitution([TextSubstitution(text="/"), namespace, TextSubstitution(text="tf")]),
-            "/tf",
-        ),
-        (
-            PathJoinSubstitution([TextSubstitution(text="/"), namespace, TextSubstitution(text="tf_static")]),
-            "/tf_static",
-        ),
-        (
-            PathJoinSubstitution([TextSubstitution(text="/"), namespace, TextSubstitution(text="map")]),
-            "/map",
-        ),
-    ]
-
-    # -----------------------------------------------------
     # Nodes
     # -----------------------------------------------------
-    load_nodes = GroupAction(
+    map_server_group = GroupAction(
+        condition=IfCondition(launch_mapserver),
         actions=[
             Node(
                 package="nav2_map_server",
                 executable="map_server",
-                name="filter_mask_server",
+                name="map_server",
                 output="screen",
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
                 arguments=["--ros-args", "--log-level", log_level],
-                remappings=remappings,
-                namespace=namespace,
-            ),
-            Node(
-                package="nav2_map_server",
-                executable="costmap_filter_info_server",
-                name="costmap_filter_info_server",
-                output="screen",
-                respawn=use_respawn,
-                respawn_delay=2.0,
-                parameters=[configured_params],
-                arguments=["--ros-args", "--log-level", log_level],
-                remappings=remappings,
-                namespace=namespace,
-            ),
-            Node(
-                package="nav2_lifecycle_manager",
-                executable="lifecycle_manager",
-                name="lifecycle_manager_costmap_filters",
-                output="screen",
-                arguments=["--ros-args", "--log-level", log_level],
-                parameters=[
-                    {"use_sim_time": use_sim_time},
-                    {"autostart": autostart},
-                    {"node_names": lifecycle_nodes},
-                ],
                 namespace=namespace,
             ),
         ],
     )
 
+    lifecycle_manager_node = Node(
+        package="nav2_lifecycle_manager",
+        executable="lifecycle_manager",
+        name="lifecycle_manager_localization",
+        output="screen",
+        arguments=["--ros-args", "--log-level", log_level],
+        parameters=[
+            {"use_sim_time": use_sim_time},
+            {"autostart": autostart},
+            {"node_names": lifecycle_nodes},
+        ],
+        namespace=namespace,
+    )
+
     # -----------------------------------------------------
-    # Launch arguments
+    # Launch description
     # -----------------------------------------------------
     ld = LaunchDescription()
 
+    # Environment
     ld.add_action(SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1"))
 
-    package_share = FindPackageShare("robotino_navigation")
-
+    # Arguments
     ld.add_action(DeclareLaunchArgument("namespace", default_value="", description="Top-level namespace"))
 
     ld.add_action(
         DeclareLaunchArgument(
-            "mask",
-            default_value=PathJoinSubstitution([package_share, "map", "filter_mask.yaml"]),
-            description="Full path to filter_mask yaml file to load",
+            "map",
+            default_value=PathJoinSubstitution([robotino_share, "map", "map_go.yaml"]),
+            description="Full path to map yaml file to load",
         )
     )
 
@@ -147,32 +125,37 @@ def generate_launch_description():
     ld.add_action(
         DeclareLaunchArgument(
             "params_file",
-            default_value=PathJoinSubstitution([package_share, "config", "costmap_filter.yaml"]),
-            description="Full path to the ROS2 parameters file to use for all launched nodes",
+            default_value=PathJoinSubstitution([robotino_share, "config", "nav2_params.yaml"]),
+            description="Full path to the ROS2 parameters file to use",
         )
     )
 
     ld.add_action(
         DeclareLaunchArgument(
             "use_respawn",
-            default_value="false",
-            description="Whether to respawn if a node crashes. Applied when composition is disabled.",
+            default_value="False",
+            description="Whether to respawn if a node crashes",
         )
     )
 
-    ld.add_action(DeclareLaunchArgument("log_level", default_value="info", description="log level"))
+    ld.add_action(
+        DeclareLaunchArgument(
+            "log_level",
+            default_value="info",
+            description="Log level",
+        )
+    )
 
     ld.add_action(
         DeclareLaunchArgument(
-            "launch_map_filter",
+            "launch_mapserver",
             default_value="true",
             description="Whether to launch map server or not",
         )
     )
 
-    # -----------------------------------------------------
-    # Add nodes
-    # -----------------------------------------------------
-    ld.add_action(load_nodes)
+    # Nodes
+    ld.add_action(map_server_group)
+    ld.add_action(lifecycle_manager_node)
 
     return ld
