@@ -10,6 +10,7 @@ from launch.actions import GroupAction
 from launch.actions import IncludeLaunchDescription
 from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
@@ -21,6 +22,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     # Get the launch directory
     bringup_dir = get_package_share_directory("robotino_navigation")
     launch_dir = os.path.join(bringup_dir, "launch")
+    slam_dir = get_package_share_directory("robotino_slamtoolbox")
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration("namespace")
@@ -38,6 +40,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     input_params_file = LaunchConfiguration("params_file")
     input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
+    slam = LaunchConfiguration("slam")
+    slam_params_file = LaunchConfiguration("slam_params_file")
+    slam_use_lifecycle_manager = LaunchConfiguration("slam_use_lifecycle_manager")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -63,7 +68,22 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     # Specify the actions
     actions = [
         IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(slam_dir, "launch", "robotino_slamasync.launch.py")
+            ),
+            condition=IfCondition(slam),
+            launch_arguments={
+                "namespace": namespace,
+                "use_sim_time": use_sim_time,
+                "autostart": autostart,
+                "launch_rviz": launch_rviz,
+                "use_lifecycle_manager": slam_use_lifecycle_manager,
+                "slam_params_file": slam_params_file,
+            }.items(),
+        ),
+        IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, "robotino_localization.launch.py")),
+            condition=UnlessCondition(slam),
             launch_arguments={
                 "namespace": namespace,
                 "map": map_yaml_file,
@@ -139,6 +159,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 def generate_launch_description():
     # Get the launch directory
     package_dir = get_package_share_directory("robotino_navigation")
+    slam_package_dir = get_package_share_directory("robotino_slamtoolbox")
 
     # Declare the launch arguments
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_LOGGING_BUFFERED_STREAM", "1")
@@ -235,6 +256,22 @@ def generate_launch_description():
         default_value="Carologistics",
         description="Which team name registered for the RefBox (important for mps_map_gen)",
     )
+    declare_slam_cmd = DeclareLaunchArgument(
+        "slam", default_value="False", description="Whether run a SLAM"
+    )
+
+    declare_slam_params_file_cmd = DeclareLaunchArgument(
+        "slam_params_file",
+        default_value=os.path.join(slam_package_dir, "config", "slam_params.yaml"),
+        description="Full path to the ROS2 parameters file to use for all launched nodes",
+    )
+
+    declare_slam_use_lifecycle_manager_cmd = DeclareLaunchArgument(
+        "slam_use_lifecycle_manager",
+        default_value="false",
+        description="Run slam_toolbox without an external lifecycle manager",
+    )
+
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -259,6 +296,9 @@ def generate_launch_description():
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
     ld.add_action(declare_team_name_cmd)
+    ld.add_action(declare_slam_cmd)
+    ld.add_action(declare_slam_params_file_cmd)
+    ld.add_action(declare_slam_use_lifecycle_manager_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
