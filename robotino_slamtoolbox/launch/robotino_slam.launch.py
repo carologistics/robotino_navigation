@@ -9,7 +9,7 @@ from launch.actions import GroupAction
 from launch.actions import OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch_ros.actions import LifecycleNode, Node
 
 from robotino_utils import find_file
 
@@ -23,6 +23,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     slam_config = LaunchConfiguration("slam_config")
     host_config = LaunchConfiguration("host_config")
     rviz_config = LaunchConfiguration("rviz_config")
+    autostart = LaunchConfiguration("autostart")
     package_dir = get_package_share_directory("robotino_slamtoolbox")
 
     launch_configuration = {}
@@ -44,10 +45,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         sys.exit(1)
 
     # Create a list of nodes to launch
+    lifecycle_nodes = ["slam_toolbox"]
+
     load_nodes = GroupAction(
         actions=[
             # Initialize SLAM Toolbox node in asynchronous mode
-            Node(
+            LifecycleNode(
                 parameters=[
                     slam_config_file,
                     host_config_file,
@@ -63,6 +66,17 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 name="slam_toolbox",
                 output="screen",
                 # namespace=namespace,
+            ),
+            Node(
+                package="nav2_lifecycle_manager",
+                executable="lifecycle_manager",
+                name="lifecycle_manager_slam",
+                output="screen",
+                parameters=[
+                    {"use_sim_time": use_sim_time},
+                    {"autostart": autostart},
+                    {"node_names": lifecycle_nodes},
+                ],
             ),
             # Initialize rviz2
             Node(
@@ -116,6 +130,12 @@ def generate_launch_description():
         description="path to host-specific configs",
     )
 
+    declare_autostart_argument = DeclareLaunchArgument(
+        "autostart",
+        default_value="true",
+        description="Automatically transition slam_toolbox via lifecycle manager",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -126,6 +146,7 @@ def generate_launch_description():
     ld.add_action(declare_host_config_argument)
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_launch_rviz_argument)
+    ld.add_action(declare_autostart_argument)
 
     # Add the actions to launch all nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
