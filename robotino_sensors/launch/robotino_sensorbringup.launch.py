@@ -11,6 +11,7 @@ from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
+
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     # Declare launch configuration variables
