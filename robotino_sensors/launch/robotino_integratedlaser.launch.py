@@ -5,17 +5,17 @@ import sys
 
 import yaml
 from ament_index_python.packages import get_package_share_directory
-from launch.conditions import IfCondition
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
 from launch.actions import IncludeLaunchDescription
 from launch.actions import LogInfo
 from launch.actions import OpaqueFunction
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from robotino_utils import find_file
@@ -24,6 +24,7 @@ from robotino_utils import find_file
 def launch_nodes_withconfig(context, *args, **kwargs):
 
     package_dir = get_package_share_directory("robotino_sensors")
+
     # Declare launch configuration variables
     namespace = LaunchConfiguration("namespace")
     host_config = LaunchConfiguration("host_config")
@@ -98,12 +99,11 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         )
         static_transform_publishers.append(static_transform_publisher_node)
 
-    namespace_frontlaser = "front"
-    namespace_rearlaser = "back"
+    namespace_frontlaser = launch_configuration["namespace"] + "/front"
+    namespace_rearlaser = launch_configuration["namespace"] + "/back"
     load_nodes = GroupAction(
-        actions=[
-            PushRosNamespace(namespace),
-            *static_transform_publishers,
+        actions=static_transform_publishers
+        + [
             Node(
                 package="sick_scan_xd",
                 executable="sick_generic_caller",
@@ -114,6 +114,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     sensor_config_file,
                     host_config_file,
                 ],
+                remappings=[("/cloud", namespace_frontlaser + "/cloud")],
             ),
             Node(
                 package="sick_scan_xd",
@@ -125,6 +126,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                     sensor_config_file,
                     host_config_file,
                 ],
+                remappings=[("/cloud", namespace_rearlaser + "/cloud")],
             ),
             # Launch Integrate laserscan launch file
             IncludeLaunchDescription(
