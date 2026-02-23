@@ -43,6 +43,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
+
+    namespace_value = launch_configuration.get("namespace", "").strip("/")
+    tf_topic = "/tf" if namespace_value == "" else f"/{namespace_value}/tf"
+    tf_static_topic = "/tf_static" if namespace_value == "" else f"/{namespace_value}/tf_static"
     static_transform_publishers = []
     static_transforms = {}
     with open(sensor_config_file, "r") as file:
@@ -78,6 +82,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package="tf2_ros",
             executable="static_transform_publisher",
             output="screen",
+            namespace=namespace,
             arguments=[
                 "--x",
                 str(translation[0]),
@@ -95,6 +100,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 frame_id,
                 "--child-frame-id",
                 child_frame_id,
+            ],
+            remappings=[
+                ("/tf", tf_topic),
+                ("/tf_static", tf_static_topic),
             ],
         )
         static_transform_publishers.append(static_transform_publisher_node)

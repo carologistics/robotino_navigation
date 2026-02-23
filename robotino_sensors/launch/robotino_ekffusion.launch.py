@@ -24,6 +24,10 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
+    namespace_value = launch_configuration.get("namespace", "").strip("/")
+    tf_topic = "/tf" if namespace_value == "" else f"/{namespace_value}/tf"
+    tf_static_topic = "/tf_static" if namespace_value == "" else f"/{namespace_value}/tf_static"
+
     ekf_node = Node(
         condition=IfCondition(launch_ekf),
         package="robot_localization",
@@ -48,6 +52,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "/" + launch_configuration["namespace"] + "/odometry/filtered",
                 "/" + launch_configuration["namespace"] + "/odom_filtered",
             ),
+            ("/tf", tf_topic),
+            ("/tf_static", tf_static_topic),
         ],
     )
 

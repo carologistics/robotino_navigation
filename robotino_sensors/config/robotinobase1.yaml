@@ -14,10 +14,10 @@
     static_transforms:
       front_laser:
         child_frame_id: robotinobase1/front_laser_link
-        parent_frame_id: robotinobase1/base_link
+        parent_frame_id: base_link
       back_laser:
         child_frame_id: robotinobase1/back_laser_link
-        parent_frame_id: robotinobase1/base_link
+        parent_frame_id: base_link
       laser:
         child_frame_id: robotinobase1/laser_link
-        parent_frame_id: robotinobase1/base_link
+        parent_frame_id: base_link
