@@ -10,8 +10,8 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters: Chnage the link and topic name based on which robotinobase is being used for slam
-    map_frame: map
-    mode: localization  # mapping
+    map_frame: /map
+    mode: mapping
     scan_queue_size: 1
     use_map_saver: true
 
@@ -70,3 +70,7 @@ slam_toolbox:
     minimum_angle_penalty: 0.9
     minimum_distance_penalty: 0.5
     use_response_expansion: true
+
+    odom_frame: robotinobase1/odom
+    base_frame: robotinobase1/base_link
+    scan_topic: /robotinobase1/scan
