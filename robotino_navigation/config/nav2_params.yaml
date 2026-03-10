@@ -295,7 +295,7 @@ local_costmap:
       resolution: 0.015
       robot_radius: 0.225
       plugins: ["obstacle_layer", "inflation_layer", "denoise_layer"] # "voxel_layer"
-      #filters: ["keepout_filter"]
+      filters: ["keepout_filter"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
@@ -374,7 +374,7 @@ global_costmap:
       lethal_cost_threshold: 90    # default=100 (Need tunning)
       track_unknown_space: false
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
-      #filters: ["keepout_filter"]
+      filters: ["keepout_filter"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         enable: true

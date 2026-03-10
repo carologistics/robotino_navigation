@@ -190,7 +190,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(package_dir, "map", "map_RC2025.yaml"),
+        default_value=os.path.join(package_dir, "map", "go_2026_map.yaml"),
         description="Full path to map yaml file to load",
     )
 
