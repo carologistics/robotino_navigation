@@ -1,4 +1,4 @@
-image: go_2026_filter_gimp.pgm
+image: go_2026_filter_gimp.png
 mode: trinary
 resolution: 0.01
 origin: [0, 0, 0]
