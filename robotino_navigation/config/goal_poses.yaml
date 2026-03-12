@@ -1,0 +1,22 @@
+/**:
+  ros__parameters:
+    static_transforms:
+      # Example goal poses - add your own as needed
+      # Format:
+      #   <name>:
+      #     translation: [x, y, z]
+      #     rotation: [yaw, pitch, roll]  # in radians
+      #     parent_frame_id: "map"
+      #     child_frame_id: "<goal_frame_name>"
+      
+      goal_pose_1:
+        translation: [1.0, 2.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]  # yaw, pitch, roll
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_1"
+
+      goal_pose_2:
+        translation: [3.5, 1.5, 0.0]
+        rotation: [1.57, 0.0, 0.0]  # 90 degrees yaw
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_2"

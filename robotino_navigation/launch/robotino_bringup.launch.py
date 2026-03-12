@@ -3,6 +3,7 @@
 import os
 import sys
 
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -13,6 +14,7 @@ from launch.actions import SetEnvironmentVariable
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
 from robotino_utils import find_file
 
@@ -43,6 +45,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     slam = LaunchConfiguration("slam")
     slam_params_file = LaunchConfiguration("slam_params_file")
     slam_use_lifecycle_manager = LaunchConfiguration("slam_use_lifecycle_manager")
+    static_transforms_file = LaunchConfiguration("static_transforms_file")
 
     launch_configuration = {}
     for argname, argval in context.launch_configurations.items():
@@ -64,6 +67,56 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
     if launch_mps_map_gen_value:
         mps_map_gen_dir = get_package_share_directory("mps_map_gen")
+
+    # Parse static transforms from config file
+    static_transform_publishers = []
+    tf_prefix = ""
+    ns = namespace.perform(context)
+    if ns != "":
+        tf_prefix = ns + "/"
+
+    transforms_file = find_file(static_transforms_file.perform(context), [bringup_dir + "/config/"])
+    if transforms_file is not None and os.path.exists(transforms_file):
+        static_transforms = {}
+        with open(transforms_file, "r") as file:
+            transforms = yaml.safe_load(file)
+            for key in "/**|ros__parameters|static_transforms".split("|"):
+                transforms = transforms.get(key, {})
+            for entity, transform in transforms.items():
+                if not isinstance(static_transforms.get(entity), dict):
+                    static_transforms[entity] = {}
+                for key in ["translation", "rotation", "parent_frame_id", "child_frame_id"]:
+                    if key in transform:
+                        static_transforms[entity][key] = transform[key]
+
+        for transform_name, values in static_transforms.items():
+            translation = values.get("translation", None)
+            rotation = values.get("rotation", None)
+            frame_id = values.get("parent_frame_id", None)
+            child_frame_id = values.get("child_frame_id", None)
+
+            if None in [translation, rotation, frame_id, child_frame_id]:
+                print(f"[WARN] Missing key(s) in transform '{transform_name}'. Skipping...")
+                continue
+
+            static_transform_publisher_node = Node(
+                package="tf2_ros",
+                executable="static_transform_publisher",
+                output="screen",
+                namespace=namespace,
+                name="tf_" + transform_name,
+                arguments=[
+                    "--x", str(translation[0]),
+                    "--y", str(translation[1]),
+                    "--z", str(translation[2]),
+                    "--yaw", str(rotation[0]),
+                    "--pitch", str(rotation[1]),
+                    "--roll", str(rotation[2]),
+                    "--frame-id", tf_prefix + frame_id,
+                    "--child-frame-id", tf_prefix + child_frame_id,
+                ],
+            )
+            static_transform_publishers.append(static_transform_publisher_node)
 
     # Specify the actions
     actions = [
@@ -153,7 +206,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         )
     bringup_cmd_group = GroupAction(actions)
 
-    return [bringup_cmd_group]
+    return [bringup_cmd_group] + static_transform_publishers
 
 
 def generate_launch_description():
@@ -276,6 +329,11 @@ def generate_launch_description():
         description="Run slam_toolbox without an external lifecycle manager",
     )
 
+    declare_static_transforms_file_cmd = DeclareLaunchArgument(
+        "static_transforms_file",
+        default_value="",
+        description="Path to YAML file containing static transforms (e.g., goal poses)",
+    )
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -305,6 +363,7 @@ def generate_launch_description():
     ld.add_action(declare_slam_cmd)
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(declare_slam_use_lifecycle_manager_cmd)
+    ld.add_action(declare_static_transforms_file_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
