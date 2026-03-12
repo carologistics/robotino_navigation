@@ -116,17 +116,17 @@ controller_server:
     controller_plugins: ["FollowPath_MPPI", "FollowPath_DWB", "FollowPath_RPP"]
     FollowPath_MPPI: # Controller parameters- MPPI
       plugin: "nav2_mppi_controller::MPPIController"
-      time_steps: 30
+      time_steps: 20
       # model_dt depends on the controller frequency, mdel_dt = 1/controller_frequency,
       # prediction_horizon = time_steps * model_dt, prediction_horizon(m) = time_steps*model_dt*vx_max
-      model_dt: 0.067
+      model_dt: 0.0667
       batch_size: 2000 # robotino motion model likely needs to be adapted
-      vx_std: 0.4
-      vy_std: 0.4
+      vx_std: 0.2
+      vy_std: 0.2
       wz_std: 1.0
-      vx_max: 1.5
-      vx_min: -1.5
-      vy_max: 1.5
+      vx_max: 0.5
+      vx_min: -0.5
+      vy_max: 0.5
       wz_max: 1.25
       iteration_count: 1 # TODO: ours was 0.7
       prune_distance: 1.7 # TODO: ours was 0.5
@@ -221,8 +221,8 @@ controller_server:
       max_vel_x: 0.5
       max_vel_y: 0.5
       max_vel_theta: 1.25
-      min_speed_xy: -0.7
-      max_speed_xy: 0.7
+      min_speed_xy: -0.5
+      max_speed_xy: 0.5
       min_speed_theta: 0.0
       acc_lim_x: 2.5
       acc_lim_y: 2.5
@@ -538,8 +538,8 @@ velocity_smoother:
     smoothing_frequency: 15.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [1.0, 1.0, 1.25]
-    min_velocity: [-1.0, -1.0, -1.25]
+    max_velocity: [0.5, 0.5, 1.25]
+    min_velocity: [-0.5, -0.5, -1.25]
     max_accel: [2.0, 2.0, 3.2]
     max_decel: [-2.0, -2.0, -3.2]
     odom_topic: "/odom_filtered"
@@ -587,9 +587,10 @@ collision_monitor:
     PolygonSlow:
       type: "circle"
       radius: 0.450
-      action_type: "slowdown"
+      action_type: "limit"
       min_points: 1
-      slowdown_ratio: 0.3
+      linear_limit: 0.25
+      angular_limit: 0.5
       visualize: true
       polygon_pub_topic: "/polygon_slowdown"
       enabled: true
