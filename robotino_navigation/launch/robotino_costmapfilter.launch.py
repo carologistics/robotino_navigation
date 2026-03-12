@@ -2,10 +2,12 @@
 # Licensed under MIT. See LICENSE file. Copyright Carologistics.
 import os
 
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import GroupAction
+from launch.actions import LogInfo
 from launch.actions import OpaqueFunction
 from launch.actions import SetEnvironmentVariable
 from launch.conditions import IfCondition
@@ -29,6 +31,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
     filter_mask_yaml = LaunchConfiguration("filter_mask_yaml")
+    goal_poses_file = LaunchConfiguration("goal_poses_file")
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
@@ -66,11 +69,72 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ("/" + launch_configuration["namespace"] + "/map", "/map"),
     ]
 
-    os.path.join(bringup_dir, "rviz", "robotino_localization.rviz")
+    # Parse goal poses from YAML file and create static transform publishers
+    static_transform_publishers = []
+    goal_poses_file_path = goal_poses_file.perform(context)
+
+    if os.path.exists(goal_poses_file_path):
+        static_transforms = {}
+        with open(goal_poses_file_path, "r") as file:
+            transforms = yaml.safe_load(file)
+            # Navigate YAML structure: /**/ros__parameters/static_transforms
+            for key in "/**|ros__parameters|static_transforms".split("|"):
+                transforms = transforms.get(key, {})
+            for entity, transform in transforms.items():
+                if not isinstance(static_transforms.get(entity), dict):
+                    static_transforms[entity] = {}
+                for key in ["translation", "rotation", "parent_frame_id", "child_frame_id"]:
+                    if key in transform:
+                        static_transforms[entity][key] = transform[key]
+
+        # Create static transform publisher nodes for each goal pose
+        for transform_name, values in static_transforms.items():
+            translation = values.get("translation", None)
+            rotation = values.get("rotation", None)
+            frame_id = values.get("parent_frame_id", None)
+            child_frame_id = values.get("child_frame_id", None)
+
+            if None in [translation, rotation, frame_id, child_frame_id]:
+                static_transform_publishers.append(
+                    LogInfo(msg=f"[WARN] Missing key(s) in transform '{transform_name}'. Skipping...")
+                )
+                continue
+
+            static_transform_publisher_node = Node(
+                package="tf2_ros",
+                executable="static_transform_publisher",
+                output="screen",
+                namespace=namespace,
+                name="tf_goalpose_" + transform_name,
+                arguments=[
+                    "--x",
+                    str(translation[0]),
+                    "--y",
+                    str(translation[1]),
+                    "--z",
+                    str(translation[2]),
+                    "--yaw",
+                    str(rotation[0]),
+                    "--pitch",
+                    str(rotation[1]),
+                    "--roll",
+                    str(rotation[2]),
+                    "--frame-id",
+                    frame_id,
+                    "--child-frame-id",
+                    child_frame_id,
+                ],
+            )
+            static_transform_publishers.append(static_transform_publisher_node)
+    else:
+        static_transform_publishers.append(
+            LogInfo(msg=f"[WARN] Goal poses file not found: {goal_poses_file_path}")
+        )
 
     # Create list of nodes to launch
     load_nodes = GroupAction(
-        actions=[
+        actions=static_transform_publishers
+        + [
             Node(
                 package="nav2_map_server",
                 executable="map_server",
@@ -171,6 +235,12 @@ def generate_launch_description():
         description="Full path to filter mask yaml file to load",
     )
 
+    declare_goal_poses_file_cmd = DeclareLaunchArgument(
+        "goal_poses_file",
+        default_value=os.path.join(package_dir, "config", "goal_pses.yaml"),
+        description="Full path to goal poses YAML file for TF publishing",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -188,6 +258,7 @@ def generate_launch_description():
     ld.add_action(launch_mapserver_argument)
     ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_filter_mask_yaml_cmd)
+    ld.add_action(declare_goal_poses_file_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))
