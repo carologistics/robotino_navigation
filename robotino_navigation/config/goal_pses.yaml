@@ -1,0 +1,83 @@
+/**:
+  ros__parameters:
+    static_transforms:
+      # Example goal poses - add your own as needed
+      # Format:
+      #   <name>:
+      #     translation: [x, y, z]
+      #     rotation: [yaw, pitch, roll]  # in radians
+      #     parent_frame_id: "map"
+      #     child_frame_id: "<goal_frame_name>"
+      
+      goal_pose_1:
+        translation: [1.0, 2.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]  # yaw, pitch, roll
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_1"
+
+      goal_pose_2:
+        translation: [3.5, 1.5, 0.0]
+        rotation: [1.57, 0.0, 0.0]  # 90 degrees yaw
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_2"
+      
+      goal_pose_3:
+        translation: [0.5, 4.0, 0.0]
+        rotation: [3.14, 0.0, 0.0]  # 180 degrees yaw
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_3"
+
+      goal_pose_4:
+        translation: [2.0, 3.0, 0.0]
+        rotation: [0.78, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_4"
+
+      goal_pose_5:
+        translation: [4.0, 0.5, 0.0]
+        rotation: [2.35, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_5"
+      
+      goal_pose_6:
+        translation: [1.5, 1.0, 0.0]
+        rotation: [0.0, 0.0, 1.57]  # 90 degrees roll
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_6"
+
+      goal_pose_7:
+        translation: [3.0, 2.5, 0.0]
+        rotation: [0.0, 1.57, 0.0]  # 90 degrees pitch
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_7"
+
+      goal_pose_8:
+        translation: [0.0, 3.5, 0.0]
+        rotation: [1.57, 1.57, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_8"
+
+      goal_pose_9:
+        translation: [2.5, 0.0, 0.0]
+        rotation: [0.0, 1.57, 1.57]
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_9" 
+
+      goal_pose_10:
+        translation: [4.0, 4.0, 0.0]
+        rotation: [1.57, 0.0, 1.57] 
+        parent_frame_id: "map"
+        child_frame_id: "goal_pose_10"
+      
+      start_pose_1:
+        translation: [0.0, 0.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "start_pose_1"
+
+      start_pose_2:
+        translation: [1.0, 0.0, 0.0] 
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "start_pose_2"
+        
