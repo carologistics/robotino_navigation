@@ -237,7 +237,7 @@ def generate_launch_description():
 
     declare_goal_poses_file_cmd = DeclareLaunchArgument(
         "goal_poses_file",
-        default_value=os.path.join(package_dir, "config", "goal_pses.yaml"),
+        default_value=os.path.join(package_dir, "config", "goal_poses.yaml"),
         description="Full path to goal poses YAML file for TF publishing",
     )
 
