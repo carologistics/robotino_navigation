@@ -26,6 +26,7 @@ install(
 
 install(PROGRAMS
   scripts/nav2goal_pose.py
+  scripts/goal_sequence_runner.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
