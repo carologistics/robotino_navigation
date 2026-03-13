@@ -33,8 +33,13 @@ class GoalSequenceRunner(Node):
         self.declare_parameter("sequence_file", str(default_seq_path))
         sequence_path = Path(self.get_parameter("sequence_file").get_parameter_value().string_value)
 
+        self.declare_parameter("use_left_field", False)
+        use_left_field = self.get_parameter("use_left_field").get_parameter_value().bool_value
+        sequence_key = "sequence1" if use_left_field else "sequence2"
+        self.get_logger().info(f"use_left_field={use_left_field} → running '{sequence_key}'")
+
         self._poses = self._load_pose_table(sequence_path)
-        self._sequence = self._load_sequence(sequence_path)
+        self._sequence = self._load_sequence(sequence_path, sequence_key)
 
     def _load_pose_table(self, sequence_path: Path):
         poses_file = self._load_yaml(sequence_path).get("poses_file")
@@ -47,11 +52,11 @@ class GoalSequenceRunner(Node):
         except Exception as exc:  # noqa: BLE001
             raise RuntimeError(f"Invalid pose table format in {poses_path}") from exc
 
-    def _load_sequence(self, sequence_path: Path):
+    def _load_sequence(self, sequence_path: Path, sequence_key: str = "sequence1"):
         data = self._load_yaml(sequence_path)
-        sequence = data.get("sequence", [])
+        sequence = data.get(sequence_key, [])
         if not sequence:
-            raise RuntimeError("No sequence steps defined")
+            raise RuntimeError(f"No sequence steps defined for key '{sequence_key}'")
         return sequence
 
     def _load_yaml(self, path: Path):
@@ -59,6 +64,7 @@ class GoalSequenceRunner(Node):
             return yaml.safe_load(handle)
 
     def run(self):
+        sequence_aborted = False
         for step in self._sequence:
             pose_name = step["pose"]
             timeout = float(step.get("timeout", 120.0))
@@ -66,11 +72,13 @@ class GoalSequenceRunner(Node):
             pose_cfg = self._poses.get(pose_name)
             if pose_cfg is None:
                 self.get_logger().error(f"Pose '{pose_name}' not found; aborting sequence")
+                sequence_aborted = True
                 break
             goal = self._build_goal(pose_cfg)
 
             if not self._action_client.wait_for_server(timeout_sec=5.0):
                 self.get_logger().error("NavigateToPose action server not available; aborting")
+                sequence_aborted = True
                 break
 
             self.get_logger().info(f"Sending goal {pose_name} (timeout {timeout}s, dwell {dwell}s)")
@@ -79,25 +87,33 @@ class GoalSequenceRunner(Node):
             goal_handle = send_future.result()
             if not goal_handle or not goal_handle.accepted:
                 self.get_logger().warn(f"Goal {pose_name} rejected")
+                sequence_aborted = True
                 break
 
             result_future = goal_handle.get_result_async()
-            finished = rclpy.spin_until_future_complete(self, result_future, timeout_sec=timeout)
-            if not finished:
+            rclpy.spin_until_future_complete(self, result_future, timeout_sec=timeout)
+            if not result_future.done():
                 self.get_logger().warn(f"Goal {pose_name} timed out; cancelling")
                 cancel_future = goal_handle.cancel_goal_async()
                 rclpy.spin_until_future_complete(self, cancel_future)
+                sequence_aborted = True
+                break
             else:
                 status = result_future.result().status
                 if status == GoalStatus.STATUS_SUCCEEDED:
                     self.get_logger().info(f"Goal {pose_name} succeeded")
                 else:
                     self.get_logger().warn(f"Goal {pose_name} finished with status {status}")
+                    sequence_aborted = True
+                    break
 
             if dwell > 0:
                 time.sleep(dwell)
 
-        self.get_logger().info("Sequence complete")
+        if sequence_aborted:
+            self.get_logger().warn("Sequence aborted")
+        else:
+            self.get_logger().info("Sequence complete")
 
     def _build_goal(self, pose_cfg):
         goal = NavigateToPose.Goal()

@@ -1,14 +1,39 @@
-# Sequence of goals with per-step timeout (s) and dwell (s)
-# pose names must match entries in goal_poses.yaml under /**/ros__parameters/static_transforms
 poses_file: "goal_poses.yaml"
-sequence:
+sequence1:
+  # - pose: goal_pose_10
+  #   timeout: 60.0
+  #   dwell: 3.0
+  # - pose: goal_pose_9
+  #   timeout: 60.0
+  #   dwell: 3.0
+  # - pose: goal_pose_8
+  #   timeout: 60.0
+  #   dwell: 3.0
+  # - pose: goal_pose_7
+  #   timeout: 60.0
+  #   dwell: 20.0
   - pose: goal_pose_6
     timeout: 60.0
-    dwell: 5.0
-  - pose: goal_pose_7
+    dwell: 3.0
+  - pose: start_pose_2
+    timeout: 60.0
+    dwell: 3.0
+sequence2:
+  - pose: goal_pose_1
     timeout: 60.0
     dwell: 15.0
-  - pose: goal_pose_8
+  - pose: goal_pose_2
+    timeout: 60.0
+    dwell: 15.0
+  - pose: goal_pose_3
+    timeout: 60.0
+    dwell: 15.0
+  - pose: start_pose_4
+    timeout: 60.0
+    dwell: 30.0
+  - pose: goal_pose_5
+    timeout: 60.0
+    dwell: 15.0
+  - pose: start_pose_1
     timeout: 60.0
     dwell: 5.0
-          
