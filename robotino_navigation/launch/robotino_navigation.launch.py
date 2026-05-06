@@ -41,9 +41,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         launch_configuration[argname] = argval
 
     remappings = [
-        ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
-        ("/" + launch_configuration["namespace"] + "/tf_static", "/tf_static"),
-        ("/" + launch_configuration["namespace"] + "/map", "/map"),
+        ("/" + namespace.perform(context) + "/tf", "/tf"),
+        ("/" + namespace.perform(context) + "/tf_static", "/tf_static"),
+        ("/" + namespace.perform(context) + "/map", "/map"),
     ]
 
     # Create our own temporary YAML files that include substitutions
@@ -79,7 +79,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 respawn_delay=2.0,
                 parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
-                remappings=remappings + [("/robotinobase1/cmd_vel", "/robotinobase1/cmd_vel_nav")],
+                remappings=remappings
+                + [("/" + namespace.perform(context) + "/cmd_vel", "/" + namespace.perform(context) + "/cmd_vel_nav")],
                 namespace=namespace,
             ),
             Node(
@@ -152,9 +153,12 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 parameters=[configured_params, configured_host_params],
                 arguments=["--ros-args", "--log-level", log_level],
                 remappings=remappings
-                + [  # [('cmd_vel', 'cmd_vel_nav')],
-                    ("/robotinobase1/cmd_vel", "/robotinobase1/cmd_vel_nav"),
-                    ("/robotinobase1/cmd_vel_smoothed", "/robotinobase1/cmd_vel"),
+                + [
+                    ("/" + namespace.perform(context) + "/cmd_vel", "/" + namespace.perform(context) + "/cmd_vel_nav"),
+                    (
+                        "/" + namespace.perform(context) + "/cmd_vel_smoothed",
+                        "/" + namespace.perform(context) + "/cmd_vel",
+                    ),
                 ],
                 namespace=namespace,
             ),

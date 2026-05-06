@@ -47,7 +47,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         namespace=namespace,
         arguments=["-d", new_rviz_config_path],
         output="screen",
-        parameters=[{"namespace", launch_configuration["namespace"]}],
+        parameters=[{"namespace": launch_configuration["namespace"]}],
         remappings=[
             ("/" + launch_configuration["namespace"] + "/map", "/map"),
             ("/" + launch_configuration["namespace"] + "/tf", "/tf"),
