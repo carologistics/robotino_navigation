@@ -60,13 +60,11 @@ map_server:
   ros__parameters:
     yaml_filename: "map.yaml"
 
-map_saver:
-  ros__parameters:
 
 planner_server:
   ros__parameters:
     MapfPlanner:
-      agent_name: "robotinobase3"
+      agent_name: "robotinobase4"
 
 behavior_server:
   ros__parameters:
