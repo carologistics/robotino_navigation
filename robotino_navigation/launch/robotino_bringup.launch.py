@@ -48,7 +48,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     for argname, argval in context.launch_configurations.items():
         launch_configuration[argname] = argval
 
-    map_yaml_file = find_file(input_map_yaml_file.perform(context), [bringup_dir + "/map/"])
+    map_yaml_file = os.path.join(bringup_dir, "map", input_map_yaml_file.perform(context))
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
