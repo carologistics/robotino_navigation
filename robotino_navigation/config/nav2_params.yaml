@@ -171,7 +171,7 @@ controller_server:
         cost_power: 1
         cost_weight: 3.81
         critical_cost: 300.0
-        consider_footprint: true
+        consider_footprint: false
         collision_cost: 1000000.0
         near_goal_distance: 1.0
         trajectory_point_step: 2
@@ -180,7 +180,7 @@ controller_server:
         cost_power: 1
         repulsion_weight: 1.5
         critical_weight: 20.0
-        consider_footprint: true # default: false, incerase the computation cost, uses robot footprint information
+        consider_footprint: false # default: false, incerase the computation cost, uses robot footprint information
         collision_cost: 1000.0
         collision_margin_distance: 0.075
         near_goal_distance: 0.1
