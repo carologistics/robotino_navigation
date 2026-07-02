@@ -200,7 +200,7 @@
 
       B_SS3:
         translation: [-13.9392, 2.10116, 0]
-        rotation: [0.0, 0.20, 0.0]
+        rotation: [3.14159265359, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_SS3"
 
