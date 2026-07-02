@@ -1,0 +1,7 @@
+image: rc26-clean.pgm
+mode: trinary
+resolution: 0.010
+origin: [-39.944, -18.248, 0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
