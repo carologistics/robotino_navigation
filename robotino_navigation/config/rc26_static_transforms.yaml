@@ -185,3 +185,27 @@
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_CC"
         child_frame_id: "B_CC-RIGHT"
+
+      B_SS3:
+        translation: [-13.9392, 2.10116, 0]
+        rotation: [0.0, 0.20, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_SS3"
+
+      B_HS1:
+        translation: [-11.0603, 1.26365, 0]
+        rotation: [2.35619, 0, 0]
+        parent_frame_id: "map"
+        child_frame_id: "B_HS1"
+
+      A_HS1:
+        translation: [18.3, 1, 0]
+        rotation: [0.769, 0, 0]
+        parent_frame_id: "map"
+        child_frame_id: "A_HS1"
+
+      A_SS3:
+        translation: [-15.5, 2.1, 0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "A_SS3"
