@@ -1,6 +1,11 @@
 /**:
   ros__parameters:
     static_transforms:
+      A_TIM:
+        translation: [-23.845, -0.979, 0.0]
+        rotation: [-1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "TIM"
       A_SS1:
         translation: [-17.76, -1.01, 0.0]
         rotation: [-1.57079632679, 0.0, 0.0]
