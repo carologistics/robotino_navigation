@@ -30,6 +30,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mps_map_gen = LaunchConfiguration("launch_mps_map_gen")
     use_composition = LaunchConfiguration("use_composition")
     input_map_yaml_file = LaunchConfiguration("map")
+    input_filter_mask_yaml_file = LaunchConfiguration("filter_mask_yaml")
     use_sim_time = LaunchConfiguration("use_sim_time")
     autostart = LaunchConfiguration("autostart")
     use_respawn = LaunchConfiguration("use_respawn")
@@ -54,6 +55,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     if map_yaml_file is None:
         print("Can not find %s, abort!", input_map_yaml_file.perform(context))
         sys.exit(1)
+    filter_mask_yaml_file = os.path.join(bringup_dir, "map", input_filter_mask_yaml_file.perform(context))
     params_file = find_file(input_params_file.perform(context), [bringup_dir + "/config/"])
     if params_file is None:
         print("Can not find %s, abort!", input_params_file.perform(context))
@@ -124,6 +126,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "host_params_file": host_params_file,
                 "use_respawn": use_respawn,
                 "launch_map_filter": launch_mapfilter,
+                "filter_mask_yaml": filter_mask_yaml_file,
                 "static_transforms_file": static_transforms_file,
             }.items(),
         ),
@@ -208,6 +211,12 @@ def generate_launch_description():
         "map",
         default_value=os.path.join(package_dir, "map", "rc26-clean.yaml"),
         description="Full path to map yaml file to load",
+    )
+
+    declare_filter_mask_yaml_cmd = DeclareLaunchArgument(
+        "filter_mask_yaml",
+        default_value=os.path.join(package_dir, "map", "rc26-clean_filter.yaml"),
+        description="Full path to keepout filter mask yaml file to load",
     )
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -318,6 +327,7 @@ def generate_launch_description():
     ld.add_action(declare_launch_rviz_cmd)
     ld.add_action(declare_launch_mps_map_gen_cmd)
     ld.add_action(declare_map_yaml_cmd)
+    ld.add_action(declare_filter_mask_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_host_params_file_cmd)
