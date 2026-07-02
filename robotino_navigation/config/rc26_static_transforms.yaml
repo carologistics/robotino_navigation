@@ -1,182 +1,182 @@
 /**:
   ros__parameters:
     static_transforms:
-      a_storage1:
+      A_SS1:
         translation: [-17.76, -1.01, 0.0]
         rotation: [-1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "a_storage1"
+        child_frame_id: "A_SS1"
 
-      a_storage2:
+      A_SS2:
         translation: [-19.54, -0.67, 0.0]
         rotation: [3.14159265359, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "a_storage2"
+        child_frame_id: "A_SS2"
 
-      a_wb1:
+      A_WB1:
         translation: [-19.35, 3.01, 0.0]
         rotation: [3.14159265359, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "a_wb1"
+        child_frame_id: "A_WB1"
 
-      a_wb2:
+      A_WB2:
         translation: [-18.31, 4.03, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "a_wb2"
+        child_frame_id: "A_WB2"
 
-      a_cc:
+      A_CC:
         translation: [-15.63, 5.03, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "a_cc"
+        child_frame_id: "A_CC"
 
-      b_storage1:
+      B_SS1:
         translation: [-11.37, -0.92, 0.0]
         rotation: [-1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "b_storage1"
+        child_frame_id: "B_SS1"
 
-      b_storage2:
+      B_SS2:
         translation: [-9.57, -0.68, 0.0]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "b_storage2"
+        child_frame_id: "B_SS2"
 
-      b_wb1:
+      B_WB1:
         translation: [-9.55, 2.97, 0.0]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "b_wb1"
+        child_frame_id: "B_WB1"
 
-      b_wb2:
+      B_WB2:
         translation: [-11.35, 4.03, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "b_wb2"
+        child_frame_id: "B_WB2"
 
-      b_cc:
+      B_CC:
         translation: [-13.49, 4.88, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "b_cc"
+        child_frame_id: "B_CC"
 
-      a_storage1_left:
+      A_SS1_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_storage1"
-        child_frame_id: "a_storage1_left"
+        parent_frame_id: "A_SS1"
+        child_frame_id: "A_SS1-LEFT"
 
-      a_storage1_right:
+      A_SS1_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_storage1"
-        child_frame_id: "a_storage1_right"
+        parent_frame_id: "A_SS1"
+        child_frame_id: "A_SS1-RIGHT"
 
-      a_storage2_left:
+      A_SS2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_storage2"
-        child_frame_id: "a_storage2_left"
+        parent_frame_id: "A_SS2"
+        child_frame_id: "A_SS2-LEFT"
 
-      a_storage2_right:
+      A_SS2_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_storage2"
-        child_frame_id: "a_storage2_right"
+        parent_frame_id: "A_SS2"
+        child_frame_id: "A_SS2-RIGHT"
 
-      a_wb1_left:
+      A_WB1_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_wb1"
-        child_frame_id: "a_wb1_left"
+        parent_frame_id: "A_WB1"
+        child_frame_id: "A_WB1-LEFT"
 
-      a_wb1_right:
+      A_WB1_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_wb1"
-        child_frame_id: "a_wb1_right"
+        parent_frame_id: "A_WB1"
+        child_frame_id: "A_WB1-RIGHT"
 
-      a_wb2_left:
+      A_WB2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_wb2"
-        child_frame_id: "a_wb2_left"
+        parent_frame_id: "A_WB2"
+        child_frame_id: "A_WB2-LEFT"
 
-      a_wb2_right:
+      A_WB2_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_wb2"
-        child_frame_id: "a_wb2_right"
+        parent_frame_id: "A_WB2"
+        child_frame_id: "A_WB2-RIGHT"
 
-      a_cc_left:
+      A_CC_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_cc"
-        child_frame_id: "a_cc_left"
+        parent_frame_id: "A_CC"
+        child_frame_id: "A_CC-LEFT"
 
-      a_cc_right:
+      A_CC_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "a_cc"
-        child_frame_id: "a_cc_right"
+        parent_frame_id: "A_CC"
+        child_frame_id: "A_CC-RIGHT"
 
-      b_storage1_left:
+      B_SS1_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_storage1"
-        child_frame_id: "b_storage1_left"
+        parent_frame_id: "B_SS1"
+        child_frame_id: "B_SS1-LEFT"
 
-      b_storage1_right:
+      B_SS1_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_storage1"
-        child_frame_id: "b_storage1_right"
+        parent_frame_id: "B_SS1"
+        child_frame_id: "B_SS1-RIGHT"
 
-      b_storage2_left:
+      B_SS2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_storage2"
-        child_frame_id: "b_storage2_left"
+        parent_frame_id: "B_SS2"
+        child_frame_id: "B_SS2-LEFT"
 
-      b_storage2_right:
+      B_SS2_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_storage2"
-        child_frame_id: "b_storage2_right"
+        parent_frame_id: "B_SS2"
+        child_frame_id: "B_SS2-RIGHT"
 
-      b_wb1_left:
+      B_WB1_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_wb1"
-        child_frame_id: "b_wb1_left"
+        parent_frame_id: "B_WB1"
+        child_frame_id: "B_WB1-LEFT"
 
-      b_wb1_right:
+      B_WB1_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_wb1"
-        child_frame_id: "b_wb1_right"
+        parent_frame_id: "B_WB1"
+        child_frame_id: "B_WB1-RIGHT"
 
-      b_wb2_left:
+      B_WB2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_wb2"
-        child_frame_id: "b_wb2_left"
+        parent_frame_id: "B_WB2"
+        child_frame_id: "B_WB2-LEFT"
 
-      b_wb2_right:
+      B_WB2_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_wb2"
-        child_frame_id: "b_wb2_right"
+        parent_frame_id: "B_WB2"
+        child_frame_id: "B_WB2-RIGHT"
 
-      b_cc_left:
+      B_CC_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_cc"
-        child_frame_id: "b_cc_left"
+        parent_frame_id: "B_CC"
+        child_frame_id: "B_CC-LEFT"
 
-      b_cc_right:
+      B_CC_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "b_cc"
-        child_frame_id: "b_cc_right"
+        parent_frame_id: "B_CC"
+        child_frame_id: "B_CC-RIGHT"
