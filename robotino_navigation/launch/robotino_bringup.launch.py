@@ -36,6 +36,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mapserver = LaunchConfiguration("launch_mapserver")
     launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
+    launch_motor_move = LaunchConfiguration("launch_motor_move")
     rviz_config = LaunchConfiguration("rviz_config")
     static_transforms_file = LaunchConfiguration("static_transforms_file")
     input_params_file = LaunchConfiguration("params_file")
@@ -65,6 +66,9 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mps_map_gen_value = launch_mps_map_gen.perform(context).lower() in ["true", "1", "t", "y", "yes"]
     if launch_mps_map_gen_value:
         mps_map_gen_dir = get_package_share_directory("mps_map_gen")
+    launch_motor_move_value = launch_motor_move.perform(context).lower() in ["true", "1", "t", "y", "yes"]
+    if launch_motor_move_value:
+        motor_move_dir = get_package_share_directory("motor_move")
 
     # Specify the actions
     actions = [
@@ -132,6 +136,16 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             }.items(),
         ),
     ]
+    if launch_motor_move_value:
+        actions.append(
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(os.path.join(motor_move_dir, "launch", "motor_move_launch.py")),
+                launch_arguments={
+                    "namespace": namespace,
+                    "use_sim_time": use_sim_time,
+                }.items(),
+            )
+        )
     if launch_mps_map_gen_value:
         actions.extend(
             [
@@ -251,6 +265,12 @@ def generate_launch_description():
         description="whether to launch rviz or not",
     )
 
+    declare_launch_motor_move_cmd = DeclareLaunchArgument(
+        "launch_motor_move",
+        default_value="true",
+        description="whether to launch motor_move or not",
+    )
+
     declare_rvizconfig_cmd = DeclareLaunchArgument(
         "rviz_config",
         default_value=[os.path.join(package_dir, "rviz/"), "nav2config.rviz"],
@@ -308,6 +328,7 @@ def generate_launch_description():
     ld.add_action(declare_launchmapserver_cmd)
     ld.add_action(declare_launchmapfilter_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
+    ld.add_action(declare_launch_motor_move_cmd)
     ld.add_action(declare_rvizconfig_cmd)
     ld.add_action(declare_static_transforms_file_cmd)
     ld.add_action(declare_team_name_cmd)
