@@ -31,7 +31,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     log_level = LaunchConfiguration("log_level")
     launch_map_filter = LaunchConfiguration("launch_map_filter")
     filter_mask_yaml = LaunchConfiguration("filter_mask_yaml")
-    goal_poses_file = LaunchConfiguration("goal_poses_file")
+    static_transforms_file = LaunchConfiguration("static_transforms_file")
 
     lifecycle_nodes = ["costmap_filter_info_server", "filter_mask_server"]
 
@@ -69,17 +69,18 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ("/" + launch_configuration["namespace"] + "/map", "/map"),
     ]
 
-    # Parse goal poses from YAML file and create static transform publishers
+    # Parse configured static transforms and create static transform publishers.
     static_transform_publishers = []
-    goal_poses_file_path = goal_poses_file.perform(context)
+    static_transforms_file_path = static_transforms_file.perform(context)
 
-    if os.path.exists(goal_poses_file_path):
+    if os.path.exists(static_transforms_file_path):
         static_transforms = {}
-        with open(goal_poses_file_path, "r") as file:
-            transforms = yaml.safe_load(file)
+        with open(static_transforms_file_path, "r") as file:
+            transforms = yaml.safe_load(file) or {}
             # Navigate YAML structure: /**/ros__parameters/static_transforms
             for key in "/**|ros__parameters|static_transforms".split("|"):
-                transforms = transforms.get(key, {})
+                transforms = transforms.get(key, {}) if isinstance(transforms, dict) else {}
+            transforms = transforms if isinstance(transforms, dict) else {}
             for entity, transform in transforms.items():
                 if not isinstance(static_transforms.get(entity), dict):
                     static_transforms[entity] = {}
@@ -106,6 +107,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 output="screen",
                 namespace=namespace,
                 name="tf_goalpose_" + transform_name,
+                remappings=remappings,
                 arguments=[
                     "--x",
                     str(translation[0]),
@@ -128,7 +130,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             static_transform_publishers.append(static_transform_publisher_node)
     else:
         static_transform_publishers.append(
-            LogInfo(msg=f"[WARN] Goal poses file not found: {goal_poses_file_path}")
+            LogInfo(msg=f"[WARN] Static transforms file not found: {static_transforms_file_path}")
         )
 
     # Create list of nodes to launch
@@ -238,7 +240,13 @@ def generate_launch_description():
     declare_goal_poses_file_cmd = DeclareLaunchArgument(
         "goal_poses_file",
         default_value=os.path.join(package_dir, "config", "goal_poses.yaml"),
-        description="Full path to goal poses YAML file for TF publishing",
+        description="Deprecated alias for static_transforms_file",
+    )
+
+    declare_static_transforms_file_cmd = DeclareLaunchArgument(
+        "static_transforms_file",
+        default_value=LaunchConfiguration("goal_poses_file"),
+        description="Full path to static transform YAML file for TF publishing",
     )
 
     # Create the launch description and populate
@@ -259,6 +267,7 @@ def generate_launch_description():
     ld.add_action(declare_host_params_file_cmd)
     ld.add_action(declare_filter_mask_yaml_cmd)
     ld.add_action(declare_goal_poses_file_cmd)
+    ld.add_action(declare_static_transforms_file_cmd)
 
     # Add the actions to launch all of the localiztion nodes
     ld.add_action(OpaqueFunction(function=launch_nodes_withconfig))

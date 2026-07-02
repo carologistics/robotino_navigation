@@ -37,6 +37,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_mapfilter = LaunchConfiguration("launch_mapfilter")
     launch_nav2rviz = LaunchConfiguration("launch_nav2rviz")
     rviz_config = LaunchConfiguration("rviz_config")
+    static_transforms_file = LaunchConfiguration("static_transforms_file")
     input_params_file = LaunchConfiguration("params_file")
     input_host_params_file = LaunchConfiguration("host_params_file")
     team_name = LaunchConfiguration("team_name")
@@ -119,6 +120,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
                 "host_params_file": host_params_file,
                 "use_respawn": use_respawn,
                 "launch_map_filter": launch_mapfilter,
+                "static_transforms_file": static_transforms_file,
             }.items(),
         ),
         IncludeLaunchDescription(
@@ -190,7 +192,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         "map",
-        default_value=os.path.join(package_dir, "map", "go_2026_map.yaml"),
+        default_value=os.path.join(package_dir, "map", "rc26-clean.yaml"),
         description="Full path to map yaml file to load",
     )
 
@@ -255,6 +257,12 @@ def generate_launch_description():
         description="Full path to the RVIZ config file to use for all launched nodes",
     )
 
+    declare_static_transforms_file_cmd = DeclareLaunchArgument(
+        "static_transforms_file",
+        default_value=os.path.join(package_dir, "config", "rc26_static_transforms.yaml"),
+        description="Full path to static transform YAML file for map fixtures and goal frames",
+    )
+
     declare_team_name_cmd = DeclareLaunchArgument(
         "team_name",
         default_value="Carologistics",
@@ -301,6 +309,7 @@ def generate_launch_description():
     ld.add_action(declare_launchmapfilter_cmd)
     ld.add_action(declare_launch_nav2rviz_cmd)
     ld.add_action(declare_rvizconfig_cmd)
+    ld.add_action(declare_static_transforms_file_cmd)
     ld.add_action(declare_team_name_cmd)
     ld.add_action(declare_slam_cmd)
     ld.add_action(declare_slam_params_file_cmd)
