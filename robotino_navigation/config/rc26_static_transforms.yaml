@@ -2,8 +2,8 @@
   ros__parameters:
     static_transforms:
       A_TIM:
-        translation: [-23.845, -0.979, 0.0]
-        rotation: [-1.57079632679, 0.0, 0.0]
+        translation: [-11.37, -1.92, 0.0]
+        rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "TIM"
       A_SS1:
@@ -43,7 +43,7 @@
         child_frame_id: "B_SS1"
 
       B_SS2:
-        translation: [-9.57, -0.68, 0.0]
+        translation: [-9.97, -0.68, 0.0]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_SS2"
@@ -174,6 +174,18 @@
         parent_frame_id: "B_WB2"
         child_frame_id: "B_WB2-RIGHT"
 
+      B_SS3_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3"
+        child_frame_id: "B_SS3-LEFT"
+
+      B_SS3_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3"
+        child_frame_id: "B_SS3-RIGHT"
+
       B_CC_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
@@ -192,17 +204,53 @@
         parent_frame_id: "map"
         child_frame_id: "B_SS3"
 
+      A_SS3_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS3"
+        child_frame_id: "A_SS3-LEFT"
+
+      A_SS3_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS3"
+        child_frame_id: "A_SS3-RIGHT"
+
       B_HS1:
         translation: [-11.0603, 1.26365, 0]
         rotation: [2.35619, 0, 0]
         parent_frame_id: "map"
         child_frame_id: "B_HS1"
 
+      B_HS1_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1"
+        child_frame_id: "B_HS1-LEFT"
+
+      B_HS1_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1"
+        child_frame_id: "B_HS1-RIGHT"
+
       A_HS1:
         translation: [18.3, 1, 0]
         rotation: [0.769, 0, 0]
         parent_frame_id: "map"
         child_frame_id: "A_HS1"
+
+      A_HS1_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_HS1"
+        child_frame_id: "A_HS1-LEFT"
+
+      A_HS1_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_HS1"
+        child_frame_id: "A_HS1-RIGHT"
 
       A_SS3:
         translation: [-15.5, 2.1, 0]
