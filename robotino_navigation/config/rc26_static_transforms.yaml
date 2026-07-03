@@ -6,65 +6,12 @@
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "TIM"
+
       A_SS1:
         translation: [-17.76, -1.01, 0.0]
         rotation: [-1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "A_SS1"
-
-      A_SS2:
-        translation: [-19.54, -0.67, 0.0]
-        rotation: [3.14159265359, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "A_SS2"
-
-      A_WB1:
-        translation: [-19.35, 3.01, 0.0]
-        rotation: [3.14159265359, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "A_WB1"
-
-      A_WB2:
-        translation: [-18.31, 4.03, 0.0]
-        rotation: [1.57079632679, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "A_WB2"
-
-      A_CC:
-        translation: [-15.63, 5.03, 0.0]
-        rotation: [1.57079632679, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "A_CC"
-
-      B_SS1:
-        translation: [-11.37, -0.92, 0.0]
-        rotation: [-1.57079632679, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "B_SS1"
-
-      B_SS2:
-        translation: [-9.97, -0.68, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "B_SS2"
-
-      B_WB1:
-        translation: [-9.55, 2.97, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "B_WB1"
-
-      B_WB2:
-        translation: [-11.35, 4.03, 0.0]
-        rotation: [1.57079632679, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "B_WB2"
-
-      B_CC:
-        translation: [-13.49, 4.88, 0.0]
-        rotation: [1.57079632679, 0.0, 0.0]
-        parent_frame_id: "map"
-        child_frame_id: "B_CC"
 
       A_SS1_LEFT:
         translation: [0.0, 0.20, 0.0]
@@ -78,6 +25,24 @@
         parent_frame_id: "A_SS1"
         child_frame_id: "A_SS1-RIGHT"
 
+      A_SS1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS1-LEFT"
+        child_frame_id: "A_SS1-LEFT-TARGET"
+
+      A_SS1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS1-RIGHT"
+        child_frame_id: "A_SS1-RIGHT-TARGET"
+
+      A_SS2:
+        translation: [-19.54, -0.67, 0.0]
+        rotation: [3.14159265359, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "A_SS2"
+
       A_SS2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
@@ -89,6 +54,24 @@
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS2"
         child_frame_id: "A_SS2-RIGHT"
+
+      A_SS2_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS2-LEFT"
+        child_frame_id: "A_SS2-LEFT-TARGET"
+
+      A_SS2_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_SS2-RIGHT"
+        child_frame_id: "A_SS2-RIGHT-TARGET"
+
+      A_WB1:
+        translation: [-19.35, 3.01, 0.0]
+        rotation: [3.14159265359, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "A_WB1"
 
       A_WB1_LEFT:
         translation: [0.0, 0.20, 0.0]
@@ -102,6 +85,24 @@
         parent_frame_id: "A_WB1"
         child_frame_id: "A_WB1-RIGHT"
 
+      A_WB1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_WB1-LEFT"
+        child_frame_id: "A_WB1-LEFT-TARGET"
+
+      A_WB1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_WB1-RIGHT"
+        child_frame_id: "A_WB1-RIGHT-TARGET"
+
+      A_WB2:
+        translation: [-18.31, 4.03, 0.0]
+        rotation: [1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "A_WB2"
+
       A_WB2_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
@@ -113,6 +114,24 @@
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_WB2"
         child_frame_id: "A_WB2-RIGHT"
+
+      A_WB2_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_WB2-LEFT"
+        child_frame_id: "A_WB2-LEFT-TARGET"
+
+      A_WB2_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_WB2-RIGHT"
+        child_frame_id: "A_WB2-RIGHT-TARGET"
+
+      A_CC:
+        translation: [-15.63, 5.03, 0.0]
+        rotation: [1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "A_CC"
 
       A_CC_LEFT:
         translation: [0.0, 0.20, 0.0]
@@ -126,83 +145,23 @@
         parent_frame_id: "A_CC"
         child_frame_id: "A_CC-RIGHT"
 
-      B_SS1_LEFT:
-        translation: [0.0, 0.20, 0.0]
+      A_CC_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS1"
-        child_frame_id: "B_SS1-LEFT"
+        parent_frame_id: "A_CC-LEFT"
+        child_frame_id: "A_CC-LEFT-TARGET"
 
-      B_SS1_RIGHT:
-        translation: [0.0, -0.20, 0.0]
+      A_CC_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS1"
-        child_frame_id: "B_SS1-RIGHT"
+        parent_frame_id: "A_CC-RIGHT"
+        child_frame_id: "A_CC-RIGHT-TARGET"
 
-      B_SS2_LEFT:
-        translation: [0.0, 0.20, 0.0]
+      A_SS3:
+        translation: [-15.5, 2.1, 0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS2"
-        child_frame_id: "B_SS2-LEFT"
-
-      B_SS2_RIGHT:
-        translation: [0.0, -0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS2"
-        child_frame_id: "B_SS2-RIGHT"
-
-      B_WB1_LEFT:
-        translation: [0.0, 0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_WB1"
-        child_frame_id: "B_WB1-LEFT"
-
-      B_WB1_RIGHT:
-        translation: [0.0, -0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_WB1"
-        child_frame_id: "B_WB1-RIGHT"
-
-      B_WB2_LEFT:
-        translation: [0.0, 0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_WB2"
-        child_frame_id: "B_WB2-LEFT"
-
-      B_WB2_RIGHT:
-        translation: [0.0, -0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_WB2"
-        child_frame_id: "B_WB2-RIGHT"
-
-      B_SS3_LEFT:
-        translation: [0.0, 0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS3"
-        child_frame_id: "B_SS3-LEFT"
-
-      B_SS3_RIGHT:
-        translation: [0.0, -0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_SS3"
-        child_frame_id: "B_SS3-RIGHT"
-
-      B_CC_LEFT:
-        translation: [0.0, 0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_CC"
-        child_frame_id: "B_CC-LEFT"
-
-      B_CC_RIGHT:
-        translation: [0.0, -0.20, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_CC"
-        child_frame_id: "B_CC-RIGHT"
-
-      B_SS3:
-        translation: [-13.9392, 2.10116, 0]
-        rotation: [3.14159265359, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "B_SS3"
+        child_frame_id: "A_SS3"
 
       A_SS3_LEFT:
         translation: [0.0, 0.20, 0.0]
@@ -216,23 +175,17 @@
         parent_frame_id: "A_SS3"
         child_frame_id: "A_SS3-RIGHT"
 
-      B_HS1:
-        translation: [-11.0603, 1.26365, 0]
-        rotation: [2.35619, 0, 0]
-        parent_frame_id: "map"
-        child_frame_id: "B_HS1"
-
-      B_HS1_LEFT:
-        translation: [0.0, 0.20, 0.0]
+      A_SS3_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1"
-        child_frame_id: "B_HS1-LEFT"
+        parent_frame_id: "A_SS3-LEFT"
+        child_frame_id: "A_SS3-LEFT-TARGET"
 
-      B_HS1_RIGHT:
-        translation: [0.0, -0.20, 0.0]
+      A_SS3_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1"
-        child_frame_id: "B_HS1-RIGHT"
+        parent_frame_id: "A_SS3-RIGHT"
+        child_frame_id: "A_SS3-RIGHT-TARGET"
 
       A_HS1:
         translation: [18.3, 1, 0]
@@ -252,8 +205,224 @@
         parent_frame_id: "A_HS1"
         child_frame_id: "A_HS1-RIGHT"
 
-      A_SS3:
-        translation: [-15.5, 2.1, 0]
+      A_HS1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_HS1-LEFT"
+        child_frame_id: "A_HS1-LEFT-TARGET"
+
+      A_HS1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "A_HS1-RIGHT"
+        child_frame_id: "A_HS1-RIGHT-TARGET"
+
+      B_SS1:
+        translation: [-11.37, -0.92, 0.0]
+        rotation: [-1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_SS1"
+
+      B_SS1_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS1"
+        child_frame_id: "B_SS1-LEFT"
+
+      B_SS1_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS1"
+        child_frame_id: "B_SS1-RIGHT"
+
+      B_SS1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS1-LEFT"
+        child_frame_id: "B_SS1-LEFT-TARGET"
+
+      B_SS1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS1-RIGHT"
+        child_frame_id: "B_SS1-RIGHT-TARGET"
+
+      B_SS2:
+        translation: [-9.97, -0.68, 0.0]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "map"
-        child_frame_id: "A_SS3"
+        child_frame_id: "B_SS2"
+
+      B_SS2_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS2"
+        child_frame_id: "B_SS2-LEFT"
+
+      B_SS2_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS2"
+        child_frame_id: "B_SS2-RIGHT"
+
+      B_SS2_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS2-LEFT"
+        child_frame_id: "B_SS2-LEFT-TARGET"
+
+      B_SS2_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS2-RIGHT"
+        child_frame_id: "B_SS2-RIGHT-TARGET"
+
+      B_WB1:
+        translation: [-9.55, 2.97, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_WB1"
+
+      B_WB1_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB1"
+        child_frame_id: "B_WB1-LEFT"
+
+      B_WB1_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB1"
+        child_frame_id: "B_WB1-RIGHT"
+
+      B_WB1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB1-LEFT"
+        child_frame_id: "B_WB1-LEFT-TARGET"
+
+      B_WB1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB1-RIGHT"
+        child_frame_id: "B_WB1-RIGHT-TARGET"
+
+      B_WB2:
+        translation: [-11.35, 4.03, 0.0]
+        rotation: [1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_WB2"
+
+      B_WB2_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB2"
+        child_frame_id: "B_WB2-LEFT"
+
+      B_WB2_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB2"
+        child_frame_id: "B_WB2-RIGHT"
+
+      B_WB2_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB2-LEFT"
+        child_frame_id: "B_WB2-LEFT-TARGET"
+
+      B_WB2_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_WB2-RIGHT"
+        child_frame_id: "B_WB2-RIGHT-TARGET"
+
+      B_CC:
+        translation: [-13.49, 4.88, 0.0]
+        rotation: [1.57079632679, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_CC"
+
+      B_CC_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_CC"
+        child_frame_id: "B_CC-LEFT"
+
+      B_CC_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_CC"
+        child_frame_id: "B_CC-RIGHT"
+
+      B_CC_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_CC-LEFT"
+        child_frame_id: "B_CC-LEFT-TARGET"
+
+      B_CC_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_CC-RIGHT"
+        child_frame_id: "B_CC-RIGHT-TARGET"
+
+      B_SS3:
+        translation: [-13.9392, 2.10116, 0]
+        rotation: [3.14159265359, 0.0, 0.0]
+        parent_frame_id: "map"
+        child_frame_id: "B_SS3"
+
+      B_SS3_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3"
+        child_frame_id: "B_SS3-LEFT"
+
+      B_SS3_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3"
+        child_frame_id: "B_SS3-RIGHT"
+
+      B_SS3_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3-LEFT"
+        child_frame_id: "B_SS3-LEFT-TARGET"
+
+      B_SS3_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_SS3-RIGHT"
+        child_frame_id: "B_SS3-RIGHT-TARGET"
+
+      B_HS1:
+        translation: [-11.0603, 1.26365, 0]
+        rotation: [2.35619, 0, 0]
+        parent_frame_id: "map"
+        child_frame_id: "B_HS1"
+
+      B_HS1_LEFT:
+        translation: [0.0, 0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1"
+        child_frame_id: "B_HS1-LEFT"
+
+      B_HS1_RIGHT:
+        translation: [0.0, -0.20, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1"
+        child_frame_id: "B_HS1-RIGHT"
+
+      B_HS1_LEFT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1-LEFT"
+        child_frame_id: "B_HS1-LEFT-TARGET"
+
+      B_HS1_RIGHT_TARGET:
+        translation: [0.40, 0.0, 0.91]
+        rotation: [0.0, 0.0, 0.0]
+        parent_frame_id: "B_HS1-RIGHT"
+        child_frame_id: "B_HS1-RIGHT-TARGET"
