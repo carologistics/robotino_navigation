@@ -26,13 +26,13 @@
         child_frame_id: "A_SS1-RIGHT"
 
       A_SS1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS1-LEFT"
         child_frame_id: "A_SS1-LEFT-TARGET"
 
       A_SS1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS1-RIGHT"
         child_frame_id: "A_SS1-RIGHT-TARGET"
@@ -56,13 +56,13 @@
         child_frame_id: "A_SS2-RIGHT"
 
       A_SS2_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS2-LEFT"
         child_frame_id: "A_SS2-LEFT-TARGET"
 
       A_SS2_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS2-RIGHT"
         child_frame_id: "A_SS2-RIGHT-TARGET"
@@ -86,13 +86,13 @@
         child_frame_id: "A_WB1-RIGHT"
 
       A_WB1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_WB1-LEFT"
         child_frame_id: "A_WB1-LEFT-TARGET"
 
       A_WB1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_WB1-RIGHT"
         child_frame_id: "A_WB1-RIGHT-TARGET"
@@ -116,13 +116,13 @@
         child_frame_id: "A_WB2-RIGHT"
 
       A_WB2_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_WB2-LEFT"
         child_frame_id: "A_WB2-LEFT-TARGET"
 
       A_WB2_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_WB2-RIGHT"
         child_frame_id: "A_WB2-RIGHT-TARGET"
@@ -146,13 +146,13 @@
         child_frame_id: "A_CC-RIGHT"
 
       A_CC_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_CC-LEFT"
         child_frame_id: "A_CC-LEFT-TARGET"
 
       A_CC_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_CC-RIGHT"
         child_frame_id: "A_CC-RIGHT-TARGET"
@@ -176,13 +176,13 @@
         child_frame_id: "A_SS3-RIGHT"
 
       A_SS3_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS3-LEFT"
         child_frame_id: "A_SS3-LEFT-TARGET"
 
       A_SS3_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_SS3-RIGHT"
         child_frame_id: "A_SS3-RIGHT-TARGET"
@@ -206,13 +206,13 @@
         child_frame_id: "A_HS1-RIGHT"
 
       A_HS1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_HS1-LEFT"
         child_frame_id: "A_HS1-LEFT-TARGET"
 
       A_HS1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "A_HS1-RIGHT"
         child_frame_id: "A_HS1-RIGHT-TARGET"
@@ -236,13 +236,13 @@
         child_frame_id: "B_SS1-RIGHT"
 
       B_SS1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS1-LEFT"
         child_frame_id: "B_SS1-LEFT-TARGET"
 
       B_SS1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS1-RIGHT"
         child_frame_id: "B_SS1-RIGHT-TARGET"
@@ -266,13 +266,13 @@
         child_frame_id: "B_SS2-RIGHT"
 
       B_SS2_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS2-LEFT"
         child_frame_id: "B_SS2-LEFT-TARGET"
 
       B_SS2_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS2-RIGHT"
         child_frame_id: "B_SS2-RIGHT-TARGET"
@@ -296,13 +296,13 @@
         child_frame_id: "B_WB1-RIGHT"
 
       B_WB1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_WB1-LEFT"
         child_frame_id: "B_WB1-LEFT-TARGET"
 
       B_WB1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_WB1-RIGHT"
         child_frame_id: "B_WB1-RIGHT-TARGET"
@@ -326,13 +326,13 @@
         child_frame_id: "B_WB2-RIGHT"
 
       B_WB2_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_WB2-LEFT"
         child_frame_id: "B_WB2-LEFT-TARGET"
 
       B_WB2_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_WB2-RIGHT"
         child_frame_id: "B_WB2-RIGHT-TARGET"
@@ -356,13 +356,13 @@
         child_frame_id: "B_CC-RIGHT"
 
       B_CC_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_CC-LEFT"
         child_frame_id: "B_CC-LEFT-TARGET"
 
       B_CC_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_CC-RIGHT"
         child_frame_id: "B_CC-RIGHT-TARGET"
@@ -386,13 +386,13 @@
         child_frame_id: "B_SS3-RIGHT"
 
       B_SS3_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS3-LEFT"
         child_frame_id: "B_SS3-LEFT-TARGET"
 
       B_SS3_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_SS3-RIGHT"
         child_frame_id: "B_SS3-RIGHT-TARGET"
@@ -416,13 +416,13 @@
         child_frame_id: "B_HS1-RIGHT"
 
       B_HS1_LEFT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_HS1-LEFT"
         child_frame_id: "B_HS1-LEFT-TARGET"
 
       B_HS1_RIGHT_TARGET:
-        translation: [0.40, 0.0, 0.91]
+        translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "B_HS1-RIGHT"
         child_frame_id: "B_HS1-RIGHT-TARGET"
