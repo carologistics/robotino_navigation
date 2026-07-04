@@ -187,38 +187,38 @@
         parent_frame_id: "A_SS3-RIGHT"
         child_frame_id: "A_SS3-RIGHT-TARGET"
 
-      A_HS1:
+      A_HS:
         translation: [18.3, 1, 0]
         rotation: [0.769, 0, 0]
         parent_frame_id: "map"
-        child_frame_id: "A_HS1"
+        child_frame_id: "A_HS"
 
-      A_HS1_LEFT:
+      A_HS_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "A_HS1"
-        child_frame_id: "A_HS1-LEFT"
+        parent_frame_id: "A_HS"
+        child_frame_id: "A_HS-LEFT"
 
-      A_HS1_RIGHT:
+      A_HS_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "A_HS1"
-        child_frame_id: "A_HS1-RIGHT"
+        parent_frame_id: "A_HS"
+        child_frame_id: "A_HS-RIGHT"
 
-      A_HS1_LEFT_TARGET:
+      A_HS_LEFT_TARGET:
         translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "A_HS1-LEFT"
-        child_frame_id: "A_HS1-LEFT-TARGET"
+        parent_frame_id: "A_HS-LEFT"
+        child_frame_id: "A_HS-LEFT-TARGET"
 
-      A_HS1_RIGHT_TARGET:
+      A_HS_RIGHT_TARGET:
         translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "A_HS1-RIGHT"
-        child_frame_id: "A_HS1-RIGHT-TARGET"
+        parent_frame_id: "A_HS-RIGHT"
+        child_frame_id: "A_HS-RIGHT-TARGET"
 
       B_SS1:
-        translation: [-11.37, -0.92, 0.0]
+        translation: [-11.37, -0.77, 0.0]
         rotation: [-1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_SS1"
@@ -278,7 +278,7 @@
         child_frame_id: "B_SS2-RIGHT-TARGET"
 
       B_WB1:
-        translation: [-9.55, 2.97, 0.0]
+        translation: [-9.75, 2.97, 0.0]
         rotation: [0.0, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_WB1"
@@ -308,7 +308,7 @@
         child_frame_id: "B_WB1-RIGHT-TARGET"
 
       B_WB2:
-        translation: [-11.35, 4.03, 0.0]
+        translation: [-11.35, 3.63, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_WB2"
@@ -338,7 +338,7 @@
         child_frame_id: "B_WB2-RIGHT-TARGET"
 
       B_CC:
-        translation: [-13.49, 4.88, 0.0]
+        translation: [-13.49, 4.68, 0.0]
         rotation: [1.57079632679, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_CC"
@@ -368,7 +368,7 @@
         child_frame_id: "B_CC-RIGHT-TARGET"
 
       B_SS3:
-        translation: [-13.9392, 2.10116, 0]
+        translation: [-13.7392, 2.10116, 0]
         rotation: [3.14159265359, 0.0, 0.0]
         parent_frame_id: "map"
         child_frame_id: "B_SS3"
@@ -397,32 +397,32 @@
         parent_frame_id: "B_SS3-RIGHT"
         child_frame_id: "B_SS3-RIGHT-TARGET"
 
-      B_HS1:
+      B_HS:
         translation: [-11.0603, 1.26365, 0]
         rotation: [2.35619, 0, 0]
         parent_frame_id: "map"
-        child_frame_id: "B_HS1"
+        child_frame_id: "B_HS"
 
-      B_HS1_LEFT:
+      B_HS_LEFT:
         translation: [0.0, 0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1"
-        child_frame_id: "B_HS1-LEFT"
+        parent_frame_id: "B_HS"
+        child_frame_id: "B_HS-LEFT"
 
-      B_HS1_RIGHT:
+      B_HS_RIGHT:
         translation: [0.0, -0.20, 0.0]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1"
-        child_frame_id: "B_HS1-RIGHT"
+        parent_frame_id: "B_HS"
+        child_frame_id: "B_HS-RIGHT"
 
-      B_HS1_LEFT_TARGET:
+      B_HS_LEFT_TARGET:
         translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1-LEFT"
-        child_frame_id: "B_HS1-LEFT-TARGET"
+        parent_frame_id: "B_HS-LEFT"
+        child_frame_id: "B_HS-LEFT-TARGET"
 
-      B_HS1_RIGHT_TARGET:
+      B_HS_RIGHT_TARGET:
         translation: [0.80, 0.0, 0.91]
         rotation: [0.0, 0.0, 0.0]
-        parent_frame_id: "B_HS1-RIGHT"
-        child_frame_id: "B_HS1-RIGHT-TARGET"
+        parent_frame_id: "B_HS-RIGHT"
+        child_frame_id: "B_HS-RIGHT-TARGET"
